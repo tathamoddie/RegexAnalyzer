@@ -5,8 +5,10 @@
         ParseFailure,
         Literal,
         GroupStart,
-        GroupDirectiveStart,
         GroupEnd,
+        GroupDirectiveStart,
+        GroupOption,
+        GroupOptionEnd,
         NamedIdentifierStart,
         NamedIdentifierEnd
     }

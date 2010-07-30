@@ -42,6 +42,21 @@ namespace TathamOddie.RegexAnalyzer.Logic
                     TokenizerState.NamedIdentifier, ">",
                     TokenType.NamedIdentifierEnd, TokenizerStateChange.PopState),
 
+                // a-z after (? is an option
+                new TokenizerRule(
+                    TokenizerState.GroupDirectiveContents, TokenizerRule.LetterData,
+                    TokenType.GroupOption, TokenizerStateChange.ReplaceState(TokenizerState.GroupOption)),
+
+                // a-z after (?[a-z]+ is another option
+                new TokenizerRule(
+                    TokenizerState.GroupOption, TokenizerRule.LetterData,
+                    TokenType.GroupOption, TokenizerStateChange.RetainState),
+
+                // : after (?[a-z]+ is the end of the options
+                new TokenizerRule(
+                    TokenizerState.GroupOption, ":",
+                    TokenType.GroupOptionEnd, TokenizerStateChange.PopState),
+
                 // Whatever is left is a literal
                 new TokenizerRule(
                     new[] { TokenizerState.GroupContents, TokenizerState.GroupContentsStart }, TokenizerRule.AnyData,

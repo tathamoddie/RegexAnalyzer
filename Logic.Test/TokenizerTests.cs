@@ -1106,5 +1106,43 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test
                 result.ToArray()
             );
         }
+
+        [TestMethod]
+        public void Tokenizer_Tokenize_ShouldTokenizeComplexExpression3()
+        {
+            // Arrange
+            const string input = @"(?ni:^[\w\d]*?(?=\d*$))";
+
+            // Act
+            var result = Tokenizer.Tokenize(input);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.GroupStart, "(", 0),
+                    new Token(TokenType.GroupDirectiveStart, "?", 1),
+                    new Token(TokenType.GroupOption, "ni", 2),
+                    new Token(TokenType.GroupOptionEnd, ":", 4),
+                    new Token(TokenType.StartOfStringAssertion, "^", 5),
+                    new Token(TokenType.CharacterSetStart, "[", 6),
+                    new Token(TokenType.CharacterEscapeMarker, @"\", 7),
+                    new Token(TokenType.CharacterEscapeData, "w", 8),
+                    new Token(TokenType.CharacterEscapeMarker, @"\", 9),
+                    new Token(TokenType.CharacterEscapeData, "d", 10),
+                    new Token(TokenType.CharacterSetEnd, "]", 11),
+                    new Token(TokenType.Quantifier, "*?", 12),
+                    new Token(TokenType.GroupStart, "(", 14),
+                    new Token(TokenType.GroupDirectiveStart, "?", 15),
+                    new Token(TokenType.PositiveLookAheadMarker, "=", 16),
+                    new Token(TokenType.CharacterEscapeMarker, @"\", 17),
+                    new Token(TokenType.CharacterEscapeData, "d", 18),
+                    new Token(TokenType.Quantifier, "*", 19),
+                    new Token(TokenType.EndOfStringAssertion, "$", 20),
+                    new Token(TokenType.GroupEnd, ")", 21),
+                    new Token(TokenType.GroupEnd, ")", 22)
+                },
+                result.ToArray()
+            );
+        }
     }
 }

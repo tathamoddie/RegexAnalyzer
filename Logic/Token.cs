@@ -1,5 +1,8 @@
-﻿namespace TathamOddie.RegexAnalyzer.Logic
+﻿using System.Diagnostics;
+
+namespace TathamOddie.RegexAnalyzer.Logic
 {
+    [DebuggerDisplay("{Type} @ {StartIndex}: {Data}")]
     public class Token
     {
         readonly TokenType type;

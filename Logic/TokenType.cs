@@ -12,6 +12,14 @@
         GroupOptionEnd,
         NamedIdentifierStart,
         NamedIdentifierEnd,
-        NonCapturingGroupMarker
+        NonCapturingGroupMarker,
+        Quantifier,
+        EndOfStringAssertion,
+        PositiveLookAheadMarker,
+        ConditionalExpressionStart,
+        ConditionalExpressionEnd,
+        OrOperator,
+        CharacterEscapeMarker,
+        CharacterEscapeData,
     }
 }

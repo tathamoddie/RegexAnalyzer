@@ -6,6 +6,9 @@
         GroupContentsStart,
         GroupDirectiveContents,
         GroupOption,
-        NamedIdentifier
+        NamedIdentifier,
+        ConditionalExpressionPredicate,
+        ConditionalExpressionContents,
+        EscapedCharacter
     }
 }

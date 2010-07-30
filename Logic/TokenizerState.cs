@@ -11,6 +11,7 @@
         ConditionalExpressionContents,
         EscapedCharacter,
         CharacterSetContents,
-        CharacterSetContentsStart
+        CharacterSetContentsStart,
+        ParametizedQuantifierContents
     }
 }

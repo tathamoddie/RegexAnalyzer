@@ -742,6 +742,73 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test
         }
 
         [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeParametizedQuantifier()
+        {
+            // Arrange
+            const string input = "a{6}";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.Literal, "a", 0),
+                    new Token(TokenType.ParametizedQuantifierStart, "{", 1),
+                    new Token(TokenType.Number, "6", 2),
+                    new Token(TokenType.ParametizedQuantifierEnd, "}", 3)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeParametizedMinimumQuantifier()
+        {
+            // Arrange
+            const string input = "a{6,}";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.Literal, "a", 0),
+                    new Token(TokenType.ParametizedQuantifierStart, "{", 1),
+                    new Token(TokenType.Number, "6", 2),
+                    new Token(TokenType.ParametizedQuantifierRangeSeparator, ",", 3),
+                    new Token(TokenType.ParametizedQuantifierEnd, "}", 4)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeParametizedRangeQuantifier()
+        {
+            // Arrange
+            const string input = "a{6,24}";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.Literal, "a", 0),
+                    new Token(TokenType.ParametizedQuantifierStart, "{", 1),
+                    new Token(TokenType.Number, "6", 2),
+                    new Token(TokenType.ParametizedQuantifierRangeSeparator, ",", 3),
+                    new Token(TokenType.Number, "2", 4),
+                    new Token(TokenType.Number, "4", 5),
+                    new Token(TokenType.ParametizedQuantifierEnd, "}", 6)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
         public void Tokenizer_GetTokens_ShouldTokenizeStartOfStringAssertion()
         {
             // Arrange
@@ -843,6 +910,29 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test
             CollectionAssert.AreEqual(new[]
                 {
                     new Token(TokenType.GroupOption, "abc", 0)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_ReduceTokens_ShouldCombineMultipleConsecutiveNumberTokens()
+        {
+            // Arrange
+            var input = new[]
+            {
+                new Token(TokenType.Number, "1", 0),
+                new Token(TokenType.Number, "2", 1),
+                new Token(TokenType.Number, "3", 2)
+            };
+
+            // Act
+            var result = Tokenizer.ReduceTokens(input);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.Number, "123", 0)
                 },
                 result.ToArray()
             );
@@ -975,6 +1065,43 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test
                     new Token(TokenType.GroupEnd, ")", 70),
                     new Token(TokenType.GroupEnd, ")", 71),
                     new Token(TokenType.GroupEnd, ")", 72)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_Tokenize_ShouldTokenizeComplexExpression2()
+        {
+            // Arrange
+            const string input = @"^[\d]+([.]\d{0,2})?$";
+
+            // Act
+            var result = Tokenizer.Tokenize(input);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.StartOfStringAssertion, "^", 0),
+                    new Token(TokenType.CharacterSetStart, "[", 1),
+                    new Token(TokenType.CharacterEscapeMarker, @"\", 2),
+                    new Token(TokenType.CharacterEscapeData, "d", 3),
+                    new Token(TokenType.CharacterSetEnd, "]", 4),
+                    new Token(TokenType.Quantifier, "+", 5),
+                    new Token(TokenType.GroupStart, "(", 6),
+                    new Token(TokenType.CharacterSetStart, "[", 7),
+                    new Token(TokenType.Literal, ".", 8),
+                    new Token(TokenType.CharacterSetEnd, "]", 9),
+                    new Token(TokenType.CharacterEscapeMarker, @"\", 10),
+                    new Token(TokenType.CharacterEscapeData, "d", 11),
+                    new Token(TokenType.ParametizedQuantifierStart, "{", 12),
+                    new Token(TokenType.Number, "0", 13),
+                    new Token(TokenType.ParametizedQuantifierRangeSeparator, ",", 14),
+                    new Token(TokenType.Number, "2", 15),
+                    new Token(TokenType.ParametizedQuantifierEnd, @"}", 16),
+                    new Token(TokenType.GroupEnd, ")", 17),
+                    new Token(TokenType.Quantifier, "?", 18),
+                    new Token(TokenType.EndOfStringAssertion, "$", 19)
                 },
                 result.ToArray()
             );

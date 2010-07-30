@@ -18,6 +18,7 @@ namespace TathamOddie.RegexAnalyzer.Logic
             AddRange(BuildGroupNameRules());
             AddRange(BuildGroupOptionRules());
             AddRange(BuildCharacterSetRules(groupingConstructs));
+            AddRange(BuildQuantifierRules(groupingConstructs));
             AddRange(BuildBasicExpressionRules(groupingConstructs));
         }
 
@@ -163,6 +164,34 @@ namespace TathamOddie.RegexAnalyzer.Logic
                 TokenType.Literal, TokenizerStateChange.RetainState);
         }
 
+        static IEnumerable<TokenizerRule> BuildQuantifierRules(IEnumerable<TokenizerState> groupingConstructs)
+        {
+            // Basic quantifiers
+            yield return new TokenizerRule(
+                groupingConstructs, new[] {"*", "+", "?"},
+                TokenType.Quantifier, TokenizerStateChange.RetainState);
+
+            // { starts a parametized quantifier
+            yield return new TokenizerRule(
+                groupingConstructs, "{",
+                TokenType.ParametizedQuantifierStart, TokenizerStateChange.PushState(TokenizerState.ParametizedQuantifierContents));
+
+            // } closes a parametized quantifier
+            yield return new TokenizerRule(
+                TokenizerState.ParametizedQuantifierContents, "}",
+                TokenType.ParametizedQuantifierEnd, TokenizerStateChange.PopState);
+
+            // numbers are valid in a parametized quantifier
+            yield return new TokenizerRule(
+                TokenizerState.ParametizedQuantifierContents, TokenizerRule.NumberData,
+                TokenType.Number, TokenizerStateChange.RetainState);
+
+            // , in a parametized quantifier separates ranges
+            yield return new TokenizerRule(
+                TokenizerState.ParametizedQuantifierContents, ",",
+                TokenType.ParametizedQuantifierRangeSeparator, TokenizerStateChange.RetainState);
+        }
+
         static IEnumerable<TokenizerRule> BuildBasicExpressionRules(IEnumerable<TokenizerState> groupingConstructs)
         {
             // \ starts an escape sequence
@@ -179,11 +208,6 @@ namespace TathamOddie.RegexAnalyzer.Logic
             yield return new TokenizerRule(
                 groupingConstructs, "|",
                 TokenType.OrOperator, TokenizerStateChange.RetainState);
-
-            // Basic quantifiers
-            yield return new TokenizerRule(
-                groupingConstructs, new[] {"*", "+", "?"},
-                TokenType.Quantifier, TokenizerStateChange.RetainState);
 
             // String start assertion
             yield return new TokenizerRule(

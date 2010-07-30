@@ -78,7 +78,7 @@ namespace TathamOddie.RegexAnalyzer.Logic
 
         internal static IEnumerable<Token> ReduceTokens(IEnumerable<Token> tokens)
         {
-            var typesToCombine = new[] {TokenType.Literal, TokenType.Quantifier, TokenType.GroupOption};
+            var typesToCombine = new[] {TokenType.Literal, TokenType.Quantifier, TokenType.GroupOption, TokenType.Number};
 
             var tokenQueue = new Queue<Token>(tokens);
 

@@ -24,6 +24,10 @@
         CharacterEscapeData,
         CharacterSetStart,
         CharacterSetEnd,
-        NegativeCharacterSetModifier
+        NegativeCharacterSetModifier,
+        ParametizedQuantifierStart,
+        ParametizedQuantifierEnd,
+        Number,
+        ParametizedQuantifierRangeSeparator
     }
 }

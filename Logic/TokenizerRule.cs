@@ -9,10 +9,10 @@ namespace TathamOddie.RegexAnalyzer.Logic
         public const IEnumerable<string> AnyData = null;
 
         public static readonly IEnumerable<string> LetterData =
-            Enumerable.Range('a', 'z').Concat(Enumerable.Range('A', 'Z')).Select(i => ((char)i).ToString());
+            Enumerable.Range('a', 'z' - 'a').Concat(Enumerable.Range('A', 'Z' - 'A')).Select(i => ((char)i).ToString());
 
         public static readonly IEnumerable<string> NumberData =
-            Enumerable.Range('0', '9').Select(c => c.ToString());
+            Enumerable.Range('0', '9' - '0').Select(i => ((char)i).ToString());
 
         public static readonly IEnumerable<string> LetterAndNumberData =
             LetterData.Union(NumberData);

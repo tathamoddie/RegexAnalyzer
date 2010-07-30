@@ -519,7 +519,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test
         public void Tokenizer_GetTokens_ShouldTokenizeCharacterSet()
         {
             // Arrange
-            const string input = "[abc]";
+            const string input = "[ab^c]";
 
             // Act
             var result = new Tokenizer(input).GetTokens();
@@ -530,8 +530,32 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test
                     new Token(TokenType.CharacterSetStart, "[", 0),
                     new Token(TokenType.Literal, "a", 1),
                     new Token(TokenType.Literal, "b", 2),
-                    new Token(TokenType.Literal, "c", 3),
-                    new Token(TokenType.CharacterSetEnd, "]", 4)
+                    new Token(TokenType.Literal, "^", 3),
+                    new Token(TokenType.Literal, "c", 4),
+                    new Token(TokenType.CharacterSetEnd, "]", 5)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeNegativeCharacterSet()
+        {
+            // Arrange
+            const string input = "[^abc]";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.CharacterSetStart, "[", 0),
+                    new Token(TokenType.NegativeCharacterSetModifier, "^", 1),
+                    new Token(TokenType.Literal, "a", 2),
+                    new Token(TokenType.Literal, "b", 3),
+                    new Token(TokenType.Literal, "c", 4),
+                    new Token(TokenType.CharacterSetEnd, "]", 5)
                 },
                 result.ToArray()
             );

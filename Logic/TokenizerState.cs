@@ -10,6 +10,7 @@
         ConditionalExpressionPredicate,
         ConditionalExpressionContents,
         EscapedCharacter,
-        CharacterSetContents
+        CharacterSetContents,
+        CharacterSetContentsStart
     }
 }

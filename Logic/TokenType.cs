@@ -23,6 +23,7 @@
         CharacterEscapeMarker,
         CharacterEscapeData,
         CharacterSetStart,
-        CharacterSetEnd
+        CharacterSetEnd,
+        NegativeCharacterSetModifier
     }
 }

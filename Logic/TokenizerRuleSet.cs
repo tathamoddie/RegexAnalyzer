@@ -133,19 +133,29 @@ namespace TathamOddie.RegexAnalyzer.Logic
             // [ starts a character set
             yield return new TokenizerRule(
                 groupingConstructs, "[",
-                TokenType.CharacterSetStart, TokenizerStateChange.PushState(TokenizerState.CharacterSetContents));
+                TokenType.CharacterSetStart, TokenizerStateChange.PushState(TokenizerState.CharacterSetContentsStart));
 
             // ] closes a character set
             yield return new TokenizerRule(
-                TokenizerState.CharacterSetContents, "]",
+                new [] { TokenizerState.CharacterSetContents, TokenizerState.CharacterSetContentsStart }, "]",
                 TokenType.CharacterSetEnd, TokenizerStateChange.PopState);
+
+            // ^ after [ makes it a negative set
+            yield return new TokenizerRule(
+                TokenizerState.CharacterSetContentsStart, "^",
+                TokenType.NegativeCharacterSetModifier, TokenizerStateChange.ReplaceState(TokenizerState.CharacterSetContents));
 
             // \ starts an escape sequence
             yield return new TokenizerRule(
-                TokenizerState.CharacterSetContents, @"\",
+                new[] { TokenizerState.CharacterSetContents, TokenizerState.CharacterSetContentsStart }, @"\",
                 TokenType.CharacterEscapeMarker, TokenizerStateChange.PushState(TokenizerState.EscapedCharacter));
 
             // escaped character data is handled by another rule in BuildBasicExpressionRules
+
+            // anything else is a character in the set
+            yield return new TokenizerRule(
+                TokenizerState.CharacterSetContentsStart, TokenizerRule.AnyData,
+                TokenType.Literal, TokenizerStateChange.ReplaceState(TokenizerState.CharacterSetContents));
 
             // anything else is a character in the set
             yield return new TokenizerRule(

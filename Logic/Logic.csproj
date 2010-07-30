@@ -51,6 +51,7 @@
     <Compile Include="Tokenizer.cs" />
     <Compile Include="TokenizerContext.cs" />
     <Compile Include="TokenizerRule.cs" />
+    <Compile Include="TokenizerRuleSet.cs" />
     <Compile Include="TokenizerState.cs" />
     <Compile Include="TokenizerStateChange.cs" />
     <Compile Include="TokenResult.cs" />

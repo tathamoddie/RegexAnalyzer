@@ -8,8 +8,10 @@
         GroupEnd,
         GroupDirectiveStart,
         GroupOption,
+        GroupOptionQualifier,
         GroupOptionEnd,
         NamedIdentifierStart,
-        NamedIdentifierEnd
+        NamedIdentifierEnd,
+        NonCapturingGroupMarker
     }
 }

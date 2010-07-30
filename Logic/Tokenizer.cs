@@ -27,6 +27,13 @@ namespace TathamOddie.RegexAnalyzer.Logic
                     TokenizerState.GroupContentsStart, "?",
                     TokenType.GroupDirectiveStart, TokenizerStateChange.ReplaceState(TokenizerState.GroupDirectiveContents)),
 
+                // : after (? is a non-capturing group marker
+                new TokenizerRule(
+                    TokenizerState.GroupDirectiveContents, ":",
+                    TokenType.NonCapturingGroupMarker, TokenizerStateChange.PopState),
+
+#region Group Names
+
                 // < after (? is the start of a group identifier
                 new TokenizerRule(
                     TokenizerState.GroupDirectiveContents, "<",
@@ -42,20 +49,46 @@ namespace TathamOddie.RegexAnalyzer.Logic
                     TokenizerState.NamedIdentifier, ">",
                     TokenType.NamedIdentifierEnd, TokenizerStateChange.PopState),
 
+#endregion
+
+#region Group Options
+
                 // a-z after (? is an option
                 new TokenizerRule(
                     TokenizerState.GroupDirectiveContents, TokenizerRule.LetterData,
                     TokenType.GroupOption, TokenizerStateChange.ReplaceState(TokenizerState.GroupOption)),
+
+                // + after (? is an option qualifier
+                new TokenizerRule(
+                    TokenizerState.GroupDirectiveContents, "+",
+                    TokenType.GroupOptionQualifier, TokenizerStateChange.ReplaceState(TokenizerState.GroupOption)),
+
+                // - after (? is an option qualifier
+                new TokenizerRule(
+                    TokenizerState.GroupDirectiveContents, "-",
+                    TokenType.GroupOptionQualifier, TokenizerStateChange.ReplaceState(TokenizerState.GroupOption)),
 
                 // a-z after (?[a-z]+ is another option
                 new TokenizerRule(
                     TokenizerState.GroupOption, TokenizerRule.LetterData,
                     TokenType.GroupOption, TokenizerStateChange.RetainState),
 
+                // + after (?[a-z]+ is an option qualifier
+                new TokenizerRule(
+                    TokenizerState.GroupOption, "+",
+                    TokenType.GroupOptionQualifier, TokenizerStateChange.RetainState),
+
+                // - after (?[a-z]+ is an option qualifier
+                new TokenizerRule(
+                    TokenizerState.GroupOption, "-",
+                    TokenType.GroupOptionQualifier, TokenizerStateChange.RetainState),
+
                 // : after (?[a-z]+ is the end of the options
                 new TokenizerRule(
                     TokenizerState.GroupOption, ":",
                     TokenType.GroupOptionEnd, TokenizerStateChange.PopState),
+
+#endregion
 
                 // Whatever is left is a literal
                 new TokenizerRule(

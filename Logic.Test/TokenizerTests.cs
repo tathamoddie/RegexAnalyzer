@@ -84,6 +84,52 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test
         }
 
         [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeGroup()
+        {
+            // Arrange
+            const string input = "(foo)";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.GroupStart, "(", 0),
+                    new Token(TokenType.Literal, "f", 1),
+                    new Token(TokenType.Literal, "o", 2),
+                    new Token(TokenType.Literal, "o", 3),
+                    new Token(TokenType.GroupEnd, ")", 4)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeNonCapturingGroup()
+        {
+            // Arrange
+            const string input = "(?:foo)";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.GroupStart, "(", 0),
+                    new Token(TokenType.GroupDirectiveStart, "?", 1),
+                    new Token(TokenType.NonCapturingGroupMarker, ":", 2),
+                    new Token(TokenType.Literal, "f", 3),
+                    new Token(TokenType.Literal, "o", 4),
+                    new Token(TokenType.Literal, "o", 5),
+                    new Token(TokenType.GroupEnd, ")", 6)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
         public void Tokenizer_GetTokens_ShouldTokenizeNamedGroup()
         {
             // Arrange
@@ -193,6 +239,87 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test
                     new Token(TokenType.GroupEnd, ")", 15),
                     new Token(TokenType.GroupEnd, ")", 16),
                     new Token(TokenType.GroupEnd, ")", 17)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeNegativeQualifiedOption()
+        {
+            // Arrange
+            const string input = "(?-m:foo)";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.GroupStart, "(", 0),
+                    new Token(TokenType.GroupDirectiveStart, "?", 1),
+                    new Token(TokenType.GroupOptionQualifier, "-", 2),
+                    new Token(TokenType.GroupOption, "m", 3),
+                    new Token(TokenType.GroupOptionEnd, ":", 4),
+                    new Token(TokenType.Literal, "f", 5),
+                    new Token(TokenType.Literal, "o", 6),
+                    new Token(TokenType.Literal, "o", 7),
+                    new Token(TokenType.GroupEnd, ")", 8)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizePositiveQualifiedOption()
+        {
+            // Arrange
+            const string input = "(?+m:foo)";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.GroupStart, "(", 0),
+                    new Token(TokenType.GroupDirectiveStart, "?", 1),
+                    new Token(TokenType.GroupOptionQualifier, "+", 2),
+                    new Token(TokenType.GroupOption, "m", 3),
+                    new Token(TokenType.GroupOptionEnd, ":", 4),
+                    new Token(TokenType.Literal, "f", 5),
+                    new Token(TokenType.Literal, "o", 6),
+                    new Token(TokenType.Literal, "o", 7),
+                    new Token(TokenType.GroupEnd, ")", 8)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeMultipleQualifiedOptions()
+        {
+            // Arrange
+            const string input = "(?+m-si:foo)";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.GroupStart, "(", 0),
+                    new Token(TokenType.GroupDirectiveStart, "?", 1),
+                    new Token(TokenType.GroupOptionQualifier, "+", 2),
+                    new Token(TokenType.GroupOption, "m", 3),
+                    new Token(TokenType.GroupOptionQualifier, "-", 4),
+                    new Token(TokenType.GroupOption, "s", 5),
+                    new Token(TokenType.GroupOption, "i", 6),
+                    new Token(TokenType.GroupOptionEnd, ":", 7),
+                    new Token(TokenType.Literal, "f", 8),
+                    new Token(TokenType.Literal, "o", 9),
+                    new Token(TokenType.Literal, "o", 10),
+                    new Token(TokenType.GroupEnd, ")", 11)
                 },
                 result.ToArray()
             );

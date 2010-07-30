@@ -1,14 +1,21 @@
-﻿namespace TathamOddie.RegexAnalyzer.Logic.Tokens
+﻿namespace TathamOddie.RegexAnalyzer.Logic
 {
     public class Token
     {
+        readonly TokenType type;
         readonly string data;
         readonly int startIndex;
 
-        public Token(string data, int startIndex)
+        public Token(TokenType type, string data, int startIndex)
         {
+            this.type = type;
             this.data = data;
             this.startIndex = startIndex;
+        }
+
+        public TokenType Type
+        {
+            get { return type; }
         }
 
         public string Data
@@ -25,22 +32,25 @@
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return typeof(Token).IsAssignableFrom(obj.GetType())
-                && Equals((Token) obj);
+            if (obj.GetType() != typeof (Token)) return false;
+            return Equals((Token) obj);
         }
 
         public bool Equals(Token other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(other.data, data) && other.startIndex == startIndex;
+            return Equals(other.type, type) && Equals(other.data, data) && other.startIndex == startIndex;
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                return ((data != null ? data.GetHashCode() : 0)*397) ^ startIndex;
+                var result = type.GetHashCode();
+                result = (result*397) ^ (data != null ? data.GetHashCode() : 0);
+                result = (result*397) ^ startIndex;
+                return result;
             }
         }
     }

@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TathamOddie.RegexAnalyzer.Logic.Tokens;
 
 namespace TathamOddie.RegexAnalyzer.Logic.Test
 {
@@ -8,7 +7,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test
     public class TokenizerTests
     {
         [TestMethod]
-        public void Tokenizer_GetTokens_ShouldReturnLiteralTokenForSingleCharacter()
+        public void Tokenizer_GetTokens_ShouldTokenizeLiteralCharacter()
         {
             // Arrange
             const string input = "a";
@@ -19,14 +18,14 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
-                    new LiteralToken("a", 0)
+                    new Token(TokenType.Literal, "a", 0)
                 },
                 result.ToArray()
             );
         }
 
         [TestMethod]
-        public void Tokenizer_GetTokens_ShouldReturnMultipleLiteralTokensForMultipleCharacters()
+        public void Tokenizer_GetTokens_ShouldTokenizeMultipleLiteralCharacters()
         {
             // Arrange
             const string input = "abc";
@@ -37,9 +36,130 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
-                    new LiteralToken("a", 0),
-                    new LiteralToken("b", 1),
-                    new LiteralToken("c", 2)
+                    new Token(TokenType.Literal, "a", 0),
+                    new Token(TokenType.Literal, "b", 1),
+                    new Token(TokenType.Literal, "c", 2)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeGroupDirectiveStart()
+        {
+            // Arrange
+            const string input = "(?";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.GroupStart, "(", 0),
+                    new Token(TokenType.GroupDirectiveStart, "?", 1)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldReturnParseFailureWhenClosingGroupImmediatelyAfterGroupDirectiveStartToken()
+        {
+            // Arrange
+            const string input = "(?)";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.GroupStart, "(", 0),
+                    new Token(TokenType.GroupDirectiveStart, "?", 1),
+                    new Token(TokenType.ParseFailure, ")", 2)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeNamedGroup()
+        {
+            // Arrange
+            const string input = "(?<foo>bar)";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.GroupStart, "(", 0),
+                    new Token(TokenType.GroupDirectiveStart, "?", 1),
+                    new Token(TokenType.NamedIdentifierStart, "<", 2),
+                    new Token(TokenType.Literal, "f", 3),
+                    new Token(TokenType.Literal, "o", 4),
+                    new Token(TokenType.Literal, "o", 5),
+                    new Token(TokenType.NamedIdentifierEnd, ">", 6),
+                    new Token(TokenType.Literal, "b", 7),
+                    new Token(TokenType.Literal, "a", 8),
+                    new Token(TokenType.Literal, "r", 9),
+                    new Token(TokenType.GroupEnd, ")", 10)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_ReduceTokens_ShouldCombineMultipleLiteralTokens()
+        {
+            // Arrange
+            var input = new[]
+            {
+                new Token(TokenType.Literal, "a", 0),
+                new Token(TokenType.Literal, "b", 1),
+                new Token(TokenType.Literal, "c", 2)
+            };
+
+            // Act
+            var result = Tokenizer.ReduceTokens(input);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.Literal, "abc", 0)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_ReduceTokens_ShouldCombineMultipleLiteralTokensWithinOtherTokens()
+        {
+            // Arrange
+            var input = new[]
+            {
+                new Token(TokenType.Literal, "a", 0),
+                new Token(TokenType.GroupStart, "(", 1),
+                new Token(TokenType.Literal, "b", 2),
+                new Token(TokenType.Literal, "c", 3),
+                new Token(TokenType.Literal, "d", 4),
+                new Token(TokenType.GroupEnd, ")", 5),
+                new Token(TokenType.Literal, "e", 6)
+            };
+
+            // Act
+            var result = Tokenizer.ReduceTokens(input);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.Literal, "a", 0),
+                    new Token(TokenType.GroupStart, "(", 1),
+                    new Token(TokenType.Literal, "bcd", 2),
+                    new Token(TokenType.GroupEnd, ")", 5),
+                    new Token(TokenType.Literal, "e", 6)
                 },
                 result.ToArray()
             );

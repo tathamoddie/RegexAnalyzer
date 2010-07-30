@@ -147,6 +147,11 @@ namespace TathamOddie.RegexAnalyzer.Logic
                     groupingConstructs, new[] { "*", "+", "?" },
                     TokenType.Quantifier, TokenizerStateChange.RetainState),
 
+                // Strign end assertion
+                new TokenizerRule(
+                    groupingConstructs, new[] { "$" },
+                    TokenType.EndOfStringAssertion, TokenizerStateChange.RetainState),
+
                 // Whatever is left is a literal
                 new TokenizerRule(
                     groupingConstructs, TokenizerRule.AnyData,
@@ -220,7 +225,7 @@ namespace TathamOddie.RegexAnalyzer.Logic
 
         internal static IEnumerable<Token> ReduceTokens(IEnumerable<Token> tokens)
         {
-            var typesToCombine = new[] {TokenType.Literal, TokenType.Quantifier};
+            var typesToCombine = new[] {TokenType.Literal, TokenType.Quantifier, TokenType.GroupOption};
 
             var tokenQueue = new Queue<Token>(tokens);
 

@@ -696,6 +696,25 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test
         }
 
         [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeEndOfStringAssertion()
+        {
+            // Arrange
+            const string input = "a$";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.Literal, "a", 0),
+                    new Token(TokenType.EndOfStringAssertion, "$", 1)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
         public void Tokenizer_ReduceTokens_ShouldCombineMultipleConsecutiveLiteralTokens()
         {
             // Arrange
@@ -713,6 +732,52 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test
             CollectionAssert.AreEqual(new[]
                 {
                     new Token(TokenType.Literal, "abc", 0)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_ReduceTokens_ShouldCombineMultipleConsecutiveQuantifierTokens()
+        {
+            // Arrange
+            var input = new[]
+            {
+                new Token(TokenType.Quantifier, "a", 0),
+                new Token(TokenType.Quantifier, "b", 1),
+                new Token(TokenType.Quantifier, "c", 2)
+            };
+
+            // Act
+            var result = Tokenizer.ReduceTokens(input);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.Quantifier, "abc", 0)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_ReduceTokens_ShouldCombineMultipleConsecutiveGroupOptionTokens()
+        {
+            // Arrange
+            var input = new[]
+            {
+                new Token(TokenType.GroupOption, "a", 0),
+                new Token(TokenType.GroupOption, "b", 1),
+                new Token(TokenType.GroupOption, "c", 2)
+            };
+
+            // Act
+            var result = Tokenizer.ReduceTokens(input);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.GroupOption, "abc", 0)
                 },
                 result.ToArray()
             );

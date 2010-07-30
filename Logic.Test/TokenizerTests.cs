@@ -516,6 +516,28 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test
         }
 
         [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeCharacterSet()
+        {
+            // Arrange
+            const string input = "[abc]";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.CharacterSetStart, "[", 0),
+                    new Token(TokenType.Literal, "a", 1),
+                    new Token(TokenType.Literal, "b", 2),
+                    new Token(TokenType.Literal, "c", 3),
+                    new Token(TokenType.CharacterSetEnd, "]", 4)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
         public void Tokenizer_GetTokens_ShouldTokenizeOrOperator()
         {
             // Arrange
@@ -690,6 +712,25 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test
                     new Token(TokenType.Literal, "a", 0),
                     new Token(TokenType.Quantifier, "+", 1),
                     new Token(TokenType.Quantifier, "?", 2)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeStartOfStringAssertion()
+        {
+            // Arrange
+            const string input = "^a";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.StartOfStringAssertion, "^", 0),
+                    new Token(TokenType.Literal, "a", 1)
                 },
                 result.ToArray()
             );

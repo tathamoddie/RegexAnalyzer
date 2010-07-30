@@ -17,6 +17,7 @@ namespace TathamOddie.RegexAnalyzer.Logic
             AddRange(BuildConditionalExpressionRules());
             AddRange(BuildGroupNameRules());
             AddRange(BuildGroupOptionRules());
+            AddRange(BuildCharacterSetRules(groupingConstructs));
             AddRange(BuildBasicExpressionRules(groupingConstructs));
         }
 
@@ -127,6 +128,31 @@ namespace TathamOddie.RegexAnalyzer.Logic
                 TokenType.GroupOptionEnd, TokenizerStateChange.PopState);
         }
 
+        static IEnumerable<TokenizerRule> BuildCharacterSetRules(IEnumerable<TokenizerState> groupingConstructs)
+        {
+            // [ starts a character set
+            yield return new TokenizerRule(
+                groupingConstructs, "[",
+                TokenType.CharacterSetStart, TokenizerStateChange.PushState(TokenizerState.CharacterSetContents));
+
+            // ] closes a character set
+            yield return new TokenizerRule(
+                TokenizerState.CharacterSetContents, "]",
+                TokenType.CharacterSetEnd, TokenizerStateChange.PopState);
+
+            // \ starts an escape sequence
+            yield return new TokenizerRule(
+                TokenizerState.CharacterSetContents, @"\",
+                TokenType.CharacterEscapeMarker, TokenizerStateChange.PushState(TokenizerState.EscapedCharacter));
+
+            // escaped character data is handled by another rule in BuildBasicExpressionRules
+
+            // anything else is a character in the set
+            yield return new TokenizerRule(
+                TokenizerState.CharacterSetContents, TokenizerRule.AnyData,
+                TokenType.Literal, TokenizerStateChange.RetainState);
+        }
+
         static IEnumerable<TokenizerRule> BuildBasicExpressionRules(IEnumerable<TokenizerState> groupingConstructs)
         {
             // \ starts an escape sequence
@@ -148,6 +174,11 @@ namespace TathamOddie.RegexAnalyzer.Logic
             yield return new TokenizerRule(
                 groupingConstructs, new[] {"*", "+", "?"},
                 TokenType.Quantifier, TokenizerStateChange.RetainState);
+
+            // String start assertion
+            yield return new TokenizerRule(
+                groupingConstructs, new[] { "^" },
+                TokenType.StartOfStringAssertion, TokenizerStateChange.RetainState);
 
             // String end assertion
             yield return new TokenizerRule(

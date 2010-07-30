@@ -14,6 +14,7 @@
         NamedIdentifierEnd,
         NonCapturingGroupMarker,
         Quantifier,
+        StartOfStringAssertion,
         EndOfStringAssertion,
         PositiveLookAheadMarker,
         ConditionalExpressionStart,
@@ -21,5 +22,7 @@
         OrOperator,
         CharacterEscapeMarker,
         CharacterEscapeData,
+        CharacterSetStart,
+        CharacterSetEnd
     }
 }

@@ -9,6 +9,7 @@
         NamedIdentifier,
         ConditionalExpressionPredicate,
         ConditionalExpressionContents,
-        EscapedCharacter
+        EscapedCharacter,
+        CharacterSetContents
     }
 }

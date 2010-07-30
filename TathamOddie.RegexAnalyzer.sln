@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic", "Logic\Logic.csproj", "{3D1609F5-3A92-4C41-A53B-71BB7984842A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.Test", "Logic.Test\Logic.Test.csproj", "{3FA924DE-4592-496A-9051-1B6DC84E1414}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0FA302BD-ED98-4E3A-8AE8-0308135BF7DC}"
+	ProjectSection(SolutionItems) = preProject
+		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
+		TathamOddie.RegexAnalyzer.vsmdi = TathamOddie.RegexAnalyzer.vsmdi
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = TathamOddie.RegexAnalyzer.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3D1609F5-3A92-4C41-A53B-71BB7984842A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D1609F5-3A92-4C41-A53B-71BB7984842A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D1609F5-3A92-4C41-A53B-71BB7984842A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D1609F5-3A92-4C41-A53B-71BB7984842A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FA924DE-4592-496A-9051-1B6DC84E1414}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FA924DE-4592-496A-9051-1B6DC84E1414}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FA924DE-4592-496A-9051-1B6DC84E1414}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FA924DE-4592-496A-9051-1B6DC84E1414}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

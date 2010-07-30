@@ -696,7 +696,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test
         }
 
         [TestMethod]
-        public void Tokenizer_ReduceTokens_ShouldCombineMultipleConsecutiveTokensOfSameType()
+        public void Tokenizer_ReduceTokens_ShouldCombineMultipleConsecutiveLiteralTokens()
         {
             // Arrange
             var input = new[]
@@ -719,20 +719,47 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test
         }
 
         [TestMethod]
-        public void Tokenizer_ReduceTokens_ShouldCombineMultipleConsecutiveTokensOfSameTypeWithinOtherTokens()
+        public void Tokenizer_ReduceTokens_ShouldNotCombineMultipleConsecutiveGroupEndTokens()
+        {
+            // Arrange
+            var input = new[]
+            {
+                new Token(TokenType.GroupEnd, "a", 0),
+                new Token(TokenType.GroupEnd, "b", 1),
+                new Token(TokenType.GroupEnd, "c", 2)
+            };
+
+            // Act
+            var result = Tokenizer.ReduceTokens(input);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.GroupEnd, "a", 0),
+                    new Token(TokenType.GroupEnd, "b", 1),
+                    new Token(TokenType.GroupEnd, "c", 2)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_ReduceTokens_ShouldCombineMultipleConsecutiveLiteralAndQuantifierTokens()
         {
             // Arrange
             var input = new[]
             {
                 new Token(TokenType.Literal, "a", 0),
                 new Token(TokenType.GroupStart, "(", 1),
-                new Token(TokenType.Literal, "b", 2),
-                new Token(TokenType.Literal, "c", 3),
-                new Token(TokenType.Quantifier, "*", 4),
-                new Token(TokenType.Quantifier, "?", 5),
-                new Token(TokenType.Literal, "d", 6),
-                new Token(TokenType.GroupEnd, ")", 7),
-                new Token(TokenType.Literal, "e", 8)
+                new Token(TokenType.GroupStart, "(", 2),
+                new Token(TokenType.Literal, "b", 3),
+                new Token(TokenType.Literal, "c", 4),
+                new Token(TokenType.Quantifier, "*", 5),
+                new Token(TokenType.Quantifier, "?", 6),
+                new Token(TokenType.Literal, "d", 7),
+                new Token(TokenType.GroupEnd, ")", 8),
+                new Token(TokenType.GroupEnd, ")", 9),
+                new Token(TokenType.Literal, "e", 10)
             };
 
             // Act
@@ -743,11 +770,13 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test
                 {
                     new Token(TokenType.Literal, "a", 0),
                     new Token(TokenType.GroupStart, "(", 1),
-                    new Token(TokenType.Literal, "bc", 2),
-                    new Token(TokenType.Quantifier, "*?", 4),
-                    new Token(TokenType.Literal, "d", 6),
-                    new Token(TokenType.GroupEnd, ")", 7),
-                    new Token(TokenType.Literal, "e", 8)
+                    new Token(TokenType.GroupStart, "(", 2),
+                    new Token(TokenType.Literal, "bc", 3),
+                    new Token(TokenType.Quantifier, "*?", 5),
+                    new Token(TokenType.Literal, "d", 7),
+                    new Token(TokenType.GroupEnd, ")", 8),
+                    new Token(TokenType.GroupEnd, ")", 9),
+                    new Token(TokenType.Literal, "e", 10)
                 },
                 result.ToArray()
             );

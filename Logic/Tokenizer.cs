@@ -220,17 +220,26 @@ namespace TathamOddie.RegexAnalyzer.Logic
 
         internal static IEnumerable<Token> ReduceTokens(IEnumerable<Token> tokens)
         {
+            var typesToCombine = new[] {TokenType.Literal, TokenType.Quantifier};
+
             var tokenQueue = new Queue<Token>(tokens);
 
             while (tokenQueue.Any())
             {
                 var currentToken = tokenQueue.Dequeue();
 
-                var data = tokenQueue
+                if (typesToCombine.Contains(currentToken.Type))
+                {
+                    var combinedData = tokenQueue
                     .DequeueWhile(t => t.Type == currentToken.Type)
                     .Aggregate(currentToken.Data, (current, token) => current + token.Data);
 
-                yield return new Token(currentToken.Type, data, currentToken.StartIndex);
+                    yield return new Token(currentToken.Type, combinedData, currentToken.StartIndex);
+                }
+                else
+                {
+                    yield return currentToken;
+                }
             }
         }
     }

@@ -155,12 +155,7 @@ namespace TathamOddie.RegexAnalyzer.Logic
 
             // anything else is a character in the set
             yield return new TokenizerRule(
-                TokenizerState.CharacterSetContentsStart, TokenizerRule.AnyData,
-                TokenType.Literal, TokenizerStateChange.ReplaceState(TokenizerState.CharacterSetContents));
-
-            // anything else is a character in the set
-            yield return new TokenizerRule(
-                TokenizerState.CharacterSetContents, TokenizerRule.AnyData,
+                new[] { TokenizerState.CharacterSetContents, TokenizerState.CharacterSetContentsStart }, TokenizerRule.AnyData,
                 TokenType.Literal, TokenizerStateChange.RetainState);
         }
 

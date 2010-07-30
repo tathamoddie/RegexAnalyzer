@@ -14,7 +14,8 @@ namespace TathamOddie.RegexAnalyzer.Logic
             // As soon as the state in the key is hit once, it is replaced by the state in the value
             oneHitStates = new Dictionary<TokenizerState, TokenizerState>
             {
-                { TokenizerState.GroupContentsStart, TokenizerState.GroupContents }
+                { TokenizerState.GroupContentsStart, TokenizerState.GroupContents },
+                { TokenizerState.CharacterSetContentsStart, TokenizerState.CharacterSetContents }
             };
 
             this.input = input;

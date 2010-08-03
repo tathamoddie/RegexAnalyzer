@@ -1144,5 +1144,88 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test
                 result.ToArray()
             );
         }
+
+        [TestMethod]
+        public void Tokenizer_Tokenize_ShouldTokenizeComplexExpression4()
+        {
+            // Arrange
+            const string input = @"^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.(([0-9]{1,3})|([a-zA-Z]{2,3})|(aero|coop|info|museum|name))$";
+
+            // Act
+            var result = Tokenizer.Tokenize(input);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.StartOfStringAssertion, "^", 0),
+                    new Token(TokenType.CharacterSetStart, "[", 1),
+                    new Token(TokenType.Literal, "_a-zA-Z0-9-", 2),
+                    new Token(TokenType.CharacterSetEnd, "]", 13),
+                    new Token(TokenType.Quantifier, "+", 14),
+                    new Token(TokenType.GroupStart, "(", 15),
+                    new Token(TokenType.CharacterEscapeMarker, @"\", 16),
+                    new Token(TokenType.CharacterEscapeData, ".", 17),
+                    new Token(TokenType.CharacterSetStart, "[", 18),
+                    new Token(TokenType.Literal, "_a-zA-Z0-9-", 19),
+                    new Token(TokenType.CharacterSetEnd, "]", 30),
+                    new Token(TokenType.Quantifier, "+", 31),
+                    new Token(TokenType.GroupEnd, ")", 32),
+                    new Token(TokenType.Quantifier, "*", 33),
+                    new Token(TokenType.Literal, "@", 34),
+                    new Token(TokenType.CharacterSetStart, "[", 35),
+                    new Token(TokenType.Literal, "a-zA-Z0-9-", 36),
+                    new Token(TokenType.CharacterSetEnd, "]", 46),
+                    new Token(TokenType.Quantifier, "+", 47),
+                    new Token(TokenType.GroupStart, "(", 48),
+                    new Token(TokenType.CharacterEscapeMarker, @"\", 49),
+                    new Token(TokenType.CharacterEscapeData, ".", 50),
+                    new Token(TokenType.CharacterSetStart, "[", 51),
+                    new Token(TokenType.Literal, "a-zA-Z0-9-", 52),
+                    new Token(TokenType.CharacterSetEnd, "]", 62),
+                    new Token(TokenType.Quantifier, "+", 63),
+                    new Token(TokenType.GroupEnd, ")", 64),
+                    new Token(TokenType.Quantifier, "*", 65),
+                    new Token(TokenType.CharacterEscapeMarker, @"\", 66),
+                    new Token(TokenType.CharacterEscapeData, ".", 67),
+                    new Token(TokenType.GroupStart, "(", 68),
+                    new Token(TokenType.GroupStart, "(", 69),
+                    new Token(TokenType.CharacterSetStart, "[", 70),
+                    new Token(TokenType.Literal, "0-9", 71),
+                    new Token(TokenType.CharacterSetEnd, "]", 74),
+                    new Token(TokenType.ParametizedQuantifierStart, "{", 75),
+                    new Token(TokenType.Number, "1", 76),
+                    new Token(TokenType.ParametizedQuantifierRangeSeparator, ",", 77),
+                    new Token(TokenType.Number, "3", 78),
+                    new Token(TokenType.ParametizedQuantifierEnd, "}", 79),
+                    new Token(TokenType.GroupEnd, ")", 80),
+                    new Token(TokenType.OrOperator, "|", 81),
+                    new Token(TokenType.GroupStart, "(", 82),
+                    new Token(TokenType.CharacterSetStart, "[", 83),
+                    new Token(TokenType.Literal, "a-zA-Z", 84),
+                    new Token(TokenType.CharacterSetEnd, "]", 90),
+                    new Token(TokenType.ParametizedQuantifierStart, "{", 91),
+                    new Token(TokenType.Number, "2", 92),
+                    new Token(TokenType.ParametizedQuantifierRangeSeparator, ",", 93),
+                    new Token(TokenType.Number, "3", 94),
+                    new Token(TokenType.ParametizedQuantifierEnd, "}", 95),
+                    new Token(TokenType.GroupEnd, ")", 96),
+                    new Token(TokenType.OrOperator, "|", 97),
+                    new Token(TokenType.GroupStart, "(", 98),
+                    new Token(TokenType.Literal, "aero", 99),
+                    new Token(TokenType.OrOperator, "|", 103),
+                    new Token(TokenType.Literal, "coop", 104),
+                    new Token(TokenType.OrOperator, "|", 108),
+                    new Token(TokenType.Literal, "info", 109),
+                    new Token(TokenType.OrOperator, "|", 113),
+                    new Token(TokenType.Literal, "museum", 114),
+                    new Token(TokenType.OrOperator, "|", 120),
+                    new Token(TokenType.Literal, "name", 121),
+                    new Token(TokenType.GroupEnd, ")", 125),
+                    new Token(TokenType.GroupEnd, ")", 126),
+                    new Token(TokenType.EndOfStringAssertion, "$", 127)
+                },
+                result.ToArray()
+            );
+        }
     }
 }

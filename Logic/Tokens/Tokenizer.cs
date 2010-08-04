@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace TathamOddie.RegexAnalyzer.Logic
+namespace TathamOddie.RegexAnalyzer.Logic.Tokens
 {
     public class Tokenizer
     {

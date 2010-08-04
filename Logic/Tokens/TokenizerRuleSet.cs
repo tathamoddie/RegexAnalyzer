@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TathamOddie.RegexAnalyzer.Logic
+namespace TathamOddie.RegexAnalyzer.Logic.Tokens
 {
     class TokenizerRuleSet : List<TokenizerRule>
     {

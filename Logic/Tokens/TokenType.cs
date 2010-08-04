@@ -1,4 +1,4 @@
-﻿namespace TathamOddie.RegexAnalyzer.Logic
+﻿namespace TathamOddie.RegexAnalyzer.Logic.Tokens
 {
     public enum TokenType
     {

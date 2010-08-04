@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace TathamOddie.RegexAnalyzer.Logic
+namespace TathamOddie.RegexAnalyzer.Logic.Tokens
 {
     [DebuggerDisplay("{Type} @ {StartIndex}: {Data}")]
     public class Token

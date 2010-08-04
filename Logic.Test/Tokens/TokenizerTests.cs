@@ -1,7 +1,8 @@
 ﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TathamOddie.RegexAnalyzer.Logic.Tokens;
 
-namespace TathamOddie.RegexAnalyzer.Logic.Test
+namespace TathamOddie.RegexAnalyzer.Logic.Test.Tokens
 {
     [TestClass]
     public class TokenizerTests

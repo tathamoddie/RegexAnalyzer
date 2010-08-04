@@ -48,15 +48,14 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueExtensions.cs" />
-    <Compile Include="Token.cs" />
-    <Compile Include="Tokenizer.cs" />
-    <Compile Include="TokenizerContext.cs" />
-    <Compile Include="TokenizerRule.cs" />
-    <Compile Include="TokenizerRuleSet.cs" />
-    <Compile Include="TokenizerState.cs" />
-    <Compile Include="TokenizerStateChange.cs" />
-    <Compile Include="TokenResult.cs" />
-    <Compile Include="TokenType.cs" />
+    <Compile Include="Tokens\Token.cs" />
+    <Compile Include="Tokens\Tokenizer.cs" />
+    <Compile Include="Tokens\TokenizerRule.cs" />
+    <Compile Include="Tokens\TokenizerRuleSet.cs" />
+    <Compile Include="Tokens\TokenizerState.cs" />
+    <Compile Include="Tokens\TokenizerStateChange.cs" />
+    <Compile Include="Tokens\TokenResult.cs" />
+    <Compile Include="Tokens\TokenType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

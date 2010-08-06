@@ -56,6 +56,13 @@
     <Compile Include="Tokens\TokenizerStateChange.cs" />
     <Compile Include="Tokens\TokenResult.cs" />
     <Compile Include="Tokens\TokenType.cs" />
+    <Compile Include="Tree\CharacterClass.cs" />
+    <Compile Include="Tree\CharacterClassNode.cs" />
+    <Compile Include="Tree\CharacterSetNode.cs" />
+    <Compile Include="Tree\ContainerNode.cs" />
+    <Compile Include="Tree\LiteralNode.cs" />
+    <Compile Include="Tree\Node.cs" />
+    <Compile Include="Tree\TreeBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

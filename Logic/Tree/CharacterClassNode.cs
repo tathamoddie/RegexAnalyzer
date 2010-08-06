@@ -1,0 +1,18 @@
+﻿namespace TathamOddie.RegexAnalyzer.Logic.Tree
+{
+    public class CharacterClassNode : Node
+    {
+        readonly CharacterClass characterClass;
+
+        public CharacterClassNode(string data, int startIndex, CharacterClass characterClass)
+            : base(data, startIndex)
+        {
+            this.characterClass = characterClass;
+        }
+
+        public CharacterClass CharacterClass
+        {
+            get { return characterClass; }
+        }
+    }
+}

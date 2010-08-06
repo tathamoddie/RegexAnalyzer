@@ -44,7 +44,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tokens\TokenizerTests.cs" />
-    <Compile Include="Tree\TreeBuilderTests.cs" />
+    <Compile Include="Tree\TreeBuilderCharacterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Logic\Logic.csproj">

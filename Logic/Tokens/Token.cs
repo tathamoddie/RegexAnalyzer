@@ -1,9 +1,10 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace TathamOddie.RegexAnalyzer.Logic.Tokens
 {
     [DebuggerDisplay("{Type} @ {StartIndex}: {Data}")]
-    public class Token
+    public class Token : IEquatable<Token>
     {
         readonly TokenType type;
         readonly string data;

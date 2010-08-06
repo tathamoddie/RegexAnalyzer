@@ -54,7 +54,6 @@
     <Compile Include="Tokens\TokenizerRuleSet.cs" />
     <Compile Include="Tokens\TokenizerState.cs" />
     <Compile Include="Tokens\TokenizerStateChange.cs" />
-    <Compile Include="Tokens\TokenResult.cs" />
     <Compile Include="Tokens\TokenType.cs" />
     <Compile Include="Tree\CharacterClass.cs" />
     <Compile Include="Tree\CharacterClassNode.cs" />

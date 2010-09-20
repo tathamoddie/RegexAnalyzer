@@ -34,6 +34,8 @@
         ParametizedQuantifierRangeSeparator,
         CommentStart,
         NonBacktrackingSubexpressionMarker,
-        BalancingGroupNamedIdentifierSeparator
+        BalancingGroupNamedIdentifierSeparator,
+        CharacterRangeSeparator,
+        Character
     }
 }

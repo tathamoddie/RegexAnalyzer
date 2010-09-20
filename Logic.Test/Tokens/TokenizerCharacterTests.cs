@@ -80,10 +80,10 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tokens
             CollectionAssert.AreEqual(new[]
                 {
                     new Token(TokenType.CharacterSetStart, "[", 0),
-                    new Token(TokenType.Literal, "a", 1),
-                    new Token(TokenType.Literal, "b", 2),
-                    new Token(TokenType.Literal, "^", 3),
-                    new Token(TokenType.Literal, "c", 4),
+                    new Token(TokenType.Character, "a", 1),
+                    new Token(TokenType.Character, "b", 2),
+                    new Token(TokenType.Character, "^", 3),
+                    new Token(TokenType.Character, "c", 4),
                     new Token(TokenType.CharacterSetEnd, "]", 5)
                 },
                 result.ToArray()
@@ -104,10 +104,78 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tokens
                 {
                     new Token(TokenType.CharacterSetStart, "[", 0),
                     new Token(TokenType.NegativeCharacterSetModifier, "^", 1),
-                    new Token(TokenType.Literal, "a", 2),
-                    new Token(TokenType.Literal, "b", 3),
-                    new Token(TokenType.Literal, "c", 4),
+                    new Token(TokenType.Character, "a", 2),
+                    new Token(TokenType.Character, "b", 3),
+                    new Token(TokenType.Character, "c", 4),
                     new Token(TokenType.CharacterSetEnd, "]", 5)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeCharacterRange()
+        {
+            // Arrange
+            const string input = "[a-z]";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.CharacterSetStart, "[", 0),
+                    new Token(TokenType.Character, "a", 1),
+                    new Token(TokenType.CharacterRangeSeparator, "-", 2),
+                    new Token(TokenType.Character, "z", 3),
+                    new Token(TokenType.CharacterSetEnd, "]", 4)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeCharacterRangeWithinOtherCharacters()
+        {
+            // Arrange
+            const string input = "[1a-z2]";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.CharacterSetStart, "[", 0),
+                    new Token(TokenType.Character, "1", 1),
+                    new Token(TokenType.Character, "a", 2),
+                    new Token(TokenType.CharacterRangeSeparator, "-", 3),
+                    new Token(TokenType.Character, "z", 4),
+                    new Token(TokenType.Character, "2", 5),
+                    new Token(TokenType.CharacterSetEnd, "]", 6)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeDashAtStartOfCharacterSet()
+        {
+            // Arrange
+            const string input = "[-ab]";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.CharacterSetStart, "[", 0),
+                    new Token(TokenType.CharacterRangeSeparator, "-", 1),
+                    new Token(TokenType.Character, "a", 2),
+                    new Token(TokenType.Character, "b", 3),
+                    new Token(TokenType.CharacterSetEnd, "]", 4)
                 },
                 result.ToArray()
             );

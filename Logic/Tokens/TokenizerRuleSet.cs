@@ -193,10 +193,15 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
 
             // escaped character data is handled by another rule in BuildBasicExpressionRules
 
+            // - is a character range separator
+            yield return new TokenizerRule(
+                new[] { TokenizerState.CharacterSetContents, TokenizerState.CharacterSetContentsStart }, @"-",
+                TokenType.CharacterRangeSeparator, TokenizerStateChange.RetainState);
+
             // anything else is a character in the set
             yield return new TokenizerRule(
                 new[] { TokenizerState.CharacterSetContents, TokenizerState.CharacterSetContentsStart }, TokenizerRule.AnyData,
-                TokenType.Literal, TokenizerStateChange.RetainState);
+                TokenType.Character, TokenizerStateChange.RetainState);
         }
 
         static IEnumerable<TokenizerRule> BuildQuantifierRules(IEnumerable<TokenizerState> groupingConstructs)

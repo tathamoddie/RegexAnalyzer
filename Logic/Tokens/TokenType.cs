@@ -32,6 +32,7 @@
         ParametizedQuantifierEnd,
         Number,
         ParametizedQuantifierRangeSeparator,
-        CommentStart
+        CommentStart,
+        NonBacktrackingSubExpressionMarker
     }
 }

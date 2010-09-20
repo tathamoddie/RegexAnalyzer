@@ -68,6 +68,11 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
             yield return new TokenizerRule(
                 TokenizerState.GroupDirectiveContents, "!",
                 TokenType.NegativeLookAheadMarker, TokenizerStateChange.PopState);
+
+            // > after (? is a non-backtracking subexpression marker
+            yield return new TokenizerRule(
+                TokenizerState.GroupDirectiveContents, ">",
+                TokenType.NonBacktrackingSubExpressionMarker, TokenizerStateChange.PopState);
         }
 
         static IEnumerable<TokenizerRule> BuildConditionalExpressionRules()

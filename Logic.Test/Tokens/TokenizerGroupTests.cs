@@ -242,5 +242,29 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tokens
                 result.ToArray()
             );
         }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeNonBacktrackingSubexpression()
+        {
+            // Arrange
+            const string input = "(?>foo)";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.GroupStart, "(", 0),
+                    new Token(TokenType.GroupDirectiveStart, "?", 1),
+                    new Token(TokenType.NonBacktrackingSubExpressionMarker, ">", 2),
+                    new Token(TokenType.Literal, "f", 3),
+                    new Token(TokenType.Literal, "o", 4),
+                    new Token(TokenType.Literal, "o", 5),
+                    new Token(TokenType.GroupEnd, ")", 6)
+                },
+                result.ToArray()
+            );
+        }
     }
 }

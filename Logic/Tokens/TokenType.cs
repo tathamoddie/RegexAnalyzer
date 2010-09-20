@@ -36,6 +36,7 @@
         NonBacktrackingSubexpressionMarker,
         BalancingGroupNamedIdentifierSeparator,
         CharacterRangeSeparator,
-        Character
+        Character,
+        AnyCharacter
     }
 }

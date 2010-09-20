@@ -46,6 +46,24 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tokens
         }
 
         [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeAnyCharacterClass()
+        {
+            // Arrange
+            const string input = ".";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.AnyCharacter, ".", 0)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
         public void Tokenizer_GetTokens_ShouldTokenizeEscapeSequence()
         {
             // Arrange
@@ -62,6 +80,25 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tokens
                     new Token(TokenType.CharacterEscapeMarker, @"\", 2),
                     new Token(TokenType.CharacterEscapeData, "+", 3),
                     new Token(TokenType.Literal, "c", 4)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeEscapedPeriod()
+        {
+            // Arrange
+            const string input = @"\.";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.CharacterEscapeMarker, @"\", 0),
+                    new Token(TokenType.CharacterEscapeData, ".", 1)
                 },
                 result.ToArray()
             );
@@ -108,6 +145,28 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tokens
                     new Token(TokenType.Character, "b", 3),
                     new Token(TokenType.Character, "c", 4),
                     new Token(TokenType.CharacterSetEnd, "]", 5)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeAnyCharacterClassInCharacterSet()
+        {
+            // Arrange
+            const string input = "[.ab]";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.CharacterSetStart, "[", 0),
+                    new Token(TokenType.AnyCharacter, ".", 1),
+                    new Token(TokenType.Character, "a", 2),
+                    new Token(TokenType.Character, "b", 3),
+                    new Token(TokenType.CharacterSetEnd, "]", 4)
                 },
                 result.ToArray()
             );

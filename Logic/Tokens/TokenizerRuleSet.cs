@@ -198,6 +198,11 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
                 new[] { TokenizerState.CharacterSetContents, TokenizerState.CharacterSetContentsStart }, @"-",
                 TokenType.CharacterRangeSeparator, TokenizerStateChange.RetainState);
 
+            // a period is the 'any character' class
+            yield return new TokenizerRule(
+                new[] { TokenizerState.CharacterSetContents, TokenizerState.CharacterSetContentsStart }, ".",
+                TokenType.AnyCharacter, TokenizerStateChange.RetainState);
+
             // anything else is a character in the set
             yield return new TokenizerRule(
                 new[] { TokenizerState.CharacterSetContents, TokenizerState.CharacterSetContentsStart }, TokenizerRule.AnyData,
@@ -258,6 +263,11 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
             yield return new TokenizerRule(
                 groupingConstructs, new[] {"$"},
                 TokenType.EndOfStringAssertion, TokenizerStateChange.RetainState);
+
+            // A period is the 'any character' class
+            yield return new TokenizerRule(
+                groupingConstructs, ".",
+                TokenType.AnyCharacter, TokenizerStateChange.RetainState);
 
             // Whatever is left is a literal
             yield return new TokenizerRule(

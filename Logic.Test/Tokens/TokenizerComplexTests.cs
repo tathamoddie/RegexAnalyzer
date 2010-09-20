@@ -232,5 +232,45 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tokens
                 result.ToArray()
             );
         }
+
+        [TestMethod]
+        public void Tokenizer_Tokenize_ShouldTokenizeComplexExpression5()
+        {
+            // Arrange
+            const string input = @"([^\\]|\\[\da-fA-F]{2}){0,32}";
+
+            // Act
+            var result = Tokenizer.Tokenize(input);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.GroupStart, "(", 0),
+                    new Token(TokenType.CharacterSetStart, "[", 1),
+                    new Token(TokenType.NegativeCharacterSetModifier, "^", 2),
+                    new Token(TokenType.CharacterEscapeMarker, @"\", 3),
+                    new Token(TokenType.CharacterEscapeData, @"\", 4),
+                    new Token(TokenType.CharacterSetEnd, "]", 5),
+                    new Token(TokenType.OrOperator, "|", 6),
+                    new Token(TokenType.CharacterEscapeMarker, @"\", 7),
+                    new Token(TokenType.CharacterEscapeData, @"\", 8),
+                    new Token(TokenType.CharacterSetStart, "[", 9),
+                    new Token(TokenType.CharacterEscapeMarker, @"\", 10),
+                    new Token(TokenType.CharacterEscapeData, "d", 11),
+                    new Token(TokenType.Literal, "a-fA-F", 12),
+                    new Token(TokenType.CharacterSetEnd, "]", 18),
+                    new Token(TokenType.ParametizedQuantifierStart, "{", 19),
+                    new Token(TokenType.Number, "2", 20),
+                    new Token(TokenType.ParametizedQuantifierEnd, "}", 21),
+                    new Token(TokenType.GroupEnd, ")", 22),
+                    new Token(TokenType.ParametizedQuantifierStart, "{", 23),
+                    new Token(TokenType.Number, "0", 24),
+                    new Token(TokenType.ParametizedQuantifierRangeSeparator, ",", 25),
+                    new Token(TokenType.Number, "32", 26),
+                    new Token(TokenType.ParametizedQuantifierEnd, "}", 28)
+                },
+                result.ToArray()
+            );
+        }
     }
 }

@@ -72,7 +72,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
             // > after (? is a non-backtracking subexpression marker
             yield return new TokenizerRule(
                 TokenizerState.GroupDirectiveContents, ">",
-                TokenType.NonBacktrackingSubExpressionMarker, TokenizerStateChange.PopState);
+                TokenType.NonBacktrackingSubexpressionMarker, TokenizerStateChange.PopState);
         }
 
         static IEnumerable<TokenizerRule> BuildConditionalExpressionRules()

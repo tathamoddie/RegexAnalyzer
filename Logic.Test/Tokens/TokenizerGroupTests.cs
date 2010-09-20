@@ -257,7 +257,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tokens
                 {
                     new Token(TokenType.GroupStart, "(", 0),
                     new Token(TokenType.GroupDirectiveStart, "?", 1),
-                    new Token(TokenType.NonBacktrackingSubExpressionMarker, ">", 2),
+                    new Token(TokenType.NonBacktrackingSubexpressionMarker, ">", 2),
                     new Token(TokenType.Literal, "f", 3),
                     new Token(TokenType.Literal, "o", 4),
                     new Token(TokenType.Literal, "o", 5),

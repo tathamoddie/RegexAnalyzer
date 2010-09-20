@@ -256,12 +256,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
 
             // String start assertion
             yield return new TokenizerRule(
-                groupingConstructs, new[] { "^" },
+                groupingConstructs, "^",
                 TokenType.StartOfStringAssertion, TokenizerStateChange.RetainState);
 
             // String end assertion
             yield return new TokenizerRule(
-                groupingConstructs, new[] {"$"},
+                groupingConstructs, "$",
                 TokenType.EndOfStringAssertion, TokenizerStateChange.RetainState);
 
             // A period is the 'any character' class

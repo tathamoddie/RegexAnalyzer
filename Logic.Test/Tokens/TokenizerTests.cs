@@ -8,6 +8,31 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tokens
     public class TokenizerTests
     {
         [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeInlineComment()
+        {
+            // Arrange
+            const string input = "(?#foo!)";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.GroupStart, "(", 0),
+                    new Token(TokenType.GroupDirectiveStart, "?", 1),
+                    new Token(TokenType.CommentStart, "#", 2),
+                    new Token(TokenType.Literal, "f", 3),
+                    new Token(TokenType.Literal, "o", 4),
+                    new Token(TokenType.Literal, "o", 5),
+                    new Token(TokenType.Literal, "!", 6),
+                    new Token(TokenType.GroupEnd, ")", 7)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
         public void Tokenizer_GetTokens_ShouldTokenizePositiveLookAhead()
         {
             // Arrange

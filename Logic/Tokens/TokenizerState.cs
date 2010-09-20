@@ -12,6 +12,7 @@
         EscapedCharacter,
         CharacterSetContents,
         CharacterSetContentsStart,
-        ParametizedQuantifierContents
+        ParametizedQuantifierContents,
+        InlineComment
     }
 }

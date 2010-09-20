@@ -31,6 +31,7 @@
         ParametizedQuantifierStart,
         ParametizedQuantifierEnd,
         Number,
-        ParametizedQuantifierRangeSeparator
+        ParametizedQuantifierRangeSeparator,
+        CommentStart
     }
 }

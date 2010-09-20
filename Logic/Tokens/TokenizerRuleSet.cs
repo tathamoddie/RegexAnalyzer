@@ -39,6 +39,21 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
                 TokenizerState.GroupContentsStart, "?",
                 TokenType.GroupDirectiveStart, TokenizerStateChange.ReplaceState(TokenizerState.GroupDirectiveContents));
 
+            // # after (? is the start of an inline comment
+            yield return new TokenizerRule(
+                TokenizerState.GroupDirectiveContents, "#",
+                TokenType.CommentStart, TokenizerStateChange.ReplaceState(TokenizerState.InlineComment));
+
+            // ) ends an inline comment
+            yield return new TokenizerRule(
+                TokenizerState.InlineComment, ")",
+                TokenType.GroupEnd, TokenizerStateChange.PopState);
+
+            // anything other than a ) is part of the inline comment
+            yield return new TokenizerRule(
+                TokenizerState.InlineComment, TokenizerRule.AnyData,
+                TokenType.Literal, TokenizerStateChange.RetainState);
+
             // : after (? is a non-capturing group marker
             yield return new TokenizerRule(
                 TokenizerState.GroupDirectiveContents, ":",

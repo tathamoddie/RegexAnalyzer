@@ -121,6 +121,38 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tokens
         }
 
         [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeBalancingGroup()
+        {
+            // Arrange
+            const string input = "(?<foo-bar>baz)";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.GroupStart, "(", 0),
+                    new Token(TokenType.GroupDirectiveStart, "?", 1),
+                    new Token(TokenType.NamedIdentifierStartOrLookBehindMarker, "<", 2),
+                    new Token(TokenType.Literal, "f", 3),
+                    new Token(TokenType.Literal, "o", 4),
+                    new Token(TokenType.Literal, "o", 5),
+                    new Token(TokenType.BalancingGroupNamedIdentifierSeparator, "-", 6),
+                    new Token(TokenType.Literal, "b", 7),
+                    new Token(TokenType.Literal, "a", 8),
+                    new Token(TokenType.Literal, "r", 9),
+                    new Token(TokenType.NamedIdentifierEnd, ">", 10),
+                    new Token(TokenType.Literal, "b", 11),
+                    new Token(TokenType.Literal, "a", 12),
+                    new Token(TokenType.Literal, "z", 13),
+                    new Token(TokenType.GroupEnd, ")", 14)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
         public void Tokenizer_GetTokens_ShouldTokenizeInlineComment()
         {
             // Arrange

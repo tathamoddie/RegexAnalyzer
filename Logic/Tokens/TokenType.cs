@@ -33,6 +33,7 @@
         Number,
         ParametizedQuantifierRangeSeparator,
         CommentStart,
-        NonBacktrackingSubexpressionMarker
+        NonBacktrackingSubexpressionMarker,
+        BalancingGroupNamedIdentifierSeparator
     }
 }

@@ -120,6 +120,11 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
                 TokenizerState.NamedIdentifierOrNegativeLookBehind, TokenizerRule.LetterAndNumberData,
                 TokenType.Literal, TokenizerStateChange.RetainState);
 
+            // - splits the two identifiers in a balancing group
+            yield return new TokenizerRule(
+                TokenizerState.NamedIdentifierOrNegativeLookBehind, "-",
+                TokenType.BalancingGroupNamedIdentifierSeparator, TokenizerStateChange.RetainState);
+
             // > ends a named identifier
             yield return new TokenizerRule(
                 TokenizerState.NamedIdentifierOrNegativeLookBehind, ">",

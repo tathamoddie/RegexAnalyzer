@@ -6,7 +6,7 @@
         GroupContentsStart,
         GroupDirectiveContents,
         GroupOption,
-        NamedIdentifier,
+        NamedIdentifierOrNegativeLookBehind,
         ConditionalExpressionPredicate,
         ConditionalExpressionContents,
         EscapedCharacter,

@@ -15,7 +15,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
 
             AddRange(BuildGroupRules(groupingConstructs));
             AddRange(BuildConditionalExpressionRules());
-            AddRange(BuildGroupNameRules());
+            AddRange(BuildGroupNameAndLookBehindRules());
             AddRange(BuildGroupOptionRules());
             AddRange(BuildCharacterSetRules(groupingConstructs));
             AddRange(BuildQuantifierRules(groupingConstructs));
@@ -78,21 +78,31 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
                 TokenType.OrOperator, TokenizerStateChange.RetainState);
         }
 
-        static IEnumerable<TokenizerRule> BuildGroupNameRules()
+        static IEnumerable<TokenizerRule> BuildGroupNameAndLookBehindRules()
         {
-            // < after (? is the start of a group identifier
+            // < after (? is the start of a group identifier or look behind
             yield return new TokenizerRule(
                 TokenizerState.GroupDirectiveContents, "<",
-                TokenType.NamedIdentifierStart, TokenizerStateChange.ReplaceState(TokenizerState.NamedIdentifier));
+                TokenType.NamedIdentifierStartOrLookBehindMarker, TokenizerStateChange.ReplaceState(TokenizerState.NamedIdentifierOrNegativeLookBehind));
+
+            // = after (?< is a positive look behind
+            yield return new TokenizerRule(
+                TokenizerState.NamedIdentifierOrNegativeLookBehind, "=",
+                TokenType.PositiveLookBehindMarker, TokenizerStateChange.PopState);
+
+            // ! after (?< is a negative look behind
+            yield return new TokenizerRule(
+                TokenizerState.NamedIdentifierOrNegativeLookBehind, "!",
+                TokenType.NegativeLookBehindMarker, TokenizerStateChange.PopState);
 
             // a-z, 0-9 are valid group identifier characters
             yield return new TokenizerRule(
-                TokenizerState.NamedIdentifier, TokenizerRule.LetterAndNumberData,
+                TokenizerState.NamedIdentifierOrNegativeLookBehind, TokenizerRule.LetterAndNumberData,
                 TokenType.Literal, TokenizerStateChange.RetainState);
 
             // > ends a named identifier
             yield return new TokenizerRule(
-                TokenizerState.NamedIdentifier, ">",
+                TokenizerState.NamedIdentifierOrNegativeLookBehind, ">",
                 TokenType.NamedIdentifierEnd, TokenizerStateChange.PopState);
         }
 

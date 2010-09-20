@@ -17,6 +17,7 @@
         StartOfStringAssertion,
         EndOfStringAssertion,
         PositiveLookAheadMarker,
+        NegativeLookAheadMarker,
         ConditionalExpressionStart,
         ConditionalExpressionEnd,
         OrOperator,

@@ -44,10 +44,15 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
                 TokenizerState.GroupDirectiveContents, ":",
                 TokenType.NonCapturingGroupMarker, TokenizerStateChange.PopState);
 
-            // = after (? is a non-capturing group marker
+            // = after (? is a positive look ahead
             yield return new TokenizerRule(
                 TokenizerState.GroupDirectiveContents, "=",
                 TokenType.PositiveLookAheadMarker, TokenizerStateChange.PopState);
+
+            // ! after (? is a negative look ahead
+            yield return new TokenizerRule(
+                TokenizerState.GroupDirectiveContents, "!",
+                TokenType.NegativeLookAheadMarker, TokenizerStateChange.PopState);
         }
 
         static IEnumerable<TokenizerRule> BuildConditionalExpressionRules()

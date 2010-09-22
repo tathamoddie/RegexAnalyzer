@@ -10,6 +10,7 @@
         ConditionalExpressionPredicate,
         ConditionalExpressionContents,
         EscapedCharacter,
+        EscapedHexCharacter,
         CharacterSetContents,
         CharacterSetContentsStart,
         ParametizedQuantifierContents,

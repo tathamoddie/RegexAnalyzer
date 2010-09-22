@@ -16,10 +16,19 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
 
         internal static Action<Stack<TokenizerState>> ReplaceState(TokenizerState state)
         {
+            return ReplaceState(state, 1);
+        }
+
+        internal static Action<Stack<TokenizerState>> ReplaceState(TokenizerState state, short pushCount)
+        {
+            if (pushCount <= 0)
+                throw new ArgumentOutOfRangeException("pushCount", pushCount, "Must be a positive number.");
+
             return states =>
             {
                 states.Pop();
-                states.Push(state);
+                for (var i = 0; i < pushCount; i ++)
+                    states.Push(state);
             };
         }
     }

@@ -244,7 +244,17 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
                 groupingConstructs, @"\",
                 TokenType.CharacterEscapeMarker, TokenizerStateChange.PushState(TokenizerState.EscapedCharacter));
 
-            // Anything immediately after \ is escaped data
+            // x immediately after \ means the escape sequence is in hex (eg, \x20)
+            yield return new TokenizerRule(
+                TokenizerState.EscapedCharacter, "x",
+                TokenType.CharacterEscapeHexMarker, TokenizerStateChange.ReplaceState(TokenizerState.EscapedHexCharacter, 2));
+
+            // hex digits after \x are the hex content (eg, \x20)
+            yield return new TokenizerRule(
+                TokenizerState.EscapedHexCharacter, TokenizerRule.HexData,
+                TokenType.CharacterEscapeData, TokenizerStateChange.PopState);
+
+            // anything else immediately after \ is escaped data
             yield return new TokenizerRule(
                 TokenizerState.EscapedCharacter, TokenizerRule.AnyData,
                 TokenType.CharacterEscapeData, TokenizerStateChange.PopState);

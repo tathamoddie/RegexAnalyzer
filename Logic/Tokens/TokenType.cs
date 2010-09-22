@@ -24,6 +24,7 @@
         ConditionalExpressionEnd,
         OrOperator,
         CharacterEscapeMarker,
+        CharacterEscapeHexMarker,
         CharacterEscapeData,
         CharacterSetStart,
         CharacterSetEnd,

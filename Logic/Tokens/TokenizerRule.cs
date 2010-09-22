@@ -17,6 +17,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
         public static readonly IEnumerable<string> LetterAndNumberData =
             LetterData.Union(NumberData);
 
+        public static readonly IEnumerable<string> HexData =
+            Enumerable.Range('a', 'f' - 'a')
+                .Concat(Enumerable.Range('A', 'F' - 'A'))
+                .Concat(Enumerable.Range('0', '9' - '0'))
+                .Select(i => ((char)i).ToString());
+
         readonly IEnumerable<TokenizerState> applicableStates;
         readonly IEnumerable<string> applicableData;
         readonly TokenType type;

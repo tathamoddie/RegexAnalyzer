@@ -64,7 +64,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tokens
         }
 
         [TestMethod]
-        public void Tokenizer_GetTokens_ShouldTokenizeEscapeSequence()
+        public void Tokenizer_GetTokens_ShouldTokenizeBasicEscapeSequence()
         {
             // Arrange
             const string input = @"ab\+c";
@@ -80,6 +80,30 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tokens
                     new Token(TokenType.CharacterEscapeMarker, @"\", 2),
                     new Token(TokenType.CharacterEscapeData, "+", 3),
                     new Token(TokenType.Literal, "c", 4)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeAsciiHexEscapeSequence()
+        {
+            // Arrange
+            const string input = @"ab\x201";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.Literal, "a", 0),
+                    new Token(TokenType.Literal, "b", 1),
+                    new Token(TokenType.CharacterEscapeMarker, @"\", 2),
+                    new Token(TokenType.CharacterEscapeHexMarker, "x", 3),
+                    new Token(TokenType.CharacterEscapeData, "2", 4),
+                    new Token(TokenType.CharacterEscapeData, "0", 5),
+                    new Token(TokenType.Literal, "1", 6)
                 },
                 result.ToArray()
             );

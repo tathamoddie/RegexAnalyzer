@@ -40,9 +40,10 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
             children.AddRange(nodes);
         }
 
-        public void ReplaceLastChild(Node node)
+        public void ReplaceLastChild(params Node[] nodes)
         {
-            children[children.Count - 1] = node;
+            children.RemoveAt(children.Count - 1);
+            children.AddRange(nodes.Where(n => n != null));
         }
 
         public override bool Equals(object obj)

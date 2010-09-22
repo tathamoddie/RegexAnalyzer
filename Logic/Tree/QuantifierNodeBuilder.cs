@@ -27,15 +27,35 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
 
             var immediatelyPriorNode = previousNodes.Last();
 
+            // If there's a multi-character literal then we need to split it up
+            Node nodeToQuantify;
+            Node nodeToInsertBeforeQuantifier = null;
+            if (immediatelyPriorNode is LiteralNode &&
+                immediatelyPriorNode.Data.Length > 1)
+            {
+                var originalLiteralData = immediatelyPriorNode.Data;
+
+                nodeToQuantify = new LiteralNode(
+                    originalLiteralData.Substring(originalLiteralData.Length - 1),
+                    immediatelyPriorNode.StartIndex + originalLiteralData.Length - 1);
+                nodeToInsertBeforeQuantifier = new LiteralNode(
+                    originalLiteralData.Substring(0, originalLiteralData.Length - 1),
+                    immediatelyPriorNode.StartIndex);
+            }
+            else
+            {
+                nodeToQuantify = immediatelyPriorNode;
+            }
+
             var quantifierNode = new QuantifierNode(
-                immediatelyPriorNode.Data + startToken.Data,
-                immediatelyPriorNode.StartIndex,
+                nodeToQuantify.Data + startToken.Data,
+                nodeToQuantify.StartIndex,
                 min,
                 max,
-                immediatelyPriorNode
+                nodeToQuantify
             );
 
-            targetNode.ReplaceLastChild(quantifierNode);
+            targetNode.ReplaceLastChild(nodeToInsertBeforeQuantifier, quantifierNode);
 
             return null;
         }

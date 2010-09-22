@@ -79,5 +79,30 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                 nodes.ToArray()
             );
         }
+
+        [TestMethod]
+        public void TreeBuilder_Build_ShouldBuildQualifierNodeAroundLastCharacterOfMultiCharacterLiteral()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.Literal, "abc", 0),
+                new Token(TokenType.Quantifier, "*", 1)
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new Node[]
+                {
+                    new LiteralNode("ab", 0),
+                    new QuantifierNode("c*", 2,
+                        0, null,
+                        new LiteralNode("c", 2))
+                },
+                nodes.ToArray()
+            );
+        }
     }
 }

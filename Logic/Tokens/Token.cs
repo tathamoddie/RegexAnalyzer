@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 
 namespace TathamOddie.RegexAnalyzer.Logic.Tokens
 {
@@ -72,7 +73,11 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
 
         public static string GetData(IEnumerable<Token> tokens)
         {
-            return tokens.Aggregate(string.Empty, (d, t) => d + t.Data);
+            var tokenArray = tokens.ToArray();
+            var builder = new StringBuilder(tokens.Count());
+            foreach (var token in tokenArray)
+                builder.Append(token.Data);
+            return builder.ToString();
         }
     }
 }

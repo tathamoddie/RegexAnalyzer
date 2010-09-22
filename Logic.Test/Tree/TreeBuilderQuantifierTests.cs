@@ -239,5 +239,34 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                 nodes.ToArray()
             );
         }
+
+        [TestMethod]
+        public void TreeBuilder_Build_ShouldBuildMinMaxParametizedQuantifierNodeAroundLastCharacterOfMultiCharacterLiteral()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.Literal, "abc", 0),
+                new Token(TokenType.ParametizedQuantifierStart, "{", 3),
+                new Token(TokenType.Number, "3", 4),
+                new Token(TokenType.ParametizedQuantifierRangeSeparator, ",", 5),
+                new Token(TokenType.Number, "16", 6),
+                new Token(TokenType.ParametizedQuantifierEnd, "}", 8)
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new Node[]
+                {
+                    new LiteralNode("ab", 0),
+                    new QuantifierNode("c{3,16}", 2,
+                        3, 16,
+                        new LiteralNode("c", 2))
+                },
+                nodes.ToArray()
+            );
+        }
     }
 }

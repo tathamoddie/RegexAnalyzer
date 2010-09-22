@@ -33,7 +33,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
 
         void Process(Node targetNode, Queue<Token> tokenQueue, TreeBuilderState state)
         {
-            state.ProcessingState = new ProcessingState(tokenQueue);
+            state.ProcessingState = new ProcessingState(targetNode, tokenQueue);
 
             while (tokenQueue.Any())
             {
@@ -51,7 +51,8 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
 
                 var node = rule.NodeBuilder(token, state);
 
-                targetNode.AddChild(node);
+                if (node != null)
+                    targetNode.AddChild(node);
             }
         }
     }

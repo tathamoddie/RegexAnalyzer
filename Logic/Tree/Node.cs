@@ -40,6 +40,11 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
             children.AddRange(nodes);
         }
 
+        public void ReplaceLastChild(Node node)
+        {
+            children[children.Count - 1] = node;
+        }
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace TathamOddie.RegexAnalyzer.Logic.Tree
+﻿namespace TathamOddie.RegexAnalyzer.Logic.Tree
 {
     public class CharacterSetNode : Node
     {

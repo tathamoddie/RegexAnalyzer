@@ -30,5 +30,22 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                 nodes.ToArray()
             );
         }
+
+        [TestMethod]
+        public void TreeBuilding_Build_ShouldNotThrowStackOverflowExceptionForMassivelyNestedGroups()
+        {
+            // Arrange
+            const int depth = 1000000;
+            var startTokens = Enumerable.Range(0, depth)
+                .Select(i => new Token(TokenType.GroupStart, "(", i));
+            var endTokens = Enumerable.Range(depth, depth)
+                .Select(i => new Token(TokenType.GroupEnd, ")", i));
+            var tokens = startTokens.Concat(endTokens);
+
+            // Act
+            new TreeBuilder().Build(tokens);
+
+            // Assert
+        }
     }
 }

@@ -89,6 +89,27 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tokens
         public void Tokenizer_GetTokens_ShouldTokenizeAsciiHexEscapeSequence()
         {
             // Arrange
+            const string input = @"\x1f";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.CharacterEscapeMarker, @"\", 0),
+                    new Token(TokenType.CharacterEscapeHexMarker, "x", 1),
+                    new Token(TokenType.CharacterEscapeData, "1", 2),
+                    new Token(TokenType.CharacterEscapeData, "f", 3)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeAsciiHexEscapeSequenceWithTrailingNumbers()
+        {
+            // Arrange
             const string input = @"ab\x201";
 
             // Act

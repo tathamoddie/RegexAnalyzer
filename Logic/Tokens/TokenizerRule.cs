@@ -9,18 +9,20 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
         public const IEnumerable<string> AnyData = null;
 
         public static readonly IEnumerable<string> LetterData =
-            Enumerable.Range('a', 'z' - 'a').Concat(Enumerable.Range('A', 'Z' - 'A')).Select(i => ((char)i).ToString());
+            Enumerable.Range('a', 'z' - 'a' + 1)
+                .Concat(Enumerable.Range('A', 'Z' - 'A' + 1))
+                .Select(i => ((char)i).ToString());
 
         public static readonly IEnumerable<string> NumberData =
-            Enumerable.Range('0', '9' - '0').Select(i => ((char)i).ToString());
+            Enumerable.Range('0', '9' - '0' + 1).Select(i => ((char)i).ToString());
 
         public static readonly IEnumerable<string> LetterAndNumberData =
             LetterData.Union(NumberData);
 
         public static readonly IEnumerable<string> HexData =
-            Enumerable.Range('a', 'f' - 'a')
-                .Concat(Enumerable.Range('A', 'F' - 'A'))
-                .Concat(Enumerable.Range('0', '9' - '0'))
+            Enumerable.Range('a', 'f' - 'a' + 1)
+                .Concat(Enumerable.Range('A', 'F' - 'A' + 1))
+                .Concat(Enumerable.Range('0', '9' - '0' + 1))
                 .Select(i => ((char)i).ToString());
 
         readonly IEnumerable<TokenizerState> applicableStates;

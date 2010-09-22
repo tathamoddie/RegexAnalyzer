@@ -196,7 +196,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tokens
         }
 
         [TestMethod]
-        public void Tokenizer_GetTokens_ShouldTokenizeAnyCharacterClassInCharacterSet()
+        public void Tokenizer_GetTokens_ShouldTokenizePeriodInCharacterSet()
         {
             // Arrange
             const string input = "[.ab]";
@@ -208,7 +208,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tokens
             CollectionAssert.AreEqual(new[]
                 {
                     new Token(TokenType.CharacterSetStart, "[", 0),
-                    new Token(TokenType.AnyCharacter, ".", 1),
+                    new Token(TokenType.Character, ".", 1),
                     new Token(TokenType.Character, "a", 2),
                     new Token(TokenType.Character, "b", 3),
                     new Token(TokenType.CharacterSetEnd, "]", 4)

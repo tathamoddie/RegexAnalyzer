@@ -198,11 +198,6 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
                 new[] { TokenizerState.CharacterSetContents, TokenizerState.CharacterSetContentsStart }, @"-",
                 TokenType.CharacterRangeSeparator, TokenizerStateChange.RetainState);
 
-            // a period is the 'any character' class
-            yield return new TokenizerRule(
-                new[] { TokenizerState.CharacterSetContents, TokenizerState.CharacterSetContentsStart }, ".",
-                TokenType.AnyCharacter, TokenizerStateChange.RetainState);
-
             // anything else is a character in the set
             yield return new TokenizerRule(
                 new[] { TokenizerState.CharacterSetContents, TokenizerState.CharacterSetContentsStart }, TokenizerRule.AnyData,

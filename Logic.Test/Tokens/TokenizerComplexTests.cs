@@ -95,7 +95,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tokens
                     new Token(TokenType.Quantifier, "+", 5),
                     new Token(TokenType.GroupStart, "(", 6),
                     new Token(TokenType.CharacterSetStart, "[", 7),
-                    new Token(TokenType.AnyCharacter, ".", 8),
+                    new Token(TokenType.Character, ".", 8),
                     new Token(TokenType.CharacterSetEnd, "]", 9),
                     new Token(TokenType.CharacterEscapeMarker, @"\", 10),
                     new Token(TokenType.CharacterEscapeData, "d", 11),

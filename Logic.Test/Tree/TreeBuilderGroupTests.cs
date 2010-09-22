@@ -24,7 +24,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
-                    new GroupNode(@"()", 0)
+                    new GroupNode("()", 0)
                 },
                 nodes.ToArray()
             );
@@ -47,8 +47,64 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
-                    new GroupNode(@"(abc)", 0,
+                    new GroupNode("(abc)", 0,
                         new LiteralNode("abc", 1))
+                },
+                nodes.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void TreeBuilding_Build_ShouldBuildNestedGroupNode()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.GroupStart, "(", 0),
+                new Token(TokenType.GroupStart, "(", 1),
+                new Token(TokenType.GroupEnd, ")", 2),
+                new Token(TokenType.GroupEnd, ")", 3),
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new GroupNode("(())", 0,
+                        new GroupNode("()", 1))
+                },
+                nodes.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void TreeBuilding_Build_ShouldBuildNestedGroupNodeWithLiteralContent()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.GroupStart, "(", 0),
+                new Token(TokenType.Literal, "abc", 1),
+                new Token(TokenType.GroupStart, "(", 4),
+                new Token(TokenType.Literal, "def", 5),
+                new Token(TokenType.GroupEnd, ")", 8),
+                new Token(TokenType.Literal, "ghi", 9),
+                new Token(TokenType.GroupEnd, ")", 12),
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new GroupNode("(abc(def)ghi)", 0,
+                        new LiteralNode("abc", 1),
+                        new GroupNode("(def)", 4,
+                            new LiteralNode("def", 5)),
+                        new LiteralNode("ghi", 9))
                 },
                 nodes.ToArray()
             );
@@ -58,7 +114,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
         public void TreeBuilding_Build_ShouldNotThrowStackOverflowExceptionForMassivelyNestedGroups()
         {
             // Arrange
-            const int depth = 5000;
+            const int depth = 1000;
             var startTokens = Enumerable.Range(0, depth)
                 .Select(i => new Token(TokenType.GroupStart, "(", i));
             var endTokens = Enumerable.Range(depth, depth)

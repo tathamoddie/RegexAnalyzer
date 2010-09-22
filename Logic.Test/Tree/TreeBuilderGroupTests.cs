@@ -31,10 +31,34 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
         }
 
         [TestMethod]
+        public void TreeBuilding_Build_ShouldBuildGroupNodeWithLiteralContent()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.GroupStart, "(", 0),
+                new Token(TokenType.Literal, "abc", 1),
+                new Token(TokenType.GroupEnd, ")", 4),
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new GroupNode(@"(abc)", 0,
+                        new LiteralNode("abc", 1))
+                },
+                nodes.ToArray()
+            );
+        }
+
+        [TestMethod]
         public void TreeBuilding_Build_ShouldNotThrowStackOverflowExceptionForMassivelyNestedGroups()
         {
             // Arrange
-            const int depth = 1000000;
+            const int depth = 5000;
             var startTokens = Enumerable.Range(0, depth)
                 .Select(i => new Token(TokenType.GroupStart, "(", i));
             var endTokens = Enumerable.Range(depth, depth)

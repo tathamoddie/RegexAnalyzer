@@ -6,15 +6,15 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
 {
     static class GroupNodeBuilder
     {
-        public static Node BuildGroupNode(Token startToken, Queue<Token> tokens)
+        public static Node BuildGroupNode(Token startToken, TreeBuilderState state)
         {
             var contentsTokens = new List<Token>();
             Token endToken = null;
 
             var nestedGroupDepth = 0;
-            while (tokens.Any())
+            while (state.ProcessingState.Tokens.Any())
             {
-                var token = tokens.Dequeue();
+                var token = state.ProcessingState.Tokens.Dequeue();
 
                 switch (token.Type)
                 {
@@ -42,10 +42,18 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
 
             var combinedData = Token.GetData(startToken, contentsTokens, endToken);
 
-            return new GroupNode(
+            var groupNode = new GroupNode(
                 combinedData,
                 startToken.StartIndex
             );
+
+            // Queue the group contents for processing
+            state.ProcessingQueue.Enqueue(new KeyValuePair<Node, IEnumerable<Token>>(
+                groupNode,
+                contentsTokens
+            ));
+
+            return groupNode;
         }
     }
 }

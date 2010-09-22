@@ -17,7 +17,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
             { "W", CharacterClass.NonWord },
         };
 
-        public static Node BuildCharacterNode(Token startToken, Queue<Token> tokens)
+        public static Node BuildCharacterNode(Token startToken, TreeBuilderState state)
         {
             var dataTokenTypes = new[]
             {
@@ -27,7 +27,9 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
                 TokenType.CharacterEscapeUnicodeMarker
             };
 
-            var dataTokens = tokens
+            var dataTokens = state
+                .ProcessingState
+                .Tokens
                 .DequeueWhile(t => dataTokenTypes.Contains(t.Type));
 
             if (dataTokens.None())

@@ -7,7 +7,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
     {
         readonly string data;
         readonly int startIndex;
-        readonly IList<Node> children = new List<Node>();
+        readonly List<Node> children = new List<Node>();
 
         protected Node(string data, int startIndex)
         {
@@ -28,6 +28,16 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
         public IEnumerable<Node> Children
         {
             get { return children; }
+        }
+
+        public void AddChild(Node node)
+        {
+            children.Add(node);
+        }
+
+        public void AddChildren(IEnumerable<Node> nodes)
+        {
+            children.AddRange(nodes);
         }
 
         public override bool Equals(object obj)

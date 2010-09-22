@@ -8,41 +8,13 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
     {
         public const IEnumerable<TreeBuilderState> AnyState = null;
 
-        readonly IEnumerable<TreeBuilderState> states;
         readonly TokenType tokenType;
-        readonly Func<Token, Queue<Token>, Node> nodeBuilder;
-        readonly Action<Stack<TreeBuilderState>> stateChange;
+        readonly Func<Token, TreeBuilderState, Node> nodeBuilder;
 
-        public TreeBuilderRule(TreeBuilderState state, TokenType tokenType, Func<Token, Queue<Token>, Node> nodeBuilder)
-            : this(new[] { state }, tokenType, nodeBuilder)
+        public TreeBuilderRule(TokenType tokenType, Func<Token, TreeBuilderState, Node> nodeBuilder)
         {
-        }
-
-        public TreeBuilderRule(IEnumerable<TreeBuilderState> states, TokenType tokenType, Func<Token, Queue<Token>, Node> nodeBuilder)
-            : this(states, tokenType, nodeBuilder, null)
-        {
-        }
-
-        public TreeBuilderRule(TreeBuilderState state, TokenType tokenType, Action<Stack<TreeBuilderState>> stateChange)
-            : this(new[] { state }, tokenType, null, stateChange)
-        {
-        }
-
-        internal TreeBuilderRule(
-            IEnumerable<TreeBuilderState> states,
-            TokenType tokenType,
-            Func<Token, Queue<Token>, Node> nodeBuilder,
-            Action<Stack<TreeBuilderState>> stateChange)
-        {
-            this.states = states;
             this.tokenType = tokenType;
             this.nodeBuilder = nodeBuilder;
-            this.stateChange = stateChange;
-        }
-
-        public IEnumerable<TreeBuilderState> States
-        {
-            get { return states; }
         }
 
         public TokenType TokenType
@@ -50,14 +22,9 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
             get { return tokenType; }
         }
 
-        public Func<Token, Queue<Token>, Node> NodeBuilder
+        public Func<Token, TreeBuilderState, Node> NodeBuilder
         {
             get { return nodeBuilder; }
-        }
-
-        public Action<Stack<TreeBuilderState>> StateChange
-        {
-            get { return stateChange; }
         }
     }
 }

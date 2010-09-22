@@ -6,7 +6,7 @@ using TathamOddie.RegexAnalyzer.Logic.Tree;
 namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
 {
     [TestClass]
-    public class TreeBuilderTests
+    public class TreeBuilderCharacterTests
     {
         [TestMethod]
         public void TreeBuilder_Build_ShouldBuildWordCharacterClassNode()
@@ -157,38 +157,6 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             CollectionAssert.AreEqual(new[]
                 {
                     new LiteralNode(@"\)", 10, ")")
-                },
-                nodes.ToArray()
-            );
-        }
-
-        [TestMethod]
-        public void TreeBuilder_Build_ShouldBuildCharacterSetNode()
-        {
-            // Arrange
-            var tokens = new[]
-            {
-                new Token(TokenType.CharacterSetStart, "[", 6),
-                new Token(TokenType.Literal, "abc", 7),
-                new Token(TokenType.CharacterEscapeMarker, @"\", 10),
-                new Token(TokenType.CharacterEscapeData, "w", 11),
-                new Token(TokenType.CharacterEscapeMarker, @"\", 12),
-                new Token(TokenType.CharacterEscapeData, "d", 13),
-                new Token(TokenType.CharacterSetEnd, "]", 14)
-            };
-
-            // Act
-            var nodes = new TreeBuilder().Build(tokens);
-            
-            // Assert
-            CollectionAssert.AreEqual(new[]
-                {
-                    new CharacterSetNode(@"[abc\w\d]", 6, new Node[]
-                    {
-                        new LiteralNode("abc", 7, "abc"),
-                        new CharacterClassNode(@"\w", 10, CharacterClass.Word),
-                        new CharacterClassNode(@"\d", 12, CharacterClass.Digits)
-                    })
                 },
                 nodes.ToArray()
             );

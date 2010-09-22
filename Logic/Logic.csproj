@@ -78,10 +78,13 @@
     <Compile Include="Tree\CharacterClass.cs" />
     <Compile Include="Tree\CharacterClassNode.cs" />
     <Compile Include="Tree\CharacterSetNode.cs" />
-    <Compile Include="Tree\ContainerNode.cs" />
     <Compile Include="Tree\LiteralNode.cs" />
     <Compile Include="Tree\Node.cs" />
+    <Compile Include="Tree\ParseFailureNode.cs" />
     <Compile Include="Tree\TreeBuilder.cs" />
+    <Compile Include="Tree\TreeBuilderRule.cs" />
+    <Compile Include="Tree\TreeBuilderRuleSet.cs" />
+    <Compile Include="Tree\TreeBuilderState.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

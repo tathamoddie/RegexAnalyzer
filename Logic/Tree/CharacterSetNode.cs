@@ -2,10 +2,10 @@
 
 namespace TathamOddie.RegexAnalyzer.Logic.Tree
 {
-    public class CharacterSetNode : ContainerNode
+    public class CharacterSetNode : Node
     {
-        public CharacterSetNode(string data, int startIndex, IEnumerable<Node> children)
-            : base(data, startIndex, children)
+        public CharacterSetNode(string data, int startIndex)
+            : base(data, startIndex)
         {
         }
     }

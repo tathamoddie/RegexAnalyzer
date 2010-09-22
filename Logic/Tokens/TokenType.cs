@@ -26,6 +26,7 @@
         CharacterEscapeMarker,
         CharacterEscapeHexMarker,
         CharacterEscapeUnicodeMarker,
+        CharacterEscapeControlMarker,
         CharacterEscapeData,
         CharacterSetStart,
         CharacterSetEnd,

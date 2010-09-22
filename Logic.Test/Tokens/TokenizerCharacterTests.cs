@@ -179,6 +179,47 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tokens
         }
 
         [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeControlCharacterEscapeSequence()
+        {
+            // Arrange
+            const string input = @"\cC";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.CharacterEscapeMarker, @"\", 0),
+                    new Token(TokenType.CharacterEscapeControlMarker, "c", 1),
+                    new Token(TokenType.CharacterEscapeData, "C", 2)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeControlCharacterEscapeSequenceWithTrailingLetters()
+        {
+            // Arrange
+            const string input = @"\cCC";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.CharacterEscapeMarker, @"\", 0),
+                    new Token(TokenType.CharacterEscapeControlMarker, "c", 1),
+                    new Token(TokenType.CharacterEscapeData, "C", 2),
+                    new Token(TokenType.Literal, "C", 3)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
         public void Tokenizer_GetTokens_ShouldTokenizeEscapedPeriod()
         {
             // Arrange

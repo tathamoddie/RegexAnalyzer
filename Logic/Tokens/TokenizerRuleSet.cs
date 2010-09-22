@@ -249,6 +249,11 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
                 TokenizerState.EscapedCharacter, "u",
                 TokenType.CharacterEscapeUnicodeMarker, TokenizerStateChange.ReplaceState(TokenizerState.EscapedHexCharacter, 4));
 
+            // c immediately after \ means an escaped control character (eg, \cC)
+            yield return new TokenizerRule(
+                TokenizerState.EscapedCharacter, "c",
+                TokenType.CharacterEscapeControlMarker, TokenizerStateChange.RetainState);
+
             // hex digits after \x or \u are the hex content (eg, \x20 or \u0020)
             yield return new TokenizerRule(
                 TokenizerState.EscapedHexCharacter, TokenizerRule.HexData,

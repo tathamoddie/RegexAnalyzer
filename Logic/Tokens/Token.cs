@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace TathamOddie.RegexAnalyzer.Logic.Tokens
 {
@@ -56,6 +58,13 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
                 result = (result*397) ^ startIndex;
                 return result;
             }
+        }
+
+        public static string GetData(Token token, IEnumerable<Token> tokens)
+        {
+            return new[] {token}
+                .Concat(tokens)
+                .Aggregate(string.Empty, (d, t) => d + t.Data);
         }
     }
 }

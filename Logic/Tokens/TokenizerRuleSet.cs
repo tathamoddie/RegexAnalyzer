@@ -27,52 +27,52 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
             // ( starts a group
             yield return new TokenizerRule(
                 groupingConstructs, "(",
-                TokenType.GroupStart, TokenizerStateChange.PushState(TokenizerState.GroupContentsStart));
+                TokenType.GroupStart, StateChange<TokenizerState>.PushState(TokenizerState.GroupContentsStart));
 
             // ) closes a group
             yield return new TokenizerRule(
                 groupingConstructs, ")",
-                TokenType.GroupEnd, TokenizerStateChange.RetainState);
+                TokenType.GroupEnd, StateChange<TokenizerState>.RetainState);
 
             // ? after ( is the start of a group directive
             yield return new TokenizerRule(
                 TokenizerState.GroupContentsStart, "?",
-                TokenType.GroupDirectiveStart, TokenizerStateChange.ReplaceState(TokenizerState.GroupDirectiveContents));
+                TokenType.GroupDirectiveStart, StateChange<TokenizerState>.ReplaceState(TokenizerState.GroupDirectiveContents));
 
             // # after (? is the start of an inline comment
             yield return new TokenizerRule(
                 TokenizerState.GroupDirectiveContents, "#",
-                TokenType.CommentStart, TokenizerStateChange.ReplaceState(TokenizerState.InlineComment));
+                TokenType.CommentStart, StateChange<TokenizerState>.ReplaceState(TokenizerState.InlineComment));
 
             // ) ends an inline comment
             yield return new TokenizerRule(
                 TokenizerState.InlineComment, ")",
-                TokenType.GroupEnd, TokenizerStateChange.PopState);
+                TokenType.GroupEnd, StateChange<TokenizerState>.PopState);
 
             // anything other than a ) is part of the inline comment
             yield return new TokenizerRule(
                 TokenizerState.InlineComment, TokenizerRule.AnyData,
-                TokenType.Literal, TokenizerStateChange.RetainState);
+                TokenType.Literal, StateChange<TokenizerState>.RetainState);
 
             // : after (? is a non-capturing group marker
             yield return new TokenizerRule(
                 TokenizerState.GroupDirectiveContents, ":",
-                TokenType.NonCapturingGroupMarker, TokenizerStateChange.PopState);
+                TokenType.NonCapturingGroupMarker, StateChange<TokenizerState>.PopState);
 
             // = after (? is a positive look ahead
             yield return new TokenizerRule(
                 TokenizerState.GroupDirectiveContents, "=",
-                TokenType.PositiveLookAheadMarker, TokenizerStateChange.PopState);
+                TokenType.PositiveLookAheadMarker, StateChange<TokenizerState>.PopState);
 
             // ! after (? is a negative look ahead
             yield return new TokenizerRule(
                 TokenizerState.GroupDirectiveContents, "!",
-                TokenType.NegativeLookAheadMarker, TokenizerStateChange.PopState);
+                TokenType.NegativeLookAheadMarker, StateChange<TokenizerState>.PopState);
 
             // > after (? is a non-backtracking subexpression marker
             yield return new TokenizerRule(
                 TokenizerState.GroupDirectiveContents, ">",
-                TokenType.NonBacktrackingSubexpressionMarker, TokenizerStateChange.PopState);
+                TokenType.NonBacktrackingSubexpressionMarker, StateChange<TokenizerState>.PopState);
         }
 
         static IEnumerable<TokenizerRule> BuildConditionalExpressionRules()
@@ -80,22 +80,22 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
             // ( after (? is the start of a conditional expression
             yield return new TokenizerRule(
                 TokenizerState.GroupDirectiveContents, "(",
-                TokenType.ConditionalExpressionStart, TokenizerStateChange.ReplaceState(TokenizerState.ConditionalExpressionPredicate));
+                TokenType.ConditionalExpressionStart, StateChange<TokenizerState>.ReplaceState(TokenizerState.ConditionalExpressionPredicate));
 
             // a-z, 0-9 are valid group identifier characters
             yield return new TokenizerRule(
                 TokenizerState.ConditionalExpressionPredicate, TokenizerRule.LetterAndNumberData,
-                TokenType.Literal, TokenizerStateChange.RetainState);
+                TokenType.Literal, StateChange<TokenizerState>.RetainState);
 
             // ) ends a conditional expression
             yield return new TokenizerRule(
                 TokenizerState.ConditionalExpressionPredicate, ")",
-                TokenType.ConditionalExpressionEnd, TokenizerStateChange.ReplaceState(TokenizerState.ConditionalExpressionContents));
+                TokenType.ConditionalExpressionEnd, StateChange<TokenizerState>.ReplaceState(TokenizerState.ConditionalExpressionContents));
 
             // | divides conditional expression content
             yield return new TokenizerRule(
                 TokenizerState.ConditionalExpressionContents, "|",
-                TokenType.OrOperator, TokenizerStateChange.RetainState);
+                TokenType.OrOperator, StateChange<TokenizerState>.RetainState);
         }
 
         static IEnumerable<TokenizerRule> BuildGroupNameAndLookBehindRules()
@@ -103,32 +103,32 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
             // < after (? is the start of a group identifier or look behind
             yield return new TokenizerRule(
                 TokenizerState.GroupDirectiveContents, "<",
-                TokenType.NamedIdentifierStartOrLookBehindMarker, TokenizerStateChange.ReplaceState(TokenizerState.NamedIdentifierOrNegativeLookBehind));
+                TokenType.NamedIdentifierStartOrLookBehindMarker, StateChange<TokenizerState>.ReplaceState(TokenizerState.NamedIdentifierOrNegativeLookBehind));
 
             // = after (?< is a positive look behind
             yield return new TokenizerRule(
                 TokenizerState.NamedIdentifierOrNegativeLookBehind, "=",
-                TokenType.PositiveLookBehindMarker, TokenizerStateChange.PopState);
+                TokenType.PositiveLookBehindMarker, StateChange<TokenizerState>.PopState);
 
             // ! after (?< is a negative look behind
             yield return new TokenizerRule(
                 TokenizerState.NamedIdentifierOrNegativeLookBehind, "!",
-                TokenType.NegativeLookBehindMarker, TokenizerStateChange.PopState);
+                TokenType.NegativeLookBehindMarker, StateChange<TokenizerState>.PopState);
 
             // a-z, 0-9 are valid group identifier characters
             yield return new TokenizerRule(
                 TokenizerState.NamedIdentifierOrNegativeLookBehind, TokenizerRule.LetterAndNumberData,
-                TokenType.Literal, TokenizerStateChange.RetainState);
+                TokenType.Literal, StateChange<TokenizerState>.RetainState);
 
             // - splits the two identifiers in a balancing group
             yield return new TokenizerRule(
                 TokenizerState.NamedIdentifierOrNegativeLookBehind, "-",
-                TokenType.BalancingGroupNamedIdentifierSeparator, TokenizerStateChange.RetainState);
+                TokenType.BalancingGroupNamedIdentifierSeparator, StateChange<TokenizerState>.RetainState);
 
             // > ends a named identifier
             yield return new TokenizerRule(
                 TokenizerState.NamedIdentifierOrNegativeLookBehind, ">",
-                TokenType.NamedIdentifierEnd, TokenizerStateChange.PopState);
+                TokenType.NamedIdentifierEnd, StateChange<TokenizerState>.PopState);
         }
 
         static IEnumerable<TokenizerRule> BuildGroupOptionRules()
@@ -136,37 +136,37 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
             // a-z after (? is an option
             yield return new TokenizerRule(
                 TokenizerState.GroupDirectiveContents, TokenizerRule.LetterData,
-                TokenType.GroupOption, TokenizerStateChange.ReplaceState(TokenizerState.GroupOption));
+                TokenType.GroupOption, StateChange<TokenizerState>.ReplaceState(TokenizerState.GroupOption));
 
             // + after (? is an option qualifier
             yield return new TokenizerRule(
                 TokenizerState.GroupDirectiveContents, "+",
-                TokenType.GroupOptionQualifier, TokenizerStateChange.ReplaceState(TokenizerState.GroupOption));
+                TokenType.GroupOptionQualifier, StateChange<TokenizerState>.ReplaceState(TokenizerState.GroupOption));
 
             // - after (? is an option qualifier
             yield return new TokenizerRule(
                 TokenizerState.GroupDirectiveContents, "-",
-                TokenType.GroupOptionQualifier, TokenizerStateChange.ReplaceState(TokenizerState.GroupOption));
+                TokenType.GroupOptionQualifier, StateChange<TokenizerState>.ReplaceState(TokenizerState.GroupOption));
 
             // a-z after (?[a-z]+ is another option
             yield return new TokenizerRule(
                 TokenizerState.GroupOption, TokenizerRule.LetterData,
-                TokenType.GroupOption, TokenizerStateChange.RetainState);
+                TokenType.GroupOption, StateChange<TokenizerState>.RetainState);
 
             // + after (?[a-z]+ is an option qualifier
             yield return new TokenizerRule(
                 TokenizerState.GroupOption, "+",
-                TokenType.GroupOptionQualifier, TokenizerStateChange.RetainState);
+                TokenType.GroupOptionQualifier, StateChange<TokenizerState>.RetainState);
 
             // - after (?[a-z]+ is an option qualifier
             yield return new TokenizerRule(
                 TokenizerState.GroupOption, "-",
-                TokenType.GroupOptionQualifier, TokenizerStateChange.RetainState);
+                TokenType.GroupOptionQualifier, StateChange<TokenizerState>.RetainState);
 
             // : after (?[a-z]+ is the end of the options
             yield return new TokenizerRule(
                 TokenizerState.GroupOption, ":",
-                TokenType.GroupOptionEnd, TokenizerStateChange.PopState);
+                TokenType.GroupOptionEnd, StateChange<TokenizerState>.PopState);
         }
 
         static IEnumerable<TokenizerRule> BuildCharacterSetRules(IEnumerable<TokenizerState> groupingConstructs)
@@ -174,34 +174,34 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
             // [ starts a character set
             yield return new TokenizerRule(
                 groupingConstructs, "[",
-                TokenType.CharacterSetStart, TokenizerStateChange.PushState(TokenizerState.CharacterSetContentsStart));
+                TokenType.CharacterSetStart, StateChange<TokenizerState>.PushState(TokenizerState.CharacterSetContentsStart));
 
             // ] closes a character set
             yield return new TokenizerRule(
                 new [] { TokenizerState.CharacterSetContents, TokenizerState.CharacterSetContentsStart }, "]",
-                TokenType.CharacterSetEnd, TokenizerStateChange.PopState);
+                TokenType.CharacterSetEnd, StateChange<TokenizerState>.PopState);
 
             // ^ after [ makes it a negative set
             yield return new TokenizerRule(
                 TokenizerState.CharacterSetContentsStart, "^",
-                TokenType.NegativeCharacterSetModifier, TokenizerStateChange.ReplaceState(TokenizerState.CharacterSetContents));
+                TokenType.NegativeCharacterSetModifier, StateChange<TokenizerState>.ReplaceState(TokenizerState.CharacterSetContents));
 
             // \ starts an escape sequence
             yield return new TokenizerRule(
                 new[] { TokenizerState.CharacterSetContents, TokenizerState.CharacterSetContentsStart }, @"\",
-                TokenType.CharacterEscapeMarker, TokenizerStateChange.PushState(TokenizerState.EscapedCharacter));
+                TokenType.CharacterEscapeMarker, StateChange<TokenizerState>.PushState(TokenizerState.EscapedCharacter));
 
             // escaped character data is handled by another rule in BuildBasicExpressionRules
 
             // - is a character range separator
             yield return new TokenizerRule(
                 new[] { TokenizerState.CharacterSetContents, TokenizerState.CharacterSetContentsStart }, @"-",
-                TokenType.CharacterRangeSeparator, TokenizerStateChange.RetainState);
+                TokenType.CharacterRangeSeparator, StateChange<TokenizerState>.RetainState);
 
             // anything else is a character in the set
             yield return new TokenizerRule(
                 new[] { TokenizerState.CharacterSetContents, TokenizerState.CharacterSetContentsStart }, TokenizerRule.AnyData,
-                TokenType.Character, TokenizerStateChange.RetainState);
+                TokenType.Character, StateChange<TokenizerState>.RetainState);
         }
 
         static IEnumerable<TokenizerRule> BuildQuantifierRules(IEnumerable<TokenizerState> groupingConstructs)
@@ -209,27 +209,27 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
             // Basic quantifiers
             yield return new TokenizerRule(
                 groupingConstructs, new[] {"*", "+", "?"},
-                TokenType.Quantifier, TokenizerStateChange.RetainState);
+                TokenType.Quantifier, StateChange<TokenizerState>.RetainState);
 
             // { starts a parametized quantifier
             yield return new TokenizerRule(
                 groupingConstructs, "{",
-                TokenType.ParametizedQuantifierStart, TokenizerStateChange.PushState(TokenizerState.ParametizedQuantifierContents));
+                TokenType.ParametizedQuantifierStart, StateChange<TokenizerState>.PushState(TokenizerState.ParametizedQuantifierContents));
 
             // } closes a parametized quantifier
             yield return new TokenizerRule(
                 TokenizerState.ParametizedQuantifierContents, "}",
-                TokenType.ParametizedQuantifierEnd, TokenizerStateChange.PopState);
+                TokenType.ParametizedQuantifierEnd, StateChange<TokenizerState>.PopState);
 
             // numbers are valid in a parametized quantifier
             yield return new TokenizerRule(
                 TokenizerState.ParametizedQuantifierContents, TokenizerRule.NumberData,
-                TokenType.Number, TokenizerStateChange.RetainState);
+                TokenType.Number, StateChange<TokenizerState>.RetainState);
 
             // , in a parametized quantifier separates ranges
             yield return new TokenizerRule(
                 TokenizerState.ParametizedQuantifierContents, ",",
-                TokenType.ParametizedQuantifierRangeSeparator, TokenizerStateChange.RetainState);
+                TokenType.ParametizedQuantifierRangeSeparator, StateChange<TokenizerState>.RetainState);
         }
 
         static IEnumerable<TokenizerRule> BuildBasicExpressionRules(IEnumerable<TokenizerState> groupingConstructs)
@@ -237,57 +237,57 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
             // \ starts an escape sequence
             yield return new TokenizerRule(
                 groupingConstructs, @"\",
-                TokenType.CharacterEscapeMarker, TokenizerStateChange.PushState(TokenizerState.EscapedCharacter));
+                TokenType.CharacterEscapeMarker, StateChange<TokenizerState>.PushState(TokenizerState.EscapedCharacter));
 
             // x immediately after \ means the escape sequence is in hex (eg, \x20)
             yield return new TokenizerRule(
                 TokenizerState.EscapedCharacter, "x",
-                TokenType.CharacterEscapeHexMarker, TokenizerStateChange.ReplaceState(TokenizerState.EscapedHexCharacter, 2));
+                TokenType.CharacterEscapeHexMarker, StateChange<TokenizerState>.ReplaceState(TokenizerState.EscapedCharacterHex, 2));
 
             // u immediately after \ means the escape sequence is in hex (eg, \u0020)
             yield return new TokenizerRule(
                 TokenizerState.EscapedCharacter, "u",
-                TokenType.CharacterEscapeUnicodeMarker, TokenizerStateChange.ReplaceState(TokenizerState.EscapedHexCharacter, 4));
+                TokenType.CharacterEscapeUnicodeMarker, StateChange<TokenizerState>.ReplaceState(TokenizerState.EscapedCharacterHex, 4));
 
             // c immediately after \ means an escaped control character (eg, \cC)
             yield return new TokenizerRule(
                 TokenizerState.EscapedCharacter, "c",
-                TokenType.CharacterEscapeControlMarker, TokenizerStateChange.RetainState);
+                TokenType.CharacterEscapeControlMarker, StateChange<TokenizerState>.RetainState);
 
             // hex digits after \x or \u are the hex content (eg, \x20 or \u0020)
             yield return new TokenizerRule(
-                TokenizerState.EscapedHexCharacter, TokenizerRule.HexData,
-                TokenType.CharacterEscapeData, TokenizerStateChange.PopState);
+                TokenizerState.EscapedCharacterHex, TokenizerRule.HexData,
+                TokenType.CharacterEscapeData, StateChange<TokenizerState>.PopState);
 
             // anything else immediately after \ is escaped data
             yield return new TokenizerRule(
                 TokenizerState.EscapedCharacter, TokenizerRule.AnyData,
-                TokenType.CharacterEscapeData, TokenizerStateChange.PopState);
+                TokenType.CharacterEscapeData, StateChange<TokenizerState>.PopState);
 
             // | is an 'or' operator
             yield return new TokenizerRule(
                 groupingConstructs, "|",
-                TokenType.OrOperator, TokenizerStateChange.RetainState);
+                TokenType.OrOperator, StateChange<TokenizerState>.RetainState);
 
             // String start assertion
             yield return new TokenizerRule(
                 groupingConstructs, "^",
-                TokenType.StartOfStringAssertion, TokenizerStateChange.RetainState);
+                TokenType.StartOfStringAssertion, StateChange<TokenizerState>.RetainState);
 
             // String end assertion
             yield return new TokenizerRule(
                 groupingConstructs, "$",
-                TokenType.EndOfStringAssertion, TokenizerStateChange.RetainState);
+                TokenType.EndOfStringAssertion, StateChange<TokenizerState>.RetainState);
 
             // A period is the 'any character' class
             yield return new TokenizerRule(
                 groupingConstructs, ".",
-                TokenType.AnyCharacter, TokenizerStateChange.RetainState);
+                TokenType.AnyCharacter, StateChange<TokenizerState>.RetainState);
 
             // Whatever is left is a literal
             yield return new TokenizerRule(
                 groupingConstructs, TokenizerRule.AnyData,
-                TokenType.Literal, TokenizerStateChange.RetainState);
+                TokenType.Literal, StateChange<TokenizerState>.RetainState);
         }
     }
 }

@@ -141,13 +141,13 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
         }
 
         [TestMethod]
-        public void TreeBuilder_Build_ShouldBuildCharacterEscapeIntoLiteralNode()
+        public void TreeBuilder_Build_ShouldBuildCharacterEscapeIntoEscapeCharacterNode()
         {
             // Arrange
             var tokens = new[]
             {
-                new Token(TokenType.CharacterEscapeMarker, @"\", 10),
-                new Token(TokenType.CharacterEscapeData, ")", 11)
+                new Token(TokenType.CharacterEscapeMarker, @"\", 0),
+                new Token(TokenType.CharacterEscapeData, ")", 1)
             };
 
             // Act
@@ -156,7 +156,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
-                    new LiteralNode(@"\)", 10, ")")
+                    new EscapedCharacterNode(@"\)", 0, ")")
                 },
                 nodes.ToArray()
             );

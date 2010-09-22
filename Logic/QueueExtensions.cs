@@ -7,8 +7,12 @@ namespace TathamOddie.RegexAnalyzer.Logic
     {
         internal static IEnumerable<T> DequeueWhile<T>(this Queue<T> queue, Func<T, bool> predicate)
         {
+            var dequeuedTokens = new List<T>();
+            
             while (queue.Count > 0 && predicate(queue.Peek()))
-                yield return queue.Dequeue();
+                dequeuedTokens.Add(queue.Dequeue());
+
+            return dequeuedTokens;
         }
     }
 }

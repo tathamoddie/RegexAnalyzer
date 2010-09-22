@@ -7,11 +7,24 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
     {
         public TreeBuilderRuleSet()
         {
+            AddRange(BuildCharacterEscapeRules());
+
+            // translate ParseFailure straight to a parse failure node
             Add(new TreeBuilderRule(
                 TreeBuilderRule.AnyState,
                 TokenType.ParseFailure,
-                t => new ParseFailureNode(t.Data, t.StartIndex)
+                (t, q) => new ParseFailureNode(t.Data, t.StartIndex)
             ));
+        }
+
+        static IEnumerable<TreeBuilderRule> BuildCharacterEscapeRules()
+        {
+            // CharacterEscapeMarker starts a character escape
+            yield return new TreeBuilderRule(
+                TreeBuilderState.Expression,
+                TokenType.CharacterEscapeMarker,
+                EscapedCharacterNode.Build
+            );
         }
     }
 }

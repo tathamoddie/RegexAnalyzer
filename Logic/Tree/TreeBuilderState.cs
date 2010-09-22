@@ -2,6 +2,7 @@
 {
     internal enum TreeBuilderState
     {
-        Expression
+        Expression,
+        EscapedCharacter
     }
 }

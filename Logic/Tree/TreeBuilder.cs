@@ -14,8 +14,11 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
 
             var rules = new TreeBuilderRuleSet();
 
-            foreach (var token in tokens)
+            var tokenQueue = new Queue<Token>(tokens);
+
+            while (tokenQueue.Any())
             {
+                var token = tokenQueue.Dequeue();
                 var tokenType = token.Type;
 
                 var currentState = states.Peek();
@@ -30,7 +33,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
                         token.Type,
                         currentState));
 
-                yield return rule.NodeBuilder(token);
+                yield return rule.NodeBuilder(token, tokenQueue);
             }
         }
     }

@@ -24,7 +24,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
 
             yield return new TreeBuilderRule(
                 TokenType.Quantifier,
-                QuantifierNodeBuilder.BuildQuantifierNode
+                QuantifierNodeBuilder.BuildBasicQuantifierNode
+            );
+
+            yield return new TreeBuilderRule(
+                TokenType.ParametizedQuantifierStart,
+                QuantifierNodeBuilder.BuildParametizedQuantifierNode
             );
 
             yield return new TreeBuilderRule(

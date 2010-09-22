@@ -1,11 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using TathamOddie.RegexAnalyzer.Logic.Tokens;
 
 namespace TathamOddie.RegexAnalyzer.Logic.Tree
 {
     static class QuantifierNodeBuilder
     {
-        public static Node BuildQuantifierNode(Token startToken, TreeBuilderState state)
+        public static Node BuildBasicQuantifierNode(Token startToken, TreeBuilderState state)
         {
             int? min;
             int? max;
@@ -19,11 +20,89 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
                     return new ParseFailureNode(startToken, "Unrecognized quantifier sequence.");
             }
 
+            return BuildQuantifierNode(new[] { startToken }, state, min, max);
+        }
+
+        public static Node BuildParametizedQuantifierNode(Token startToken, TreeBuilderState state)
+        {
+            var acceptedQuantifierTokenTypes = new[]
+            {
+                TokenType.Number,
+                TokenType.ParametizedQuantifierRangeSeparator,
+                TokenType.ParametizedQuantifierEnd
+            };
+
+            var remainingQuantifierTokens = state.ProcessingState.Tokens
+                .DequeueWhile(t => acceptedQuantifierTokenTypes.Contains(t.Type));
+            
+            var quantifierTokens = new[] { startToken }.Concat(remainingQuantifierTokens);
+            
+            int? min;
+            int? max;
+
+            var quantifierTokenTypes = quantifierTokens.Select(t => t.Type);
+            if (quantifierTokenTypes.SequenceEqual(new[]
+                {
+                    TokenType.ParametizedQuantifierStart,
+                    TokenType.Number,
+                    TokenType.ParametizedQuantifierRangeSeparator,
+                    TokenType.Number,
+                    TokenType.ParametizedQuantifierEnd
+                }))
+            {
+                min = int.Parse(quantifierTokens.ElementAt(1).Data);
+                max = int.Parse(quantifierTokens.ElementAt(3).Data);
+            }
+            else if (quantifierTokenTypes.SequenceEqual(new[]
+                {
+                    TokenType.ParametizedQuantifierStart,
+                    TokenType.ParametizedQuantifierRangeSeparator,
+                    TokenType.Number,
+                    TokenType.ParametizedQuantifierEnd
+                }))
+            {
+                min = null;
+                max = int.Parse(quantifierTokens.ElementAt(2).Data);
+            }
+            else if (quantifierTokenTypes.SequenceEqual(new[]
+                {
+                    TokenType.ParametizedQuantifierStart,
+                    TokenType.Number,
+                    TokenType.ParametizedQuantifierRangeSeparator,
+                    TokenType.ParametizedQuantifierEnd
+                }))
+            {
+                min = int.Parse(quantifierTokens.ElementAt(1).Data);
+                max = null;
+            }
+            else if (quantifierTokenTypes.SequenceEqual(new[]
+                {
+                    TokenType.ParametizedQuantifierStart,
+                    TokenType.Number,
+                    TokenType.ParametizedQuantifierEnd
+                }))
+            {
+                min = int.Parse(quantifierTokens.ElementAt(1).Data);
+                max = min;
+            }
+            else
+            {
+                return new LiteralNode(
+                    Token.GetData(quantifierTokens),
+                    startToken.StartIndex
+                );
+            }
+
+            return BuildQuantifierNode(quantifierTokens, state, min, max);
+        }
+
+        static Node BuildQuantifierNode(IEnumerable<Token> quantifierTokens, TreeBuilderState state, int? min, int? max)
+        {
             var targetNode = state.ProcessingState.TargetNode;
             var previousNodes = targetNode.Children;
 
             if (previousNodes.None())
-                return new ParseFailureNode(startToken, "Nothing preceeding the quantifier.");
+                return new ParseFailureNode(quantifierTokens.First(), "Nothing preceeding the quantifier.");
 
             var immediatelyPriorNode = previousNodes.Last();
 
@@ -48,12 +127,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
             }
 
             var quantifierNode = new QuantifierNode(
-                nodeToQuantify.Data + startToken.Data,
+                nodeToQuantify.Data + Token.GetData(quantifierTokens),
                 nodeToQuantify.StartIndex,
                 min,
                 max,
                 nodeToQuantify
-            );
+                );
 
             targetNode.ReplaceLastChild(nodeToInsertBeforeQuantifier, quantifierNode);
 

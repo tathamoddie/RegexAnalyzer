@@ -9,7 +9,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
     public class TreeBuilderQuantifierTests
     {
         [TestMethod]
-        public void TreeBuilder_Build_ShouldBuildZeroOrMoreQualifierNodeForSingleCharacterLiteral()
+        public void TreeBuilder_Build_ShouldBuildZeroOrMoreQuantifierNodeForSingleCharacterLiteral()
         {
             // Arrange
             var tokens = new[]
@@ -33,7 +33,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
         }
 
         [TestMethod]
-        public void TreeBuilder_Build_ShouldBuildOneOrMoreQualifierNodeForSingleCharacterLiteral()
+        public void TreeBuilder_Build_ShouldBuildOneOrMoreQuantifierNodeForSingleCharacterLiteral()
         {
             // Arrange
             var tokens = new[]
@@ -57,7 +57,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
         }
 
         [TestMethod]
-        public void TreeBuilder_Build_ShouldBuildZeroOrOneQualifierNodeForSingleCharacterLiteral()
+        public void TreeBuilder_Build_ShouldBuildZeroOrOneQuantifierNodeForSingleCharacterLiteral()
         {
             // Arrange
             var tokens = new[]
@@ -81,7 +81,142 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
         }
 
         [TestMethod]
-        public void TreeBuilder_Build_ShouldBuildQualifierNodeAroundLastCharacterOfMultiCharacterLiteral()
+        public void TreeBuilder_Build_ShouldBuildMinParametizedQuantifierNodeForSingleCharacterLiteral()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.Literal, "a", 0),
+                new Token(TokenType.ParametizedQuantifierStart, "{", 1),
+                new Token(TokenType.Number, "3", 2),
+                new Token(TokenType.ParametizedQuantifierRangeSeparator, ",", 3),
+                new Token(TokenType.ParametizedQuantifierEnd, "}", 4)
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new QuantifierNode("a{3,}", 0,
+                        3, null,
+                        new LiteralNode("a", 0))
+                },
+                nodes.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void TreeBuilder_Build_ShouldBuildMaxParametizedQuantifierNodeForSingleCharacterLiteral()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.Literal, "a", 0),
+                new Token(TokenType.ParametizedQuantifierStart, "{", 1),
+                new Token(TokenType.ParametizedQuantifierRangeSeparator, ",", 2),
+                new Token(TokenType.Number, "3", 3),
+                new Token(TokenType.ParametizedQuantifierEnd, "}", 4)
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new QuantifierNode("a{,3}", 0,
+                        null, 3,
+                        new LiteralNode("a", 0))
+                },
+                nodes.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void TreeBuilder_Build_ShouldBuildMinMaxParametizedQuantifierNodeForSingleCharacterLiteral()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.Literal, "a", 0),
+                new Token(TokenType.ParametizedQuantifierStart, "{", 1),
+                new Token(TokenType.Number, "3", 2),
+                new Token(TokenType.ParametizedQuantifierRangeSeparator, ",", 3),
+                new Token(TokenType.Number, "16", 4),
+                new Token(TokenType.ParametizedQuantifierEnd, "}", 6)
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new QuantifierNode("a{3,16}", 0,
+                        3, 16,
+                        new LiteralNode("a", 0))
+                },
+                nodes.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void TreeBuilder_Build_ShouldBuildExactParametizedQuantifierNodeForSingleCharacterLiteral()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.Literal, "a", 0),
+                new Token(TokenType.ParametizedQuantifierStart, "{", 1),
+                new Token(TokenType.Number, "8", 2),
+                new Token(TokenType.ParametizedQuantifierEnd, "}", 3)
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new QuantifierNode("a{8}", 0,
+                        8, 8,
+                        new LiteralNode("a", 0))
+                },
+                nodes.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void TreeBuilder_Build_ShouldHandleMalformedParametizedQuantifierTokensAsLiteral()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.Literal, "a", 0),
+                new Token(TokenType.ParametizedQuantifierStart, "{", 1),
+                new Token(TokenType.Number, "8", 2),
+                new Token(TokenType.ParametizedQuantifierRangeSeparator, ",", 3),
+                new Token(TokenType.ParametizedQuantifierRangeSeparator, ",", 4),
+                new Token(TokenType.ParametizedQuantifierEnd, "}", 5)
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new LiteralNode("a", 0),
+                    new LiteralNode("{8,,}", 1)
+                },
+                nodes.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void TreeBuilder_Build_ShouldBuildQuantifierNodeAroundLastCharacterOfMultiCharacterLiteral()
         {
             // Arrange
             var tokens = new[]

@@ -28,6 +28,13 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
                 GroupNodeBuilder.BuildGroupNode
             );
 
+            // Literal goes straight to Literal
+            yield return new TreeBuilderRule(
+                TreeBuilderState.Expression,
+                TokenType.Literal,
+                (t, q) => new LiteralNode(t.Data, t.StartIndex)
+            );
+
             // translate ParseFailure straight to a parse failure node
             yield return new TreeBuilderRule(
                 TreeBuilderRule.AnyState,

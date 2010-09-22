@@ -83,6 +83,7 @@
     <Compile Include="Tree\CharacterSetNode.cs" />
     <Compile Include="Tree\GroupNode.cs" />
     <Compile Include="Tree\GroupNodeBuilder.cs" />
+    <Compile Include="Tree\LiteralNode.cs" />
     <Compile Include="Tree\Node.cs" />
     <Compile Include="Tree\ParseFailureNode.cs" />
     <Compile Include="Tree\TreeBuilder.cs" />

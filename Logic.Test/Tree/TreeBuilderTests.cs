@@ -27,5 +27,26 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                 nodes.ToArray()
             );
         }
+
+        [TestMethod]
+        public void TreeBuilder_Build_ShouldBuildLiteralTokenIntoLiteralNode()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.Literal, "abc", 0)
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new LiteralNode("abc", 0)
+                },
+                nodes.ToArray()
+            );
+        }
     }
 }

@@ -131,6 +131,54 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tokens
         }
 
         [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeUnicodeEscapeSequence()
+        {
+            // Arrange
+            const string input = @"\u030a";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.CharacterEscapeMarker, @"\", 0),
+                    new Token(TokenType.CharacterEscapeUnicodeMarker, "u", 1),
+                    new Token(TokenType.CharacterEscapeData, "0", 2),
+                    new Token(TokenType.CharacterEscapeData, "3", 3),
+                    new Token(TokenType.CharacterEscapeData, "0", 4),
+                    new Token(TokenType.CharacterEscapeData, "a", 5)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void Tokenizer_GetTokens_ShouldTokenizeUnicodeEscapeSequenceWithTrailingNumbers()
+        {
+            // Arrange
+            const string input = @"\u030a44";
+
+            // Act
+            var result = new Tokenizer(input).GetTokens();
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.CharacterEscapeMarker, @"\", 0),
+                    new Token(TokenType.CharacterEscapeUnicodeMarker, "u", 1),
+                    new Token(TokenType.CharacterEscapeData, "0", 2),
+                    new Token(TokenType.CharacterEscapeData, "3", 3),
+                    new Token(TokenType.CharacterEscapeData, "0", 4),
+                    new Token(TokenType.CharacterEscapeData, "a", 5),
+                    new Token(TokenType.Literal, "4", 6),
+                    new Token(TokenType.Literal, "4", 7)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
         public void Tokenizer_GetTokens_ShouldTokenizeEscapedPeriod()
         {
             // Arrange

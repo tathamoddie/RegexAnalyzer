@@ -244,7 +244,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
                 TokenizerState.EscapedCharacter, "x",
                 TokenType.CharacterEscapeHexMarker, TokenizerStateChange.ReplaceState(TokenizerState.EscapedHexCharacter, 2));
 
-            // hex digits after \x are the hex content (eg, \x20)
+            // u immediately after \ means the escape sequence is in hex (eg, \u0020)
+            yield return new TokenizerRule(
+                TokenizerState.EscapedCharacter, "u",
+                TokenType.CharacterEscapeUnicodeMarker, TokenizerStateChange.ReplaceState(TokenizerState.EscapedHexCharacter, 4));
+
+            // hex digits after \x or \u are the hex content (eg, \x20 or \u0020)
             yield return new TokenizerRule(
                 TokenizerState.EscapedHexCharacter, TokenizerRule.HexData,
                 TokenType.CharacterEscapeData, TokenizerStateChange.PopState);

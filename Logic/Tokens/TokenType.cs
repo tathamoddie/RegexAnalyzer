@@ -25,6 +25,7 @@
         OrOperator,
         CharacterEscapeMarker,
         CharacterEscapeHexMarker,
+        CharacterEscapeUnicodeMarker,
         CharacterEscapeData,
         CharacterSetStart,
         CharacterSetEnd,

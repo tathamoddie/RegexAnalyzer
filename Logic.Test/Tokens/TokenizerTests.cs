@@ -200,6 +200,29 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tokens
         }
 
         [TestMethod]
+        public void Tokenizer_ReduceTokens_ShouldCombineMultipleConsecutiveCharacterEscapeDataTokens()
+        {
+            // Arrange
+            var input = new[]
+            {
+                new Token(TokenType.CharacterEscapeData, "1", 0),
+                new Token(TokenType.CharacterEscapeData, "2", 1),
+                new Token(TokenType.CharacterEscapeData, "3", 2)
+            };
+
+            // Act
+            var result = Tokenizer.ReduceTokens(input);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new Token(TokenType.CharacterEscapeData, "123", 0)
+                },
+                result.ToArray()
+            );
+        }
+
+        [TestMethod]
         public void Tokenizer_ReduceTokens_ShouldNotCombineMultipleConsecutiveGroupEndTokens()
         {
             // Arrange

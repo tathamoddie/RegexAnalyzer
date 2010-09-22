@@ -1,25 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TathamOddie.RegexAnalyzer.Logic
+namespace TathamOddie.RegexAnalyzer.Logic.Tokens
 {
-    static class StateChange<T> where T : struct
+    static class TokenizerStateChange
     {
-        internal static Action<Stack<T>> RetainState = states => { };
+        internal static Action<Stack<TokenizerState>> RetainState = states => { };
 
-        internal static Action<Stack<T>> PopState = states => states.Pop();
+        internal static Action<Stack<TokenizerState>> PopState = states => states.Pop();
 
-        internal static Action<Stack<T>> PushState(T state)
+        internal static Action<Stack<TokenizerState>> PushState(TokenizerState state)
         {
             return states => states.Push(state);
         }
 
-        internal static Action<Stack<T>> ReplaceState(T state)
+        internal static Action<Stack<TokenizerState>> ReplaceState(TokenizerState state)
         {
             return ReplaceState(state, 1);
         }
 
-        internal static Action<Stack<T>> ReplaceState(T state, short pushCount)
+        internal static Action<Stack<TokenizerState>> ReplaceState(TokenizerState state, short pushCount)
         {
             if (pushCount <= 0)
                 throw new ArgumentOutOfRangeException("pushCount", pushCount, "Must be a positive number.");

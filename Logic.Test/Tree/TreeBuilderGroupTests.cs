@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TathamOddie.RegexAnalyzer.Logic.Tokens;
 using TathamOddie.RegexAnalyzer.Logic.Tree;
@@ -6,14 +7,16 @@ using TathamOddie.RegexAnalyzer.Logic.Tree;
 namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
 {
     [TestClass]
-    public class TreeBuilderTests
+    public class TreeBuilderGroupTests
     {
-        public void TreeBuilder_BuildTree_ShouldConvertParseFailureToken()
+        [TestMethod]
+        public void TreeBuilding_Build_ShouldBuildEmptyGroupNode()
         {
             // Arrange
             var tokens = new[]
             {
-                new Token(TokenType.ParseFailure, "x", 0)
+                new Token(TokenType.GroupStart, "(", 0),
+                new Token(TokenType.GroupEnd, ")", 1),
             };
 
             // Act
@@ -22,7 +25,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
-                    new ParseFailureNode("x", 0, "Unrecognised token.")
+                    new GroupNode(@"()", 0)
                 },
                 nodes.ToArray()
             );

@@ -73,6 +73,7 @@
     <Compile Include="Tokens\TokenTests.cs" />
     <Compile Include="Tree\TreeBuilderCharacterTests.cs" />
     <Compile Include="Tree\TreeBuilderTests.cs" />
+    <Compile Include="Tree\TreeBuilderGroupTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Logic\Logic.csproj">

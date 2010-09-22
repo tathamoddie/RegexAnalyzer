@@ -60,11 +60,19 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tokens
             }
         }
 
-        public static string GetData(Token token, IEnumerable<Token> tokens)
+        public static string GetData(Token t1, IEnumerable<Token> t2)
         {
-            return new[] {token}
-                .Concat(tokens)
-                .Aggregate(string.Empty, (d, t) => d + t.Data);
+            return GetData(new[] {t1}.Concat(t2));
+        }
+
+        public static string GetData(Token t1, IEnumerable<Token> t2, Token t3)
+        {
+            return GetData(new[] {t1}.Concat(t2).Concat(new[] {t3}));
+        }
+
+        public static string GetData(IEnumerable<Token> tokens)
+        {
+            return tokens.Aggregate(string.Empty, (d, t) => d + t.Data);
         }
     }
 }

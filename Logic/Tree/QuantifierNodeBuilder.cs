@@ -12,10 +12,9 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
 
             switch (startToken.Data)
             {
-                case "?":
-                    min = 0;
-                    max = 1;
-                    break;
+                case "*": min = 0; max = null; break;
+                case "+": min = 1; max = null; break;
+                case "?": min = 0; max = 1; break;
                 default:
                     return new ParseFailureNode(startToken, "Unrecognized quantifier sequence.");
             }

@@ -80,7 +80,6 @@
     <Compile Include="Tree\CharacterClassNode.cs" />
     <Compile Include="Tree\CharacterNodeBuilder.cs" />
     <Compile Include="Tree\EscapedCharacterNode.cs" />
-    <Compile Include="Tree\CharacterSetNode.cs" />
     <Compile Include="Tree\ExpressionNode.cs" />
     <Compile Include="Tree\GroupNode.cs" />
     <Compile Include="Tree\GroupNodeBuilder.cs" />

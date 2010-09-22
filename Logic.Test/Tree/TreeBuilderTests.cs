@@ -8,6 +8,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
     [TestClass]
     public class TreeBuilderTests
     {
+        [TestMethod]
         public void TreeBuilder_BuildTree_ShouldConvertParseFailureToken()
         {
             // Arrange

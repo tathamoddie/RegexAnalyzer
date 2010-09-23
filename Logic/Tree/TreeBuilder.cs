@@ -5,7 +5,7 @@ using TathamOddie.RegexAnalyzer.Logic.Tokens;
 
 namespace TathamOddie.RegexAnalyzer.Logic.Tree
 {
-    class TreeBuilder
+    public class TreeBuilder
     {
         readonly TreeBuilderRuleSet rules = new TreeBuilderRuleSet();
 

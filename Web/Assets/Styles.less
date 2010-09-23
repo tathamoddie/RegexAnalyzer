@@ -53,6 +53,8 @@ p { margin-bottom: 8px; }
 code
 {
     white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow: hidden;
 }
 
 .code-block
@@ -73,6 +75,25 @@ table
     th, td { padding: 3px 10px; text-align: left; }
     tbody tr { border-top: solid 1px @box-color; }
     th:nth-child(1n+2), td:nth-child(1n+2) { border-left: solid 1px @box-inner-border; }
+}
+
+ol.ast
+{
+    list-style-type: none;
+    background: transparent url(TreeDot.png) repeat left top;
+    ol
+    {
+        list-style-type: none;
+        margin-left: 10px;
+    }
+    li
+    {
+        display: block;
+        height: 18px;
+        line-height: 18px;
+        vertical-align: middle;
+        background-color: #fff;
+    }
 }
 
 #input-form

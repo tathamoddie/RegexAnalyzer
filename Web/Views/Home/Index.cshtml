@@ -1,0 +1,20 @@
+﻿@inherits System.Web.Mvc.WebViewPage<dynamic>
+@{
+    LayoutPage = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form method="get" action="analyze">
+    <ol>
+        <li>
+            <label for="input-expression">Expression</label>
+            <input id="input-expression" type="text" name="q" />
+        </li>
+        <li>
+            <label for="input-verbose">Verbose</label>
+            <input id="input-verbose" type="checkbox" name="verbose" value="true" />
+        </li>
+        <li>
+            <input type="submit" />
+        </li>
+    </ol>
+</form>

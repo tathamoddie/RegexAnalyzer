@@ -14,8 +14,14 @@ namespace Web
 
             routes.MapRoute(
                 "Analyze",
-                "a",
+                "analyze",
                 new { controller = "Analysis", action = "Analyze" }
+            );
+
+            routes.MapRoute(
+                "Home",
+                "",
+                new { controller = "Home", action = "Index" }
             );
         }
 

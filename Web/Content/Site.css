@@ -1,28 +1,33 @@
-/* Styles for validation helpers
------------------------------------------------------------*/
-.field-validation-error
+/* http://kuler.adobe.com/#themeID/1018131 */
+/* purple: 65356B */
+/* maroon: AB434F */
+/* brown:  C76347 */
+/* orange: FFA24C */
+/* teal:   519183 */
+/* light:  ccc */
+
+html, body
 {
-    color: #ff0000;
+    margin: 0;
+    padding: 0;
 }
 
-.field-validation-valid
+#container
 {
-    display: none;
+    width: 800px;
+    margin: 0 auto;
+    border-left: solid 1px red;
+    border-right: solid 1px red;
 }
 
-.input-validation-error
+h1
 {
-    border: 1px solid #ff0000;
-    background-color: #ffeeee;
+    font-family: "museo-1" , "museo-2" ,serif;
+    font-size: 33px;
+    color: #AB434F;
 }
 
-.validation-summary-errors
+h1 span
 {
-    font-weight: bold;
-    color: #ff0000;
-}
-
-.validation-summary-valid
-{
-    display: none;
+    color: #ccc;
 }

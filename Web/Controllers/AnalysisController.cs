@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Web.Mvc;
 using TathamOddie.RegexAnalyzer.Logic.Tokens;
@@ -8,6 +7,7 @@ namespace Web.Controllers
 {
     public class AnalysisController : Controller
     {
+        [ValidateInput(false)]
         public ActionResult Analyze(
             [DefaultValue(false)]bool verbose,
             string q)

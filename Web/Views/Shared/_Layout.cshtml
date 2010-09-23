@@ -13,6 +13,17 @@
 
 @RenderBody()
 
+            <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.1.min.js"></script>
+            <script type="text/javascript">
+
+                $('textarea').keypress(function (e) {
+                    if (e.which == 13 && !e.shiftKey) {
+                        e.preventDefault();
+                        $(this).closest('form').submit();
+                    }
+                });
+
+            </script>
         </div>
     </body>
 </html>

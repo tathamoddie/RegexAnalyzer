@@ -3,24 +3,24 @@
     LayoutPage = "~/Views/Shared/_Layout.cshtml";
 }
 
-<p>We started with this expression:</p>
-<code>@View.Expression</code>
+<h2>We started with this expression:</h2>
+<code class="code-block">@View.Expression</code>
 
-<p>First up, we broke it into these tokens:</p>
+<h2>First up, we broke it into these tokens:</h2>
 <table title="Expression tokens">
     <thead>
         <tr>
-            <th>Start Index</th>
-            <th>Data</th>
             <th>Token Type</th>
+            <th>Index</th>
+            <th>Data</th>
         </tr>
     </thead>
     <tbody>
         @foreach(var token in View.Tokens) {
             <tr>
-                <td>@token.StartIndex</td>
-                <td>@token.Data</td>
                 <td>@token.Type</td>
+                <td>@token.StartIndex.ToString("#,##0")</td>
+                <td><code>@token.Data</code></td>
             </tr>
         }
     </tbody>
@@ -35,4 +35,4 @@ Using the variables, we generated these /potential/ matches:
 We tested each of these potential matches against the original expression.
 These ones passed (x%):-->
 
-<p>All of that took us @View.TimeTaken.TotalSeconds.ToString("#,##0.00000000") seconds.</p>
+<h2>All of that took us @View.TimeTaken.TotalSeconds.ToString("#,##0.00000000") seconds. Your move.</h2>

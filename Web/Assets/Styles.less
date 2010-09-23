@@ -6,9 +6,15 @@
 @theme-color-5: #519183; /* teal */
 
 @heading-color: @theme-color-2;
+@sub-heading-color: #888;
 @light-color: #ccc;
+@box-color: #aaa;
+@box-inner-border: #ddd;
+@box-background-color: #f7f7f7;
 
 * { margin: 0; padding: 0; }
+
+.wf-loading { visibility: hidden; }
 
 html, body
 {
@@ -35,12 +41,43 @@ h1
     }
 }
 
+h2
+{
+    margin: 20px 0 10px 0;
+    font-size: 20px;
+    color: @sub-heading-color;
+}
+
 p { margin-bottom: 8px; }
 
-.wf-loading { visibility: hidden; }
+code
+{
+    white-space: pre-wrap;
+}
+
+.code-block
+{
+    display: block;
+    padding: 10px;
+    background-color: @box-background-color;
+    border: solid 1px @box-color;
+    line-height: 140%;
+    margin-bottom: 8px;
+}
+
+table
+{
+    border: solid 1px @box-color;
+    border-collapse: collapse;
+    th { background-color: @box-background-color; }
+    th, td { padding: 3px 10px; text-align: left; }
+    tbody tr { border-top: solid 1px @box-color; }
+    th:nth-child(1n+2), td:nth-child(1n+2) { border-left: solid 1px @box-inner-border; }
+}
 
 #input-form
 {
+    margin-top: 15px;
     ol
     {
         list-style-type: none;

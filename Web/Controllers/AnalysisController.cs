@@ -90,39 +90,37 @@ namespace Web.Controllers
             markupBuilder.Append("<ol class=\"ast\">");
 
             var nodesToProcess = new Stack<Node>(nodes.Reverse());
-            var layers = new Stack<int>();
+            var layers = new Stack<int>(new[] { nodes.Count() });
             while (nodesToProcess.Any())
             {
-                var needToCloseLayer = false;
-                if (layers.Any())
+                var layersToClose = 0;
+                while (layers.Any() && layers.Peek() == 0)
                 {
-                    var currentLayer = layers.Pop();
-
-                    if (currentLayer > 0)
-                        currentLayer--;
-
-                    if (currentLayer == 0)
-                        needToCloseLayer = true;
-                    else
-                        layers.Push(currentLayer);
+                    layersToClose++;
+                    layers.Pop();
                 }
 
+                layers.Push(layers.Pop() - 1);
+
+                for (var i = 0; i < layersToClose; i++)
+                    markupBuilder.Append("</ol>");
+                
                 var currentNode = nodesToProcess.Pop();
 
                 markupBuilder.AppendFormat("<li><span class=\"ast-node-data\"><code>{0}</code></span> <span class=\"ast-node-description\"><span>{1}</span></span></li>", currentNode.Data, currentNode.GetType().Name);
 
-                if (needToCloseLayer)
-                    markupBuilder.Append("</ol>");
-
                 if (!currentNode.Children.Any()) continue;
 
                 markupBuilder.Append("<ol>");
+                layers.Push(currentNode.Children.Count());
 
                 foreach (var childNode in currentNode.Children.Reverse())
                     nodesToProcess.Push(childNode);
 
-                layers.Push(currentNode.Children.Count());
             }
+
+            for (var i = 0; i < layers.Count(); i++)
+                markupBuilder.Append("</ol>");
 
             markupBuilder.Append("</ol>");
 

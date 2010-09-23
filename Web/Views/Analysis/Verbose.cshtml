@@ -27,12 +27,31 @@
 </table>
 
 <h2>Using the tokens, we built this <acronym title="abstract syntax tree">AST</acronym>:</h2>
-<ol class="ast">
-    @View.NodesMarkup
-</ol>
+<table title="Expression tokens">
+    <thead>
+        <tr>
+            <th>Depth</th>
+            <th>Node Type</th>
+            <th>Index</th>
+            <th>Data</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var node in View.AllNodes) {
+            <tr>
+                <td>@node.Key</td>
+                <td>@node.Value.GetType().Name</td>
+                <td>@node.Value.StartIndex.ToString("#,##0")</td>
+                <td><code>@node.Value.Data</code></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h2>Just for you, we made the <acronym title="abstract syntax tree">AST</acronym> look pretty:</h2>
+@View.NodesMarkup
 
 <!--
-Just for you, we made the AST look pretty:
 We idenitified these nodes as variables:
 We generated this (partial) set of variable permutations:
 Using the variables, we generated these /potential/ matches:

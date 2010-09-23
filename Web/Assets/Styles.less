@@ -11,6 +11,7 @@
 @box-color: #aaa;
 @box-inner-border: #ddd;
 @box-background-color: #f7f7f7;
+@highlight-background-color: #ffb;
 
 * { margin: 0; padding: 0; }
 
@@ -79,10 +80,12 @@ table
 
 ol.ast
 {
+    position: relative;
     list-style-type: none;
     background: transparent url(TreeDot.png) repeat left top;
     ol
     {
+        position: none;
         list-style-type: none;
         margin-left: 10px;
     }
@@ -93,6 +96,15 @@ ol.ast
         line-height: 18px;
         vertical-align: middle;
         background-color: #fff;
+        span
+        {
+            position: absolute;
+            left: 300px;
+        }
+    }
+    li:hover *
+    {
+        background-color: @highlight-background-color;
     }
 }
 

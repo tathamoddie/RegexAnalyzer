@@ -23,39 +23,72 @@ namespace Web.Controllers
 
             ViewData["Expression"] = q;
 
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-
             var result = verbose ? AnalyzeVerbose(q) : AnalyzeBasic(q);
-            
-            stopwatch.Stop();
-
-            ViewData["TimeTaken"] = stopwatch.Elapsed;
 
             return result;
         }
 
         ActionResult AnalyzeBasic(string expression)
         {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            stopwatch.Stop();
+
+            ViewData["TimeTaken"] = stopwatch.Elapsed;
+
             return View("Basic");
         }
 
         ActionResult AnalyzeVerbose(string expression)
         {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             var tokens = Tokenizer.Tokenize(expression);
-
-            ViewData["Tokens"] = tokens;
-
             var nodes = new TreeBuilder().Build(tokens);
 
+            stopwatch.Stop();
+
+            ViewData["TimeTaken"] = stopwatch.Elapsed;
+
+            ViewData["Tokens"] = tokens;
+            
+            ViewData["AllNodes"] = FlattenNodes(nodes);
             ViewData["NodesMarkup"] = RenderNodesAsHtml(nodes);
 
             return View("Verbose");
         }
 
+        static IEnumerable<KeyValuePair<int, Node>> FlattenNodes(IEnumerable<Node> nodes)
+        {
+            var nodesToProcess = new Stack<Node>(nodes.Reverse());
+            var depths = new Stack<int>(new [] { nodes.Count() });
+            while (nodesToProcess.Any())
+            {
+                var currentNode = nodesToProcess.Pop();
+
+                while (depths.Any() && depths.Peek() == 0)
+                    depths.Pop();
+
+                depths.Push(depths.Pop() - 1);
+
+                yield return new KeyValuePair<int, Node>(depths.Count() - 1, currentNode);
+
+                var children = currentNode.Children;
+                if (!children.Any()) continue;
+
+                depths.Push(children.Count());
+                foreach(var childNode in children.Reverse())
+                    nodesToProcess.Push(childNode);
+            }
+        }
+
         static IHtmlString RenderNodesAsHtml(IEnumerable<Node> nodes)
         {
             var markupBuilder = new StringBuilder();
+            markupBuilder.Append("<ol class=\"ast\">");
+
             var nodesToProcess = new Stack<Node>(nodes.Reverse());
             var layers = new Stack<int>();
             while (nodesToProcess.Any())
@@ -76,7 +109,7 @@ namespace Web.Controllers
 
                 var currentNode = nodesToProcess.Pop();
 
-                markupBuilder.AppendFormat("<li>{0}</li>", currentNode.Data);
+                markupBuilder.AppendFormat("<li><code>{0}</code> <span>{1}</span></li>", currentNode.Data, currentNode.GetType().Name);
 
                 if (needToCloseLayer)
                     markupBuilder.Append("</ol>");
@@ -90,6 +123,9 @@ namespace Web.Controllers
 
                 layers.Push(currentNode.Children.Count());
             }
+
+            markupBuilder.Append("</ol>");
+
             return new HtmlString(markupBuilder.ToString());
         }
     }

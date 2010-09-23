@@ -109,7 +109,7 @@ namespace Web.Controllers
 
                 var currentNode = nodesToProcess.Pop();
 
-                markupBuilder.AppendFormat("<li><code>{0}</code> <span>{1}</span></li>", currentNode.Data, currentNode.GetType().Name);
+                markupBuilder.AppendFormat("<li><span class=\"ast-node-data\"><code>{0}</code></span> <span class=\"ast-node-description\"><span>{1}</span></span></li>", currentNode.Data, currentNode.GetType().Name);
 
                 if (needToCloseLayer)
                     markupBuilder.Append("</ol>");

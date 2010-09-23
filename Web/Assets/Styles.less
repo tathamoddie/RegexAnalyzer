@@ -72,7 +72,7 @@ table
 {
     border: solid 1px @box-color;
     border-collapse: collapse;
-    th { background-color: @box-background-color; }
+    th { background-color: @box-background-color; white-space: nowrap; }
     th, td { padding: 3px 10px; text-align: left; }
     tbody tr { border-top: solid 1px @box-color; }
     th:nth-child(1n+2), td:nth-child(1n+2) { border-left: solid 1px @box-inner-border; }
@@ -93,16 +93,34 @@ ol.ast
     {
         display: block;
         height: 18px;
+        width: 100%;
+        overflow: hidden;
         line-height: 18px;
         vertical-align: middle;
         background-color: #fff;
-        span
+        .ast-node-data
+        {
+            display: block;
+            float: left;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 300px;
+        }
+        .ast-node-description
         {
             position: absolute;
+            display: block;
+            height: 18px;
             left: 300px;
+            width: 495px;
+            padding-left: 5px;
+            line-height: 18px;
+            vertical-align: middle;
+            background-color: #fff;
+            overflow: hidden;
         }
     }
-    li:hover *
+    li:hover * *
     {
         background-color: @highlight-background-color;
     }

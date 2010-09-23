@@ -1,0 +1,81 @@
+/* http://kuler.adobe.com/#themeID/1018131 */
+@theme-color-1: #65356b; /* purple */
+@theme-color-2: #AB434F; /* maroon */
+@theme-color-3: #C76347; /* brown */
+@theme-color-4: #FFA24C; /* orange */
+@theme-color-5: #519183; /* teal */
+
+@heading-color: @theme-color-2;
+@light-color: #ccc;
+
+* { margin: 0; padding: 0; }
+
+html, body
+{
+    font-family: "facitweb-1", "facitweb-2", sans-serif;
+    font-size: 13px;
+}
+
+#container
+{
+    width: 800px;
+    margin: 0 auto;
+}
+
+h1
+{
+    margin: 40px 0 15px 0;
+    font-family: "museo-1", "museo-2", serif;
+    font-size: 33px;
+    color: @heading-color;
+    
+    span
+    {
+        color: @light-color;
+    }
+}
+
+p { margin-bottom: 8px; }
+
+#input-form
+{
+    ol
+    {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        overflow: hidden;
+
+        li#input-form-expression
+        {
+            float: left;
+            padding-bottom: 10px;
+            label { display: none; }
+            textarea
+            {
+                width: 778px;
+                padding: 10px;
+                border: solid 1px #ddd;
+                overflow: auto;
+            }
+        }
+
+        li#input-form-verbose,
+        li#input-form-submit
+        {
+            float: right;
+            clear: left;
+            margin-left: 20px;
+            height: 30px;
+            line-height: 30px;
+            vertical-align: middle;
+        }
+
+        li#input-form-submit input
+        {
+            height: 30px;
+            padding: 0 10px;
+        }
+    }
+}

@@ -2,18 +2,24 @@
 @{
     LayoutPage = "~/Views/Shared/_Layout.cshtml";
 }
+<p>
+    Regular expressions are no doubt insanely powerful, however they're pretty terse and nobody
+    ever seems to document them once they've written them. This site answers once simple
+    question - what does this regular expression do? Use it to help you learn, or help work out
+    what the last guy did.
+</p>
 <form id="input-form" method="get" action="analyze">
     <ol>
-        <li>
+        <li id="input-form-expression">
             <label for="input-expression">Expression</label>
-            <input id="input-expression" type="text" name="q" />
+            <textarea id="input-expression" type="text" name="q" rows="5" placeholder="Expression..."></textarea>
         </li>
-        <li>
-            <label for="input-verbose">Verbose</label>
+        <li id="input-form-submit">
+            <input type="submit" value="Tell Me Now" />
+        </li>
+        <li id="input-form-verbose">
+            <label for="input-verbose">Verbose?</label>
             <input id="input-verbose" type="checkbox" name="verbose" value="true" />
-        </li>
-        <li>
-            <input type="submit" />
         </li>
     </ol>
 </form>

@@ -107,7 +107,11 @@ namespace Web.Controllers
                 
                 var currentNode = nodesToProcess.Pop();
 
-                markupBuilder.AppendFormat("<li><span class=\"ast-node-data\"><code>{0}</code></span> <span class=\"ast-node-description\"><span>{1}</span></span></li>", currentNode.Data, currentNode.GetType().Name);
+                markupBuilder.AppendFormat(
+                    "<li><span class=\"ast-node-data\"><code title=\"{0}\">{1}</code></span> <span class=\"ast-node-description\"><span>{2}</span></span></li>",
+                    HttpUtility.HtmlAttributeEncode(currentNode.Data),
+                    HttpUtility.HtmlEncode(currentNode.Data),
+                    HttpUtility.HtmlEncode(currentNode.GetType().Name));
 
                 if (!currentNode.Children.Any()) continue;
 

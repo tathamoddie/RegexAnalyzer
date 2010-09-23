@@ -3,4 +3,36 @@
     LayoutPage = "~/Views/Shared/_Layout.cshtml";
 }
 
+<p>We started with this expression:</p>
 <code>@View.Expression</code>
+
+<p>First up, we broke it into these tokens:</p>
+<table title="Expression tokens">
+    <thead>
+        <tr>
+            <th>Start Index</th>
+            <th>Data</th>
+            <th>Token Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var token in View.Tokens) {
+            <tr>
+                <td>@token.StartIndex</td>
+                <td>@token.Data</td>
+                <td>@token.Type</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!--
+<p>Using the tokens, we build this <acronym title="abstract syntax tree">AST</acronym>:</p>
+Just for you, we made the AST look pretty:
+We idenitified these nodes as variables:
+We generated this (partial) set of variable permutations:
+Using the variables, we generated these /potential/ matches:
+We tested each of these potential matches against the original expression.
+These ones passed (x%):-->
+
+<p>All of that took us @View.TimeTaken.TotalSeconds.ToString("#,##0.00000000") seconds.</p>

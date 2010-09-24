@@ -20,5 +20,10 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
         {
             get { return message; }
         }
+
+        public override string Description
+        {
+            get { return "unexpected tokens"; }
+        }
     }
 }

@@ -4,6 +4,11 @@
     {
         public LiteralNode(string data, int startIndex)
             : base(data, startIndex)
-        {}
+        { }
+
+        public override string Description
+        {
+            get { return "literal text"; }
+        }
     }
 }

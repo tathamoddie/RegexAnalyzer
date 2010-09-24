@@ -1,4 +1,6 @@
-﻿namespace TathamOddie.RegexAnalyzer.Logic.Tree
+﻿using System;
+
+namespace TathamOddie.RegexAnalyzer.Logic.Tree
 {
     public class EscapedCharacterNode : Node
     {
@@ -13,6 +15,11 @@
         public string EscapedContent
         {
             get { return escapedContent; }
+        }
+
+        public override string Description
+        {
+            get { throw new NotImplementedException(); }
         }
     }
 }

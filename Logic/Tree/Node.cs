@@ -30,6 +30,8 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
             get { return children; }
         }
 
+        public abstract string Description { get; }
+
         public void AddChild(Node node)
         {
             children.Add(node);

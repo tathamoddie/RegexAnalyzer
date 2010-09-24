@@ -11,5 +11,10 @@
         {
             AddChildren(children);
         }
+
+        public override string Description
+        {
+            get { return "group"; }
+        }
     }
 }

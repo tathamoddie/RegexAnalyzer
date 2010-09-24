@@ -113,7 +113,7 @@ namespace Web.Controllers
                     "<span class=\"ast-node\"><span class=\"ast-node-data\"><code title=\"{0}\">{1}</code></span><span class=\"ast-node-description\"><span>{2}</span></span></span>",
                     HttpUtility.HtmlAttributeEncode(currentNode.Data),
                     HttpUtility.HtmlEncode(currentNode.Data),
-                    HttpUtility.HtmlEncode(currentNode.GetType().Name));
+                    HttpUtility.HtmlEncode(currentNode.Description));
 
                 if (currentNode.Children.Any())
                 {

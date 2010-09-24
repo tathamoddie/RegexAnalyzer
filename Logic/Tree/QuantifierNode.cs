@@ -1,4 +1,6 @@
-﻿namespace TathamOddie.RegexAnalyzer.Logic.Tree
+﻿using System.Linq;
+
+namespace TathamOddie.RegexAnalyzer.Logic.Tree
 {
     public class QuantifierNode : Node
     {
@@ -22,6 +24,41 @@
         public int? Min
         {
             get { return min; }
+        }
+
+        public override string Description
+        {
+            get
+            {
+                var commonDescriptions = new[]
+                {
+                    new { min = (int?)0, max = (int?)null, text = "zero or more times" },
+                    new { min = (int?)0, max = (int?)1, text = "zero or one times" },
+                    new { min = (int?)0, max = (int?)2, text = "zero or two times" },
+                    new { min = (int?)1, max = (int?)1, text = "exactly once" },
+                    new { min = (int?)2, max = (int?)1, text = "exactly twice" },
+                    new { min = (int?)1, max = (int?)null, text = "at least once" },
+                    new { min = (int?)2, max = (int?)null, text = "at least twice" },
+                    new { min = (int?)null, max = (int?)1, text = "at most once" },
+                    new { min = (int?)null, max = (int?)2, text = "at most twice" },
+                };
+
+                var commonDescription = commonDescriptions
+                    .Where(d => d.min == min)
+                    .Where(d => d.max == max)
+                    .SingleOrDefault();
+
+                if (commonDescription != null)
+                    return commonDescription.text;
+
+                var format =
+                    min.HasValue && max.HasValue ? "between {0} and {1} times" :
+                    min.HasValue ? "at least {0} times" :
+                    max.HasValue ? "at most {1} times" :
+                    string.Empty;
+
+                return string.Format(format, min ?? 0, max ?? 0);
+            }
         }
 
         public override bool Equals(object obj)

@@ -79,6 +79,7 @@ ol.ast
     background: transparent url(TreeDot.png) repeat left top;
     ol
     {
+        clear: left;
         position: none;
         list-style-type: none;
         margin-left: 10px;
@@ -86,12 +87,21 @@ ol.ast
     li
     {
         display: block;
-        height: 18px;
         width: 100%;
         overflow: hidden;
         line-height: 18px;
         vertical-align: middle;
-        background-color: #fff;
+        .ast-node
+        {
+            display: block;
+            overflow: hidden;
+            width: 100%;
+            background-color: #fff;
+        }   
+        .ast-node:hover * *
+        {
+            background-color: @highlight-background-color;
+        }
         .ast-node-data
         {
             display: block;
@@ -113,10 +123,6 @@ ol.ast
             background-color: #fff;
             overflow: hidden;
         }
-    }
-    li:hover * *
-    {
-        background-color: @highlight-background-color;
     }
 }
 

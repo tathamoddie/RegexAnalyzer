@@ -103,30 +103,34 @@ namespace Web.Controllers
                 layers.Push(layers.Pop() - 1);
 
                 for (var i = 0; i < layersToClose; i++)
-                    markupBuilder.Append("</ol>");
+                    markupBuilder.Append("</ol></li>");
                 
                 var currentNode = nodesToProcess.Pop();
 
+                markupBuilder.Append("<li>");
+
                 markupBuilder.AppendFormat(
-                    "<li><span class=\"ast-node-data\"><code title=\"{0}\">{1}</code></span> <span class=\"ast-node-description\"><span>{2}</span></span></li>",
+                    "<span class=\"ast-node\"><span class=\"ast-node-data\"><code title=\"{0}\">{1}</code></span><span class=\"ast-node-description\"><span>{2}</span></span></span>",
                     HttpUtility.HtmlAttributeEncode(currentNode.Data),
                     HttpUtility.HtmlEncode(currentNode.Data),
                     HttpUtility.HtmlEncode(currentNode.GetType().Name));
 
-                if (!currentNode.Children.Any()) continue;
+                if (currentNode.Children.Any())
+                {
+                    markupBuilder.Append("<ol>");
+                    layers.Push(currentNode.Children.Count());
 
-                markupBuilder.Append("<ol>");
-                layers.Push(currentNode.Children.Count());
-
-                foreach (var childNode in currentNode.Children.Reverse())
-                    nodesToProcess.Push(childNode);
-
+                    foreach (var childNode in currentNode.Children.Reverse())
+                        nodesToProcess.Push(childNode);
+                }
+                else
+                {
+                    markupBuilder.Append("</li>");
+                }
             }
 
             for (var i = 0; i < layers.Count(); i++)
                 markupBuilder.Append("</ol>");
-
-            markupBuilder.Append("</ol>");
 
             return new HtmlString(markupBuilder.ToString());
         }

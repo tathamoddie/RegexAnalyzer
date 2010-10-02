@@ -32,9 +32,11 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
             {
                 var commonDescriptions = new[]
                 {
+                    new { min = (int?)0, max = (int?)0, text = "never occurs" },
                     new { min = (int?)0, max = (int?)null, text = "zero or more occurences" },
                     new { min = (int?)0, max = (int?)1, text = "zero or one occurences" },
-                    new { min = (int?)0, max = (int?)2, text = "zero or two occurences" },
+                    new { min = (int?)0, max = (int?)2, text = "up to two occurences" },
+                    new { min = (int?)1, max = (int?)2, text = "one or two occurences" },
                     new { min = (int?)1, max = (int?)1, text = "exactly once" },
                     new { min = (int?)2, max = (int?)1, text = "exactly twice" },
                     new { min = (int?)1, max = (int?)null, text = "at least once" },
@@ -52,10 +54,11 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
                     return commonDescription.text;
 
                 var format =
-                    min.HasValue && max.HasValue && min == max ? "exactly {0} occurences" :
-                    min.HasValue && max.HasValue ? "between {0} and {1} occurences" :
-                    min.HasValue ? "at least {0} occurences" :
-                    max.HasValue ? "at most {1} occurences" :
+                    min.HasValue && max.HasValue && min == max ? "exactly {0:#,###} occurences" :
+                    min == 0 && max.HasValue ? "up to {1:#,###} occurences" :
+                    min.HasValue && max.HasValue ? "between {0:#,###} and {1:#,###} occurences" :
+                    min.HasValue ? "at least {0:#,###} occurences" :
+                    max.HasValue ? "at most {1:#,###} occurences" :
                     string.Empty;
 
                 return string.Format(format, min ?? 0, max ?? 0);

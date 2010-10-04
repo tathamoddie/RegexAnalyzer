@@ -9,7 +9,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
     public class TreeBuilderCharacterTests
     {
         [TestMethod]
-        public void TreeBuilder_BuildNodes_ShouldBuildWordCharacterClassNode()
+        public void TreeBuilder_BuildExpressionNode_ShouldBuildWordCharacterClassNode()
         {
             // Arrange
             var tokens = new[]
@@ -19,19 +19,19 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
                     new CharacterClassNode(@"\w", 10, CharacterClass.Word)
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilder_BuildNodes_ShouldBuildNonWordCharacterClassNode()
+        public void TreeBuilder_BuildExpressionNode_ShouldBuildNonWordCharacterClassNode()
         {
             // Arrange
             var tokens = new[]
@@ -41,19 +41,19 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
                     new CharacterClassNode(@"\W", 10, CharacterClass.NonWord)
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilder_BuildNodes_ShouldBuildWhiteSpaceCharacterClassNode()
+        public void TreeBuilder_BuildExpressionNode_ShouldBuildWhiteSpaceCharacterClassNode()
         {
             // Arrange
             var tokens = new[]
@@ -63,19 +63,19 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
                     new CharacterClassNode(@"\s", 10, CharacterClass.WhiteSpace)
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilder_BuildNodes_ShouldBuildNonWhiteSpaceCharacterClassNode()
+        public void TreeBuilder_BuildExpressionNode_ShouldBuildNonWhiteSpaceCharacterClassNode()
         {
             // Arrange
             var tokens = new[]
@@ -85,19 +85,19 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
                     new CharacterClassNode(@"\S", 10, CharacterClass.NonWhiteSpace)
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilder_BuildNodes_ShouldBuildDigitsCharacterClassNode()
+        public void TreeBuilder_BuildExpressionNode_ShouldBuildDigitsCharacterClassNode()
         {
             // Arrange
             var tokens = new[]
@@ -107,19 +107,19 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
                     new CharacterClassNode(@"\d", 10, CharacterClass.Digits)
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilder_BuildNodes_ShouldBuildNonDigitsCharacterClassNode()
+        public void TreeBuilder_BuildExpressionNode_ShouldBuildNonDigitsCharacterClassNode()
         {
             // Arrange
             var tokens = new[]
@@ -129,19 +129,19 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
                     new CharacterClassNode(@"\D", 10, CharacterClass.NonDigits)
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilder_BuildNodes_ShouldBuildCharacterEscapeIntoEscapeCharacterNode()
+        public void TreeBuilder_BuildExpressionNode_ShouldBuildCharacterEscapeIntoEscapeCharacterNode()
         {
             // Arrange
             var tokens = new[]
@@ -151,14 +151,14 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
                     new EscapedCharacterNode(@"\)", 0, ")")
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
     }

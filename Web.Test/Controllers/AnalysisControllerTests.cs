@@ -37,10 +37,10 @@ namespace TathamOddie.RegexAnalyzer.Web.Test.Controllers
         public void AnalysisController_RenderExpressionAsHtml_ShouldRenderSingleFlatNode()
         {
             // Arrange
-            var nodes = new Node[]
+            var nodes = new ExpressionNode("abc", 0, new Node[]
             {
                 new LiteralNode("abc", 0) { NodeId = 1 }
-            };
+            });
 
             // Act
             var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
@@ -50,14 +50,62 @@ namespace TathamOddie.RegexAnalyzer.Web.Test.Controllers
         }
 
         [TestMethod]
+        public void AnalysisController_RenderExpressionAsHtml_ShouldRenderContentBeforeAllNodes()
+        {
+            // Arrange
+            var nodes = new ExpressionNode("abcdef", 0, new Node[]
+            {
+                new LiteralNode("def", 3) { NodeId = 1 }
+            });
+
+            // Act
+            var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
+
+            // Assert
+            Assert.AreEqual("abc<span class=\"ast-node ast-node-1\">def</span>", result);
+        }
+
+        [TestMethod]
+        public void AnalysisController_RenderExpressionAsHtml_ShouldRenderContentAfterAllNodes()
+        {
+            // Arrange
+            var nodes = new ExpressionNode("abcdef", 0, new Node[]
+            {
+                new LiteralNode("abc", 0) { NodeId = 1 }
+            });
+
+            // Act
+            var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
+
+            // Assert
+            Assert.AreEqual("<span class=\"ast-node ast-node-1\">abc</span>def", result);
+        }
+
+        [TestMethod]
+        public void AnalysisController_RenderExpressionAsHtml_ShouldRenderContentBeforeAndAfterAllNodes()
+        {
+            // Arrange
+            var nodes = new ExpressionNode("abcdefghi", 0, new Node[]
+            {
+                new LiteralNode("def", 3) { NodeId = 1 }
+            });
+
+            // Act
+            var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
+
+            // Assert
+            Assert.AreEqual("abc<span class=\"ast-node ast-node-1\">def</span>ghi", result);
+        }
+
+        [TestMethod]
         public void AnalysisController_RenderExpressionAsHtml_ShouldRenderSequentialFlatNodes()
         {
             // Arrange
-            var nodes = new Node[]
+            var nodes = new ExpressionNode("abcdef", 0, new Node[]
             {
                 new LiteralNode("abc", 0) { NodeId = 1 },
                 new LiteralNode("def", 3) { NodeId = 2 }
-            };
+            });
 
             // Act
             var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
@@ -70,12 +118,12 @@ namespace TathamOddie.RegexAnalyzer.Web.Test.Controllers
         public void AnalysisController_RenderExpressionAsHtml_ShouldRenderGroupNodeWithDataBeforeChildNode()
         {
             // Arrange
-            var nodes = new Node[]
+            var nodes = new ExpressionNode("(abc", 0, new Node[]
             {
                 new GroupNode("(abc", 0,
                     new LiteralNode("abc", 1) { NodeId = 2 })
                 { NodeId = 1 }
-            };
+            });
 
             // Act
             var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
@@ -88,12 +136,12 @@ namespace TathamOddie.RegexAnalyzer.Web.Test.Controllers
         public void AnalysisController_RenderExpressionAsHtml_ShouldRenderGroupNodeWithDataAfterChildNode()
         {
             // Arrange
-            var nodes = new Node[]
+            var nodes = new ExpressionNode("abc)", 0, new Node[]
             {
                 new GroupNode("abc)", 0,
                     new LiteralNode("abc", 0) { NodeId = 2 })
                 { NodeId = 1 }
-            };
+            });
 
             // Act
             var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
@@ -106,12 +154,12 @@ namespace TathamOddie.RegexAnalyzer.Web.Test.Controllers
         public void AnalysisController_RenderExpressionAsHtml_ShouldRenderGroupNodeWithDataBeforeAndAfterChildNode()
         {
             // Arrange
-            var nodes = new Node[]
+            var nodes = new ExpressionNode("(abc)", 0, new Node[]
             {
                 new GroupNode("(abc)", 0,
                     new LiteralNode("abc", 1) { NodeId = 2 })
                 { NodeId = 1 }
-            };
+            });
 
             // Act
             var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
@@ -124,13 +172,13 @@ namespace TathamOddie.RegexAnalyzer.Web.Test.Controllers
         public void AnalysisController_RenderExpressionAsHtml_ShouldRenderGroupNodeWithDataBetweenChildNodes()
         {
             // Arrange
-            var nodes = new Node[]
+            var nodes = new ExpressionNode("abc|def", 0, new Node[]
             {
                 new GroupNode("abc|def", 0,
                     new LiteralNode("abc", 0) { NodeId = 2 },
                     new LiteralNode("def", 4) { NodeId = 3 })
                 { NodeId = 1 }
-            };
+            });
 
             // Act
             var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
@@ -143,13 +191,13 @@ namespace TathamOddie.RegexAnalyzer.Web.Test.Controllers
         public void AnalysisController_RenderExpressionAsHtml_ShouldRenderGroupNodeWithDataBeforeAndAfterAndBetweenChildNodes()
         {
             // Arrange
-            var nodes = new Node[]
+            var nodes = new ExpressionNode("(abc|def)", 0, new Node[]
             {
                 new GroupNode("(abc|def)", 0,
                     new LiteralNode("abc", 1) { NodeId = 2 },
                     new LiteralNode("def", 5) { NodeId = 3 })
                 { NodeId = 1 }
-            };
+            });
 
             // Act
             var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
@@ -162,8 +210,7 @@ namespace TathamOddie.RegexAnalyzer.Web.Test.Controllers
         public void AnalysisController_RenderExpressionAsHtml_ShouldRenderNestedGroupNodesWithDataBeforeAndAfterAndBetweenChildNodes()
         {
             // Arrange
-            // abc(def(ghi)jkl(mno)pqr)stu
-            var nodes = new Node[]
+            var nodes = new ExpressionNode("abc(def(ghi)jkl(mno)pqr)stu", 0, new Node[]
             {
                 new LiteralNode("abc", 0),
                 new GroupNode("(def(ghi)jkl(mno)pqr)", 3,
@@ -175,7 +222,7 @@ namespace TathamOddie.RegexAnalyzer.Web.Test.Controllers
                         new LiteralNode("mno", 16)),
                     new LiteralNode("pqr", 20)),
                 new LiteralNode("stu", 24)
-            };
+            });
 
             // Act
             var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();

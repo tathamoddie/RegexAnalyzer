@@ -8,14 +8,14 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
     {
         readonly TreeBuilderRuleSet rules = new TreeBuilderRuleSet();
 
-        public IEnumerable<Node> Build(IEnumerable<Token> tokens)
+        public Node Build(IEnumerable<Token> tokens)
         {
-            var nodes = BuildNodes(tokens);
-            AssignIdsToNodes(nodes);
-            return nodes;
+            var node = BuildExpressionNode(tokens);
+            AssignIdsToNodes(node.Children);
+            return node;
         }
 
-        internal IEnumerable<Node> BuildNodes(IEnumerable<Token> tokens)
+        internal Node BuildExpressionNode(IEnumerable<Token> tokens)
         {
             var state = new TreeBuilderState();
 
@@ -34,7 +34,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
                 Process(node, tokenQueue, state);
             }
 
-            return expressionNode.Children;
+            return expressionNode;
         }
 
         void Process(Node targetNode, Queue<Token> tokenQueue, TreeBuilderState state)

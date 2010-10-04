@@ -9,7 +9,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
     public class TreeBuilderGroupTests
     {
         [TestMethod]
-        public void TreeBuilding_BuildNodes_ShouldBuildEmptyGroupNode()
+        public void TreeBuilding_BuildExpressionNode_ShouldBuildEmptyGroupNode()
         {
             // Arrange
             var tokens = new[]
@@ -19,19 +19,19 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
                     new GroupNode("()", 0)
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilding_BuildNodes_ShouldBuildParseFailureNodeForUnclosedGroup()
+        public void TreeBuilding_BuildExpressionNode_ShouldBuildParseFailureNodeForUnclosedGroup()
         {
             // Arrange
             var tokens = new[]
@@ -40,19 +40,19 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
                     new ParseFailureNode("(", 0, "group is never closed")
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilding_BuildNodes_ShouldBuildGroupNodeWithLiteralContent()
+        public void TreeBuilding_BuildExpressionNode_ShouldBuildGroupNodeWithLiteralContent()
         {
             // Arrange
             var tokens = new[]
@@ -63,7 +63,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -71,12 +71,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                     new GroupNode("(abc)", 0,
                         new LiteralNode("abc", 1))
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilding_BuildNodes_ShouldBuildNestedGroupNode()
+        public void TreeBuilding_BuildExpressionNode_ShouldBuildNestedGroupNode()
         {
             // Arrange
             var tokens = new[]
@@ -88,7 +88,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -96,12 +96,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                     new GroupNode("(())", 0,
                         new GroupNode("()", 1))
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilding_BuildNodes_ShouldBuildNestedGroupNodeWithLiteralContent()
+        public void TreeBuilding_BuildExpressionNode_ShouldBuildNestedGroupNodeWithLiteralContent()
         {
             // Arrange
             var tokens = new[]
@@ -116,7 +116,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -127,12 +127,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                             new LiteralNode("def", 5)),
                         new LiteralNode("ghi", 9))
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilding_BuildNodes_ShouldBuildNamedGroupNode()
+        public void TreeBuilding_BuildExpressionNode_ShouldBuildNamedGroupNode()
         {
             // Arrange
             var tokens = new[]
@@ -147,7 +147,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -156,12 +156,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                         new LiteralNode("bar", 7))
                     { NamedIdentifier = "foo" }
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilding_BuildNodes_ShouldBuildBalancingGroupNode()
+        public void TreeBuilding_BuildExpressionNode_ShouldBuildBalancingGroupNode()
         {
             // Arrange
             var tokens = new[]
@@ -178,7 +178,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -187,12 +187,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                         new LiteralNode("baz", 11))
                     { NamedIdentifier = "foo", BalancingGroupIdentifier = "bar" }
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilding_BuildNodes_ShouldBuildCapturingGroupNode()
+        public void TreeBuilding_BuildExpressionNode_ShouldBuildCapturingGroupNode()
         {
             // Arrange
             var tokens = new[]
@@ -203,7 +203,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -212,12 +212,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                         new LiteralNode("abc", 1))
                     { GroupMode = GroupMode.CapturingGroup }
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilding_BuildNodes_ShouldBuildNonCapturingGroupNode()
+        public void TreeBuilding_BuildExpressionNode_ShouldBuildNonCapturingGroupNode()
         {
             // Arrange
             var tokens = new[]
@@ -230,7 +230,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -239,12 +239,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                         new LiteralNode("abc", 3))
                     { GroupMode = GroupMode.NonCapturingGroup }
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilding_BuildNodes_ShouldBuildPositiveLookAheadGroupNode()
+        public void TreeBuilding_BuildExpressionNode_ShouldBuildPositiveLookAheadGroupNode()
         {
             // Arrange
             var tokens = new[]
@@ -257,7 +257,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -266,12 +266,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                         new LiteralNode("abc", 3))
                     { GroupMode = GroupMode.PositiveLookAhead }
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilding_BuildNodes_ShouldBuildPositiveLookBehindGroupNode()
+        public void TreeBuilding_BuildExpressionNode_ShouldBuildPositiveLookBehindGroupNode()
         {
             // Arrange
             var tokens = new[]
@@ -285,7 +285,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -294,12 +294,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                         new LiteralNode("abc", 4))
                     { GroupMode = GroupMode.PositiveLookBehind }
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilding_BuildNodes_ShouldBuildNegativeLookAheadGroupNode()
+        public void TreeBuilding_BuildExpressionNode_ShouldBuildNegativeLookAheadGroupNode()
         {
             // Arrange
             var tokens = new[]
@@ -312,7 +312,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -321,12 +321,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                         new LiteralNode("abc", 3))
                     { GroupMode = GroupMode.NegativeLookAhead }
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilding_BuildNodes_ShouldBuildNegativeLookBehindGroupNode()
+        public void TreeBuilding_BuildExpressionNode_ShouldBuildNegativeLookBehindGroupNode()
         {
             // Arrange
             var tokens = new[]
@@ -340,7 +340,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -349,12 +349,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                         new LiteralNode("abc", 4))
                     { GroupMode = GroupMode.NegativeLookBehind }
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilding_BuildNodes_ShouldNotThrowStackOverflowExceptionForMassivelyNestedGroups()
+        public void TreeBuilding_BuildExpressionNode_ShouldNotThrowStackOverflowExceptionForMassivelyNestedGroups()
         {
             // Arrange
             const int depth = 1000;
@@ -365,7 +365,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             var tokens = startTokens.Concat(endTokens);
 
             // Act
-            new TreeBuilder().BuildNodes(tokens);
+            new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
         }

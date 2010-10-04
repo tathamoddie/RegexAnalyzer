@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -35,14 +34,14 @@ namespace Web.Controllers
             stopwatch.Start();
 
             var tokens = Tokenizer.Tokenize(expression);
-            var nodes = new TreeBuilder().Build(tokens);
+            var rootNode = new TreeBuilder().Build(tokens);
 
             stopwatch.Stop();
 
             ViewData["TimeTaken"] = stopwatch.Elapsed;
 
-            ViewData["ExpressionMarkup"] = RenderExpressionAsHtml(nodes);
-            ViewData["NodesMarkup"] = RenderNodesAsHtml(nodes);
+            ViewData["ExpressionMarkup"] = RenderExpressionAsHtml(rootNode);
+            ViewData["NodesMarkup"] = RenderNodesAsHtml(rootNode.Children);
 
             return View("Basic");
         }
@@ -53,7 +52,7 @@ namespace Web.Controllers
             stopwatch.Start();
 
             var tokens = Tokenizer.Tokenize(expression);
-            var nodes = new TreeBuilder().Build(tokens);
+            var rootNode = new TreeBuilder().Build(tokens);
 
             stopwatch.Stop();
 
@@ -61,9 +60,9 @@ namespace Web.Controllers
 
             ViewData["Tokens"] = tokens;
 
-            ViewData["ExpressionMarkup"] = RenderExpressionAsHtml(nodes);
-            ViewData["AllNodes"] = FlattenNodes(nodes);
-            ViewData["NodesMarkup"] = RenderNodesAsHtml(nodes);
+            ViewData["ExpressionMarkup"] = RenderExpressionAsHtml(rootNode);
+            ViewData["AllNodes"] = FlattenNodes(rootNode.Children);
+            ViewData["NodesMarkup"] = RenderNodesAsHtml(rootNode.Children);
 
             return View("Verbose");
         }
@@ -96,13 +95,16 @@ namespace Web.Controllers
             }
         }
 
-        internal static IHtmlString RenderExpressionAsHtml(IEnumerable<Node> nodes)
+        internal static IHtmlString RenderExpressionAsHtml(Node rootNode)
         {
             var markupBuilder = new StringBuilder();
-            
+
+            var nodes = rootNode.Children;
+
             var nodesToProcess = new Stack<Node>(nodes.Reverse());
             var layers = new Stack<int>(new[] { nodes.Count() });
-            var nodeToParentDictionary = nodes.ToDictionary(n => n, p => (Node)null);
+            var nodeToParentDictionary = nodes.ToDictionary(n => n, p => rootNode);
+
             while (nodesToProcess.Any())
             {
                 var layersToClose = 0;
@@ -134,17 +136,10 @@ namespace Web.Controllers
                         nodesToProcess.Push(childNode);
                         nodeToParentDictionary[childNode] = currentNode;
                     }
-
-                    var firstChild = currentNode.Children.First();
-                    var firstChildStartOffset = firstChild.StartIndex - currentNode.StartIndex;
-
-                    if (firstChildStartOffset > 0)
-                        markupBuilder.Append(HttpUtility.HtmlEncode(currentNode.Data.Substring(0, firstChildStartOffset)));
                 }
                 else
                 {
                     markupBuilder.Append(HttpUtility.HtmlEncode(currentNode.Data));
-
                     markupBuilder.Append("</span>");
                 }
 
@@ -163,16 +158,25 @@ namespace Web.Controllers
             if (parentNode == null) return;
 
             var indexOfCurrentNodeAtThisLevel = parentNode.Children.ToList().IndexOf(currentNode);
-            if (indexOfCurrentNodeAtThisLevel <= 0) return;
+            if (indexOfCurrentNodeAtThisLevel == 0)
+            {
+                if (currentNode.StartIndex == 0) return;
 
-            var previousNodeAtThisLevel = parentNode.Children.ElementAt(indexOfCurrentNodeAtThisLevel - 1);
-            var endIndexOfPreviousNodeAtThisLevel = previousNodeAtThisLevel.StartIndex + previousNodeAtThisLevel.Data.Length;
-            var numberOfCharactersBetweenPreviousAndCurrentNode = currentNode.StartIndex - endIndexOfPreviousNodeAtThisLevel;
-            if (numberOfCharactersBetweenPreviousAndCurrentNode <= 0) return;
+                var charactersBeforeThisFirstNode = parentNode.Data.Substring(0, currentNode.StartIndex - parentNode.StartIndex);
 
-            var charactersBetweenPreviousAndCurrentNode = parentNode.Data.Substring(endIndexOfPreviousNodeAtThisLevel, numberOfCharactersBetweenPreviousAndCurrentNode);
+                markupBuilder.Append(charactersBeforeThisFirstNode);
+            }
+            else
+            {
+                var previousNodeAtThisLevel = parentNode.Children.ElementAt(indexOfCurrentNodeAtThisLevel - 1);
+                var endIndexOfPreviousNodeAtThisLevel = previousNodeAtThisLevel.StartIndex + previousNodeAtThisLevel.Data.Length;
+                var numberOfCharactersBetweenPreviousAndCurrentNode = currentNode.StartIndex - endIndexOfPreviousNodeAtThisLevel;
+                if (numberOfCharactersBetweenPreviousAndCurrentNode <= 0) return;
 
-            markupBuilder.Append(charactersBetweenPreviousAndCurrentNode);
+                var charactersBetweenPreviousAndCurrentNode = parentNode.Data.Substring(endIndexOfPreviousNodeAtThisLevel, numberOfCharactersBetweenPreviousAndCurrentNode);
+
+                markupBuilder.Append(charactersBetweenPreviousAndCurrentNode);
+            }
         }
 
         static void RenderRemainingDataIfThisIsTheLastNode(StringBuilder markupBuilder, Node currentNode, IDictionary<Node, Node> nodeToParentDictionary)

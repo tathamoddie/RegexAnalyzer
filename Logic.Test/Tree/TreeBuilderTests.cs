@@ -9,7 +9,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
     public class TreeBuilderTests
     {
         [TestMethod]
-        public void TreeBuilder_BuildNodes_ShouldConvertParseFailureToken()
+        public void TreeBuilder_BuildExpressionNode_ShouldConvertParseFailureToken()
         {
             // Arrange
             var tokens = new[]
@@ -18,19 +18,19 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
                     new ParseFailureNode("x", 0, "unrecognised token")
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilder_BuildNodes_ShouldBuildLiteralTokenIntoLiteralNode()
+        public void TreeBuilder_BuildExpressionNode_ShouldBuildLiteralTokenIntoLiteralNode()
         {
             // Arrange
             var tokens = new[]
@@ -39,19 +39,19 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
                     new LiteralNode("abc", 0)
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilder_BuildNodes_ShouldConvertUnexpectedTokenToParseFailureNode()
+        public void TreeBuilder_BuildExpressionNode_ShouldConvertUnexpectedTokenToParseFailureNode()
         {
             // Arrange
             var tokens = new[]
@@ -60,14 +60,14 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
                     new ParseFailureNode(")", 0, "unexpected token")
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
@@ -92,7 +92,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                     new LiteralNode("2", 1) { NodeId = 2 },
                     new LiteralNode("3", 2) { NodeId = 3 },
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 

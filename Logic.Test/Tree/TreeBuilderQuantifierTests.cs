@@ -9,7 +9,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
     public class TreeBuilderQuantifierTests
     {
         [TestMethod]
-        public void TreeBuilder_BuildNodes_ShouldBuildZeroOrMoreQuantifierNodeForSingleCharacterLiteral()
+        public void TreeBuilder_BuildExpressionNode_ShouldBuildZeroOrMoreQuantifierNodeForSingleCharacterLiteral()
         {
             // Arrange
             var tokens = new[]
@@ -19,7 +19,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -28,12 +28,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                         0, null,
                         new LiteralNode("a", 0))
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilder_BuildNodes_ShouldBuildOneOrMoreQuantifierNodeForSingleCharacterLiteral()
+        public void TreeBuilder_BuildExpressionNode_ShouldBuildOneOrMoreQuantifierNodeForSingleCharacterLiteral()
         {
             // Arrange
             var tokens = new[]
@@ -43,7 +43,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -52,12 +52,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                         1, null,
                         new LiteralNode("a", 0))
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilder_BuildNodes_ShouldBuildZeroOrOneQuantifierNodeForSingleCharacterLiteral()
+        public void TreeBuilder_BuildExpressionNode_ShouldBuildZeroOrOneQuantifierNodeForSingleCharacterLiteral()
         {
             // Arrange
             var tokens = new[]
@@ -67,7 +67,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -76,12 +76,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                         0, 1,
                         new LiteralNode("a", 0))
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilder_BuildNodes_ShouldBuildMinParametizedQuantifierNodeForSingleCharacterLiteral()
+        public void TreeBuilder_BuildExpressionNode_ShouldBuildMinParametizedQuantifierNodeForSingleCharacterLiteral()
         {
             // Arrange
             var tokens = new[]
@@ -94,7 +94,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -103,12 +103,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                         3, null,
                         new LiteralNode("a", 0))
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilder_BuildNodes_ShouldBuildMaxParametizedQuantifierNodeForSingleCharacterLiteral()
+        public void TreeBuilder_BuildExpressionNode_ShouldBuildMaxParametizedQuantifierNodeForSingleCharacterLiteral()
         {
             // Arrange
             var tokens = new[]
@@ -121,7 +121,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -130,12 +130,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                         null, 3,
                         new LiteralNode("a", 0))
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilder_BuildNodes_ShouldBuildMinMaxParametizedQuantifierNodeForSingleCharacterLiteral()
+        public void TreeBuilder_BuildExpressionNode_ShouldBuildMinMaxParametizedQuantifierNodeForSingleCharacterLiteral()
         {
             // Arrange
             var tokens = new[]
@@ -149,7 +149,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -158,12 +158,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                         3, 16,
                         new LiteralNode("a", 0))
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilder_BuildNodes_ShouldBuildExactParametizedQuantifierNodeForSingleCharacterLiteral()
+        public void TreeBuilder_BuildExpressionNode_ShouldBuildExactParametizedQuantifierNodeForSingleCharacterLiteral()
         {
             // Arrange
             var tokens = new[]
@@ -175,7 +175,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -184,12 +184,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                         8, 8,
                         new LiteralNode("a", 0))
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilder_BuildNodes_ShouldHandleMalformedParametizedQuantifierTokensAsLiteral()
+        public void TreeBuilder_BuildExpressionNode_ShouldHandleMalformedParametizedQuantifierTokensAsLiteral()
         {
             // Arrange
             var tokens = new[]
@@ -203,7 +203,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -211,12 +211,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                     new LiteralNode("a", 0),
                     new LiteralNode("{8,,}", 1)
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilder_BuildNodes_ShouldBuildQuantifierNodeAroundLastCharacterOfMultiCharacterLiteral()
+        public void TreeBuilder_BuildExpressionNode_ShouldBuildQuantifierNodeAroundLastCharacterOfMultiCharacterLiteral()
         {
             // Arrange
             var tokens = new[]
@@ -226,7 +226,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new Node[]
@@ -236,12 +236,12 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                         0, null,
                         new LiteralNode("c", 2))
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
 
         [TestMethod]
-        public void TreeBuilder_BuildNodes_ShouldBuildMinMaxParametizedQuantifierNodeAroundLastCharacterOfMultiCharacterLiteral()
+        public void TreeBuilder_BuildExpressionNode_ShouldBuildMinMaxParametizedQuantifierNodeAroundLastCharacterOfMultiCharacterLiteral()
         {
             // Arrange
             var tokens = new[]
@@ -255,7 +255,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().BuildNodes(tokens);
+            var nodes = new TreeBuilder().BuildExpressionNode(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new Node[]
@@ -265,7 +265,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                         3, 16,
                         new LiteralNode("c", 2))
                 },
-                nodes.ToArray()
+                nodes.Children.ToArray()
             );
         }
     }

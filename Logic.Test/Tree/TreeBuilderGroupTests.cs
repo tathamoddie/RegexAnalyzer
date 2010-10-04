@@ -171,6 +171,58 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
         }
 
         [TestMethod]
+        public void TreeBuilding_Build_ShouldBuildCapturingGroupNode()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.GroupStart, "(", 0),
+                new Token(TokenType.Literal, "abc", 1),
+                new Token(TokenType.GroupEnd, ")", 4),
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new GroupNode("(abc)", 0,
+                        new LiteralNode("abc", 1))
+                    { IsCapturing = true }
+                },
+                nodes.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void TreeBuilding_Build_ShouldBuildNonCapturingGroupNode()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.GroupStart, "(", 0),
+                new Token(TokenType.GroupDirectiveStart, "?", 1),
+                new Token(TokenType.NonCapturingGroupMarker, ":", 2),
+                new Token(TokenType.Literal, "abc", 3),
+                new Token(TokenType.GroupEnd, ")", 6),
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new GroupNode("(?:abc)", 0,
+                        new LiteralNode("abc", 3))
+                    { IsCapturing = false }
+                },
+                nodes.ToArray()
+            );
+        }
+
+        [TestMethod]
         public void TreeBuilding_Build_ShouldNotThrowStackOverflowExceptionForMassivelyNestedGroups()
         {
             // Arrange

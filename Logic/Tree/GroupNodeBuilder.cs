@@ -86,6 +86,15 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
                     },
                     ProcessBalancingGroupDirective
                 },
+
+                // Non-capturing
+                {
+                    new[]
+                    {
+                        new PatternSegment<Token>(t => t.Type == TokenType.NonCapturingGroupMarker, 1)
+                    },
+                    (g, t) => { g.IsCapturing = false; }
+                },
             };
 
             foreach (var strategy in strategies)

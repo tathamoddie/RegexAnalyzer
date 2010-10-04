@@ -27,11 +27,11 @@
 
         public string BalancingGroupIdentifier { get; set; }
 
-        bool isCapturing = true;
-        public bool IsCapturing
+        CaptureMode captureMode = CaptureMode.CapturingGroup;
+        public CaptureMode CaptureMode
         {
-            get { return isCapturing; }
-            set { isCapturing = value; }
+            get { return captureMode; }
+            set { captureMode = value; }
         }
 
         public override bool Equals(object obj)
@@ -46,7 +46,7 @@
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return base.Equals(other)
-                && other.isCapturing.Equals(isCapturing)
+                && Equals(other.CaptureMode, CaptureMode)
                 && Equals(other.NamedIdentifier, NamedIdentifier)
                 && Equals(other.BalancingGroupIdentifier, BalancingGroupIdentifier);
         }
@@ -55,8 +55,8 @@
         {
             unchecked
             {
-                int result = base.GetHashCode();
-                result = (result*397) ^ isCapturing.GetHashCode();
+                var result = base.GetHashCode();
+                result = (result*397) ^ CaptureMode.GetHashCode();
                 result = (result*397) ^ (NamedIdentifier != null ? NamedIdentifier.GetHashCode() : 0);
                 result = (result*397) ^ (BalancingGroupIdentifier != null ? BalancingGroupIdentifier.GetHashCode() : 0);
                 return result;

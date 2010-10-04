@@ -93,7 +93,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
                     {
                         new PatternSegment<Token>(t => t.Type == TokenType.NonCapturingGroupMarker, 1)
                     },
-                    (g, t) => { g.IsCapturing = false; }
+                    (g, t) => { g.CaptureMode = CaptureMode.NonCapturingGroup; }
                 },
             };
 

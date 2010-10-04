@@ -40,10 +40,10 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
         }
 
         [TestMethod]
-        public void GroupNode_Equals_ShouldReturnFalseWhenIsCapturingDiffers()
+        public void GroupNode_Equals_ShouldReturnFalseWhenCaptureModeDiffers()
         {
-            var lhs = new GroupNode("(abc)", 0) { IsCapturing = true };
-            var rhs = new GroupNode("(abc)", 0) { IsCapturing = false };
+            var lhs = new GroupNode("(abc)", 0) { CaptureMode = CaptureMode.CapturingGroup };
+            var rhs = new GroupNode("(abc)", 0) { CaptureMode = CaptureMode.NonCapturingGroup };
             Assert.IsFalse(lhs.Equals(rhs));
         }
 

@@ -98,6 +98,23 @@ namespace TathamOddie.RegexAnalyzer.Web.Test.Controllers
         }
 
         [TestMethod]
+        public void AnalysisController_RenderExpressionAsHtml_ShouldEncodeDataBeforeBetweenAfterAndWithinNodes()
+        {
+            // Arrange
+            var nodes = new ExpressionNode("<<<<<", 0, new Node[]
+            {
+                new LiteralNode("<", 1) { NodeId = 1 },
+                new LiteralNode("<", 3) { NodeId = 2 }
+            });
+
+            // Act
+            var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
+
+            // Assert
+            Assert.AreEqual("&lt;<span class=\"ast-node ast-node-1\">&lt;</span>&lt;<span class=\"ast-node ast-node-2\">&lt;</span>&lt;", result);
+        }
+
+        [TestMethod]
         public void AnalysisController_RenderExpressionAsHtml_ShouldRenderSequentialFlatNodes()
         {
             // Arrange

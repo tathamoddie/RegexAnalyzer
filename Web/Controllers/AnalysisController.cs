@@ -164,7 +164,7 @@ namespace Web.Controllers
 
                 var charactersBeforeThisFirstNode = parentNode.Data.Substring(0, currentNode.StartIndex - parentNode.StartIndex);
 
-                markupBuilder.Append(charactersBeforeThisFirstNode);
+                markupBuilder.Append(HttpUtility.HtmlEncode(charactersBeforeThisFirstNode));
             }
             else
             {
@@ -175,7 +175,7 @@ namespace Web.Controllers
 
                 var charactersBetweenPreviousAndCurrentNode = parentNode.Data.Substring(endIndexOfPreviousNodeAtThisLevel, numberOfCharactersBetweenPreviousAndCurrentNode);
 
-                markupBuilder.Append(charactersBetweenPreviousAndCurrentNode);
+                markupBuilder.Append(HttpUtility.HtmlEncode(charactersBetweenPreviousAndCurrentNode));
             }
         }
 
@@ -195,7 +195,7 @@ namespace Web.Controllers
 
             var remainingCharacters = parentNode.Data.Substring(endIndexOfCurrentNode - parentNode.StartIndex, numberOfRemainingCharacters);
 
-            markupBuilder.Append(remainingCharacters);
+            markupBuilder.Append(HttpUtility.HtmlEncode(remainingCharacters));
         }
 
         static IHtmlString RenderNodesAsHtml(IEnumerable<Node> nodes)

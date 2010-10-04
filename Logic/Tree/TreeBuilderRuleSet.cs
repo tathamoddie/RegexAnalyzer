@@ -39,7 +39,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
 
             yield return new TreeBuilderRule(
                 TokenType.ParseFailure,
-                (t, s) => new ParseFailureNode(t.Data, t.StartIndex, "Unrecognised token.")
+                (t, s) => new ParseFailureNode(t.Data, t.StartIndex, "unrecognised token")
             );
         }
     }

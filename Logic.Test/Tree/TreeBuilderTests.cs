@@ -9,7 +9,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
     public class TreeBuilderTests
     {
         [TestMethod]
-        public void TreeBuilder_BuildTree_ShouldConvertParseFailureToken()
+        public void TreeBuilder_Build_ShouldConvertParseFailureToken()
         {
             // Arrange
             var tokens = new[]
@@ -45,6 +45,27 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             CollectionAssert.AreEqual(new[]
                 {
                     new LiteralNode("abc", 0)
+                },
+                nodes.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void TreeBuilder_Build_ShouldConvertUnexpectedTokenToParseFailureNode()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.GroupEnd, ")", 0)
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new ParseFailureNode(")", 0, "Unexpected token.")
                 },
                 nodes.ToArray()
             );

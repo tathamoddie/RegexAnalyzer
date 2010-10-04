@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using TathamOddie.RegexAnalyzer.Logic.Tokens;
 
@@ -45,9 +44,10 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
                     .FirstOrDefault();
 
                 if (rule == null)
-                    throw new ApplicationException(string.Format(
-                        "No rule is defined for token type {0}.",
-                        token.Type));
+                {
+                    targetNode.AddChild(new ParseFailureNode(token, "unexpected token"));
+                    break;
+                }
 
                 var node = rule.NodeBuilder(token, state);
 

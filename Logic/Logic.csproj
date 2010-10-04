@@ -77,12 +77,12 @@
     <Compile Include="Tokens\TokenizerState.cs" />
     <Compile Include="Tokens\TokenizerStateChange.cs" />
     <Compile Include="Tokens\TokenType.cs" />
-    <Compile Include="Tree\CaptureMode.cs" />
     <Compile Include="Tree\CharacterClass.cs" />
     <Compile Include="Tree\CharacterClassNode.cs" />
     <Compile Include="Tree\CharacterNodeBuilder.cs" />
     <Compile Include="Tree\EscapedCharacterNode.cs" />
     <Compile Include="Tree\ExpressionNode.cs" />
+    <Compile Include="Tree\GroupMode.cs" />
     <Compile Include="Tree\GroupNode.cs" />
     <Compile Include="Tree\GroupNodeBuilder.cs" />
     <Compile Include="Tree\LiteralNode.cs" />

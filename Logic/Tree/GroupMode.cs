@@ -1,6 +1,6 @@
 ﻿namespace TathamOddie.RegexAnalyzer.Logic.Tree
 {
-    public enum CaptureMode
+    public enum GroupMode
     {
         CapturingGroup,
         NonCapturingGroup

@@ -189,7 +189,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                 {
                     new GroupNode("(abc)", 0,
                         new LiteralNode("abc", 1))
-                    { CaptureMode = CaptureMode.CapturingGroup }
+                    { GroupMode = GroupMode.CapturingGroup }
                 },
                 nodes.ToArray()
             );
@@ -216,7 +216,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                 {
                     new GroupNode("(?:abc)", 0,
                         new LiteralNode("abc", 3))
-                    { CaptureMode = CaptureMode.NonCapturingGroup }
+                    { GroupMode = GroupMode.NonCapturingGroup }
                 },
                 nodes.ToArray()
             );

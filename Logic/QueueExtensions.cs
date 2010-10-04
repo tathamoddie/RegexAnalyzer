@@ -49,7 +49,7 @@ namespace TathamOddie.RegexAnalyzer.Logic
 
             while (
                 (limit == null || dequeuedElements.Count < limit) &&
-                queue.Count > 0 &&
+                queue.Any() &&
                 predicate(queue.Peek()))
                 dequeuedElements.Add(queue.Dequeue());
 

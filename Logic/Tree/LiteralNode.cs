@@ -1,4 +1,6 @@
-﻿namespace TathamOddie.RegexAnalyzer.Logic.Tree
+﻿using System;
+
+namespace TathamOddie.RegexAnalyzer.Logic.Tree
 {
     public class LiteralNode : Node
     {

@@ -25,6 +25,8 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
             get { return startIndex; }
         }
 
+        public int NodeId { get; set; }
+
         public IEnumerable<Node> Children
         {
             get { return children; }
@@ -60,15 +62,19 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(other.data, data) && other.startIndex == startIndex && other.children.SequenceEqual(children);
+            return Equals(other.data, data)
+                && other.startIndex == startIndex
+                && other.NodeId == NodeId
+                && other.children.SequenceEqual(children);
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                int result = (data != null ? data.GetHashCode() : 0);
+                var result = (data != null ? data.GetHashCode() : 0);
                 result = (result*397) ^ startIndex;
+                result = (result*397) ^ NodeId;
                 return result;
             }
         }

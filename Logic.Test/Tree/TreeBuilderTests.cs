@@ -70,5 +70,40 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                 nodes.ToArray()
             );
         }
+
+        [TestMethod]
+        public void TreeBuilder_AssignIdsToNodes_ShouldAssignIdsByLevel()
+        {
+            // Arrange
+            var nodes = new Node[]
+            {
+                new LiteralNode("1", 0),            // 1
+                new GroupNode("(23(45)67)", 1,      // 2
+                    new LiteralNode("23", 2),       // 4
+                    new GroupNode("(45)", 4,        // 5
+                        new LiteralNode("45", 5)),  // 7
+                    new LiteralNode("67", 8)),      // 6
+                new LiteralNode("8", 11),           // 3
+            };
+
+            // Act
+            TreeBuilder.AssignIdsToNodes(nodes);
+
+            // Assert
+            CollectionAssert.AreEqual(new Node[]
+                {
+                    new LiteralNode("1", 0) { NodeId = 1 },
+                    new GroupNode("(23(45)67)", 1,
+                        new LiteralNode("23", 2) { NodeId = 4 },
+                        new GroupNode("(45)", 4,
+                            new LiteralNode("45", 5) { NodeId = 7 })
+                            { NodeId = 5 },
+                        new LiteralNode("67", 8) { NodeId = 6 })
+                        { NodeId = 2 },
+                    new LiteralNode("8", 11) { NodeId = 3 },
+                },
+                nodes.ToArray()
+            );
+        }
     }
 }

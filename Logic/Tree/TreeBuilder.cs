@@ -55,5 +55,23 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
                     targetNode.AddChild(node);
             }
         }
+
+        internal static void AssignIdsToNodes(IEnumerable<Node> nodes)
+        {
+            var currentNodeId = 1;
+
+            var nodesToProcess = new Queue<Node>(nodes);
+            
+            while (nodesToProcess.Any())
+            {
+                var currentNode = nodesToProcess.Dequeue();
+
+                currentNode.NodeId = currentNodeId;
+                currentNodeId++;
+                
+                foreach (var childNode in currentNode.Children)
+                    nodesToProcess.Enqueue(childNode);
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TathamOddie.RegexAnalyzer.Logic.Tokens;
 
@@ -60,31 +61,46 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
         {
             var group = (GroupNode)state.ProcessingState.TargetNode;
 
-            var namedIdentifierTokens = state
-                .ProcessingState
-                .Tokens
-                .DequeuePattern(new []
-                {
-                    new PatternSegment<Token>(t => t.Type == TokenType.NamedIdentifierStartOrLookBehindMarker, 1),
-                    new PatternSegment<Token>(t => t.Type == TokenType.Literal),
-                    new PatternSegment<Token>(t => t.Type == TokenType.NamedIdentifierEnd, 1),
-                });
-
-            if (namedIdentifierTokens.Any())
+            var strategies = new Dictionary<IEnumerable<PatternSegment<Token>>, Action<GroupNode, IEnumerable<Token>>>
             {
-                var identifierTokens = namedIdentifierTokens
-                    .Skip(1)
-                    .Take(namedIdentifierTokens.Count() - 2);
+                // Named group
+                {
+                    new[]
+                    {
+                        new PatternSegment<Token>(t => t.Type == TokenType.NamedIdentifierStartOrLookBehindMarker, 1),
+                        new PatternSegment<Token>(t => t.Type == TokenType.Literal),
+                        new PatternSegment<Token>(t => t.Type == TokenType.NamedIdentifierEnd, 1),
+                    },
+                    ProcessNamedGroupDirective
+                }
+            };
 
-                var identifier = Token.GetData(identifierTokens);
+            foreach (var strategy in strategies)
+            {
+                var tokens = state
+                    .ProcessingState
+                    .Tokens
+                    .DequeuePattern(strategy.Key);
 
-                // named identifier
-                group.NamedIdentifier = identifier;
+                if (!tokens.Any()) continue;
 
-                return null;
+                strategy.Value(group, tokens);
+
+                break;
             }
 
             return null;
+        }
+
+        static void ProcessNamedGroupDirective(GroupNode group, IEnumerable<Token> tokens)
+        {
+            var identifierTokens = tokens
+                .Skip(1)
+                .Take(tokens.Count() - 2);
+
+            var identifier = Token.GetData(identifierTokens);
+
+            group.NamedIdentifier = identifier;
         }
     }
 }

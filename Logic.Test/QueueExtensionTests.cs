@@ -110,5 +110,30 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test
                 result.ToArray());
             Assert.AreEqual(1, input.Count());
         }
+
+        [TestMethod]
+        public void QueueExtensions_DequeuePattern_ShouldReturnEmptyEnumerableWhenPatternFails()
+        {
+            // Arrange
+            var input = new Queue<string>(new[]
+            {
+                "a",
+                "a",
+                "b",
+                "b",
+                "c"
+            });
+
+            // Act
+            var result = input.DequeuePattern(new[]
+            {
+                new PatternSegment<string>(s => s == "a", 2),
+                new PatternSegment<string>(s => s == "c")
+            });
+
+            // Assert
+            Assert.AreEqual(0, result.Count());
+            Assert.AreEqual(5, input.Count());
+        }
     }
 }

@@ -19,5 +19,16 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             var node = new GroupNode("(abc)", 0) { NamedIdentifier = "foo" };
             Assert.AreEqual("named group 'foo'", node.Description);
         }
+
+        [TestMethod]
+        public void GroupNode_Description_ShouldReturnBalancingGroup()
+        {
+            var node = new GroupNode("(abc)", 0)
+                           {
+                               BalancingGroupIdentifier = "foo",
+                               NamedIdentifier = "bar"
+                           };
+            Assert.AreEqual("balancing group 'foo', captured in 'bar'", node.Description);
+        }
     }
 }

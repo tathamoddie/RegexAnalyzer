@@ -72,7 +72,20 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
                         new PatternSegment<Token>(t => t.Type == TokenType.NamedIdentifierEnd, 1),
                     },
                     ProcessNamedGroupDirective
-                }
+                },
+
+                // Balancing group
+                {
+                    new[]
+                    {
+                        new PatternSegment<Token>(t => t.Type == TokenType.NamedIdentifierStartOrLookBehindMarker, 1),
+                        new PatternSegment<Token>(t => t.Type == TokenType.Literal),
+                        new PatternSegment<Token>(t => t.Type == TokenType.BalancingGroupNamedIdentifierSeparator, 1),
+                        new PatternSegment<Token>(t => t.Type == TokenType.Literal),
+                        new PatternSegment<Token>(t => t.Type == TokenType.NamedIdentifierEnd, 1),
+                    },
+                    ProcessBalancingGroupDirective
+                },
             };
 
             foreach (var strategy in strategies)
@@ -101,6 +114,27 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
             var identifier = Token.GetData(identifierTokens);
 
             group.NamedIdentifier = identifier;
+        }
+
+        static void ProcessBalancingGroupDirective(GroupNode group, IEnumerable<Token> tokens)
+        {
+            var identifierTokens = tokens
+                .Skip(1)
+                .TakeWhile(t => t.Type == TokenType.Literal);
+
+            var namedIdentifier = Token.GetData(identifierTokens);
+
+            group.NamedIdentifier = namedIdentifier;
+
+            var balancingGroupTokens = tokens
+                .Skip(1) // ?
+                .Skip(identifierTokens.Count())
+                .Skip(1) // -
+                .TakeWhile(t => t.Type == TokenType.Literal);
+
+            var balancingGroupIdentifier = Token.GetData(balancingGroupTokens);
+
+            group.BalancingGroupIdentifier = balancingGroupIdentifier;
         }
     }
 }

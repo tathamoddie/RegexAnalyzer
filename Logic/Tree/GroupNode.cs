@@ -16,12 +16,15 @@
         {
             get
             {
-                return !string.IsNullOrEmpty(NamedIdentifier)
-                    ? string.Format("named group '{0}'", NamedIdentifier)
+                return
+                    !string.IsNullOrEmpty(BalancingGroupIdentifier) ? string.Format("balancing group '{0}', captured in '{1}'", BalancingGroupIdentifier, NamedIdentifier) :
+                    !string.IsNullOrEmpty(NamedIdentifier) ? string.Format("named group '{0}'", NamedIdentifier)
                     : "group";
             }
         }
 
         public string NamedIdentifier { get; set; }
+
+        public string BalancingGroupIdentifier { get; set; }
     }
 }

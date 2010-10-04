@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TathamOddie.RegexAnalyzer.Logic
 {
@@ -7,16 +8,29 @@ namespace TathamOddie.RegexAnalyzer.Logic
     {
         internal static IEnumerable<T> DequeuePattern<T>(this Queue<T> queue, IEnumerable<PatternSegment<T>> patternSegments)
         {
-            var dequeuedElements = new List<T>();
+            var workingQueue = new Queue<T>(queue);
+
+            var candidateElements = new List<T>();
 
             foreach (var patternSegment in patternSegments)
             {
                 var segment = patternSegment;
-                dequeuedElements.AddRange(
-                    queue.DequeueWhile(i => segment.Predicate(i), patternSegment.Count));
+
+                var elements = workingQueue.DequeueWhile(i => segment.Predicate(i), patternSegment.Count);
+
+                var correctNumberOfElementsForSegment =
+                    (patternSegment.Count == null && elements.Any()) ||
+                    (patternSegment.Count == elements.Count());
+
+                if (!correctNumberOfElementsForSegment)
+                    return Enumerable.Empty<T>();
+
+                candidateElements.AddRange(elements);
             }
 
-            return dequeuedElements;
+            queue.DequeueWhile(e => true, candidateElements.Count());
+
+            return candidateElements;
         }
 
         internal static IEnumerable<T> DequeueWhile<T>(this Queue<T> queue, Func<T, bool> predicate)

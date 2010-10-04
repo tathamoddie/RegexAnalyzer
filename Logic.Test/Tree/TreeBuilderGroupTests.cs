@@ -140,6 +140,37 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
         }
 
         [TestMethod]
+        public void TreeBuilding_Build_ShouldBuildBalancingGroupNode()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.GroupStart, "(", 0),
+                new Token(TokenType.GroupDirectiveStart, "?", 1),
+                new Token(TokenType.NamedIdentifierStartOrLookBehindMarker, "<", 2),
+                new Token(TokenType.Literal, "foo", 3),
+                new Token(TokenType.BalancingGroupNamedIdentifierSeparator, "-", 6),
+                new Token(TokenType.Literal, "bar", 7),
+                new Token(TokenType.NamedIdentifierEnd, ">", 10),
+                new Token(TokenType.Literal, "baz", 11),
+                new Token(TokenType.GroupEnd, ")", 14)
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new GroupNode("(?<foo-bar>baz)", 0,
+                        new LiteralNode("baz", 11))
+                    { NamedIdentifier = "foo", BalancingGroupIdentifier = "bar" }
+                },
+                nodes.ToArray()
+            );
+        }
+
+        [TestMethod]
         public void TreeBuilding_Build_ShouldNotThrowStackOverflowExceptionForMassivelyNestedGroups()
         {
             // Arrange

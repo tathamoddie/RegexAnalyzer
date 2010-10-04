@@ -4,7 +4,7 @@
 @box-color: #aaa;
 @box-inner-border: #ddd;
 @box-background-color: #f7f7f7;
-@highlight-background-color: #ffb;
+@highlight-background-color: #ff9;
 @error-highlight-background-color: #fcc;
 
 * { margin: 0; padding: 0; }
@@ -46,8 +46,28 @@ h2
 
 p { margin-bottom: 8px; }
 
+.ast-node-hover-candidate ()
+{
+    -webkit-transition-property: background-color;
+    -webkit-transition-duration: 0.5s;
+    -moz-transition-property: background-color;
+    -moz-transition-duration: 0.5s;
+    -o-transition-property: background-color;
+    -o-transition-duration: 0.5s;
+}
+
+.ast-node-hover-effect (@existing-background-color: #fff)
+{
+    background-color: @highlight-background-color;
+    .ast-node
+    {
+        background-color: @existing-background-color;
+    }
+}
+
 code
 {
+    font-weight: bold;
     white-space: pre-wrap;
     word-wrap: break-word;
     overflow: hidden;
@@ -61,21 +81,9 @@ code
     border: solid 1px @box-color;
     line-height: 140%;
     margin-bottom: 8px;
-}
-
-.ast-node-hover-candidate ()
-{
-    -webkit-transition-property: background-color;
-    -webkit-transition-duration: 1s;
-    -moz-transition-property: background-color;
-    -moz-transition-duration: 1s;
-    -o-transition-property: background-color;
-    -o-transition-duration: 1s;
-}
-
-.ast-node-hover ()
-{
-    background-color: @highlight-background-color;
+    .ast-node { display: inline-block; .ast-node-hover-candidate; }
+    .ast-parse-failure-node { background-color: @error-highlight-background-color; }
+    .ast-node-hover { .ast-node-hover-effect(@box-background-color); }
 }
 
 table
@@ -90,8 +98,7 @@ table
         tr { border-top: solid 1px @box-color; }
         tr.ast-node { .ast-node-hover-candidate; }
         tr.ast-parse-failure-node { background-color: @error-highlight-background-color; }
-        tr.ast-node:hover,
-        tr.ast-node-hover { .ast-node-hover; }
+        tr.ast-node-hover { .ast-node-hover-effect; }
     }
 }
 
@@ -124,8 +131,7 @@ ol.ast
         }
         .ast-node * * { .ast-node-hover-candidate; }
         .ast-parse-failure-node * * { background-color: @error-highlight-background-color; }
-        .ast-node:hover * *,
-        .ast-node-hover * * { .ast-node-hover; }
+        .ast-node-hover * * { .ast-node-hover-effect; }
         .ast-node-data
         {
             display: block;

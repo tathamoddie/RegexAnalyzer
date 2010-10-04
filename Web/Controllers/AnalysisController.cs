@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -40,6 +41,7 @@ namespace Web.Controllers
 
             ViewData["TimeTaken"] = stopwatch.Elapsed;
 
+            ViewData["ExpressionMarkup"] = RenderExpressionAsHtml(nodes);
             ViewData["NodesMarkup"] = RenderNodesAsHtml(nodes);
 
             return View("Basic");
@@ -58,7 +60,8 @@ namespace Web.Controllers
             ViewData["TimeTaken"] = stopwatch.Elapsed;
 
             ViewData["Tokens"] = tokens;
-            
+
+            ViewData["ExpressionMarkup"] = RenderExpressionAsHtml(nodes);
             ViewData["AllNodes"] = FlattenNodes(nodes);
             ViewData["NodesMarkup"] = RenderNodesAsHtml(nodes);
 
@@ -91,6 +94,104 @@ namespace Web.Controllers
                 foreach(var childNode in children.Reverse())
                     nodesToProcess.Push(childNode);
             }
+        }
+
+        internal static IHtmlString RenderExpressionAsHtml(IEnumerable<Node> nodes)
+        {
+            var markupBuilder = new StringBuilder();
+            
+            var nodesToProcess = new Stack<Node>(nodes.Reverse());
+            var layers = new Stack<int>(new[] { nodes.Count() });
+            var nodeToParentDictionary = nodes.ToDictionary(n => n, p => (Node)null);
+            while (nodesToProcess.Any())
+            {
+                var layersToClose = 0;
+                while (layers.Any() && layers.Peek() == 0)
+                {
+                    layersToClose++;
+                    layers.Pop();
+                }
+
+                layers.Push(layers.Pop() - 1);
+
+                for (var i = 0; i < layersToClose; i++)
+                    markupBuilder.Append("</span>");
+
+                var currentNode = nodesToProcess.Pop();
+
+                RenderDataBetweenThisAndPreviousNode(markupBuilder, currentNode, nodeToParentDictionary);
+
+                markupBuilder.AppendFormat(
+                    "<span class=\"{0}\">",
+                    BuildNodeClass(currentNode));
+                
+                if (currentNode.Children.Any())
+                {
+                    layers.Push(currentNode.Children.Count());
+
+                    foreach (var childNode in currentNode.Children.Reverse())
+                    {
+                        nodesToProcess.Push(childNode);
+                        nodeToParentDictionary[childNode] = currentNode;
+                    }
+
+                    var firstChild = currentNode.Children.First();
+                    var firstChildStartOffset = firstChild.StartIndex - currentNode.StartIndex;
+
+                    if (firstChildStartOffset > 0)
+                        markupBuilder.Append(HttpUtility.HtmlEncode(currentNode.Data.Substring(0, firstChildStartOffset)));
+                }
+                else
+                {
+                    markupBuilder.Append(HttpUtility.HtmlEncode(currentNode.Data));
+
+                    markupBuilder.Append("</span>");
+                }
+
+                RenderRemainingDataIfThisIsTheLastNode(markupBuilder, currentNode, nodeToParentDictionary);
+            }
+
+            for (var i = 0; i < layers.Count() - 1; i++)
+                markupBuilder.Append("</span>");
+
+            return new HtmlString(markupBuilder.ToString());
+        }
+
+        static void RenderDataBetweenThisAndPreviousNode(StringBuilder markupBuilder, Node currentNode, IDictionary<Node, Node> nodeToParentDictionary)
+        {
+            var parentNode = nodeToParentDictionary[currentNode];
+            if (parentNode == null) return;
+
+            var indexOfCurrentNodeAtThisLevel = parentNode.Children.ToList().IndexOf(currentNode);
+            if (indexOfCurrentNodeAtThisLevel <= 0) return;
+
+            var previousNodeAtThisLevel = parentNode.Children.ElementAt(indexOfCurrentNodeAtThisLevel - 1);
+            var endIndexOfPreviousNodeAtThisLevel = previousNodeAtThisLevel.StartIndex + previousNodeAtThisLevel.Data.Length;
+            var numberOfCharactersBetweenPreviousAndCurrentNode = currentNode.StartIndex - endIndexOfPreviousNodeAtThisLevel;
+            if (numberOfCharactersBetweenPreviousAndCurrentNode <= 0) return;
+
+            var charactersBetweenPreviousAndCurrentNode = parentNode.Data.Substring(endIndexOfPreviousNodeAtThisLevel, numberOfCharactersBetweenPreviousAndCurrentNode);
+
+            markupBuilder.Append(charactersBetweenPreviousAndCurrentNode);
+        }
+
+        static void RenderRemainingDataIfThisIsTheLastNode(StringBuilder markupBuilder, Node currentNode, IDictionary<Node, Node> nodeToParentDictionary)
+        {
+            var parentNode = nodeToParentDictionary[currentNode];
+            if (parentNode == null) return;
+
+            var siblings = parentNode.Children.ToList();
+
+            var indexOfCurrentNodeAtThisLevel = siblings.IndexOf(currentNode);
+            if (indexOfCurrentNodeAtThisLevel < siblings.Count() - 1) return;
+
+            var endIndexOfCurrentNode = currentNode.StartIndex + currentNode.Data.Length;
+            var numberOfRemainingCharacters = parentNode.StartIndex + parentNode.Data.Length - endIndexOfCurrentNode;
+            if (numberOfRemainingCharacters <= 0) return;
+
+            var remainingCharacters = parentNode.Data.Substring(endIndexOfCurrentNode - parentNode.StartIndex, numberOfRemainingCharacters);
+
+            markupBuilder.Append(remainingCharacters);
         }
 
         static IHtmlString RenderNodesAsHtml(IEnumerable<Node> nodes)

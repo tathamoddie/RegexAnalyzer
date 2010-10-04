@@ -32,5 +32,170 @@ namespace TathamOddie.RegexAnalyzer.Web.Test.Controllers
             // Assert
             StringAssert.Contains(nodeClass, "ast-parse-failure-node");
         }
+
+        [TestMethod]
+        public void AnalysisController_RenderExpressionAsHtml_ShouldRenderSingleFlatNode()
+        {
+            // Arrange
+            var nodes = new Node[]
+            {
+                new LiteralNode("abc", 0) { NodeId = 1 }
+            };
+
+            // Act
+            var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
+
+            // Assert
+            Assert.AreEqual("<span class=\"ast-node ast-node-1\">abc</span>", result);
+        }
+
+        [TestMethod]
+        public void AnalysisController_RenderExpressionAsHtml_ShouldRenderSequentialFlatNodes()
+        {
+            // Arrange
+            var nodes = new Node[]
+            {
+                new LiteralNode("abc", 0) { NodeId = 1 },
+                new LiteralNode("def", 3) { NodeId = 2 }
+            };
+
+            // Act
+            var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
+
+            // Assert
+            Assert.AreEqual("<span class=\"ast-node ast-node-1\">abc</span><span class=\"ast-node ast-node-2\">def</span>", result);
+        }
+
+        [TestMethod]
+        public void AnalysisController_RenderExpressionAsHtml_ShouldRenderGroupNodeWithDataBeforeChildNode()
+        {
+            // Arrange
+            var nodes = new Node[]
+            {
+                new GroupNode("(abc", 0,
+                    new LiteralNode("abc", 1) { NodeId = 2 })
+                { NodeId = 1 }
+            };
+
+            // Act
+            var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
+
+            // Assert
+            Assert.AreEqual("<span class=\"ast-node ast-node-1\">(<span class=\"ast-node ast-node-2\">abc</span></span>", result);
+        }
+
+        [TestMethod]
+        public void AnalysisController_RenderExpressionAsHtml_ShouldRenderGroupNodeWithDataAfterChildNode()
+        {
+            // Arrange
+            var nodes = new Node[]
+            {
+                new GroupNode("abc)", 0,
+                    new LiteralNode("abc", 0) { NodeId = 2 })
+                { NodeId = 1 }
+            };
+
+            // Act
+            var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
+
+            // Assert
+            Assert.AreEqual("<span class=\"ast-node ast-node-1\"><span class=\"ast-node ast-node-2\">abc</span>)</span>", result);
+        }
+
+        [TestMethod]
+        public void AnalysisController_RenderExpressionAsHtml_ShouldRenderGroupNodeWithDataBeforeAndAfterChildNode()
+        {
+            // Arrange
+            var nodes = new Node[]
+            {
+                new GroupNode("(abc)", 0,
+                    new LiteralNode("abc", 1) { NodeId = 2 })
+                { NodeId = 1 }
+            };
+
+            // Act
+            var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
+
+            // Assert
+            Assert.AreEqual("<span class=\"ast-node ast-node-1\">(<span class=\"ast-node ast-node-2\">abc</span>)</span>", result);
+        }
+
+        [TestMethod]
+        public void AnalysisController_RenderExpressionAsHtml_ShouldRenderGroupNodeWithDataBetweenChildNodes()
+        {
+            // Arrange
+            var nodes = new Node[]
+            {
+                new GroupNode("abc|def", 0,
+                    new LiteralNode("abc", 0) { NodeId = 2 },
+                    new LiteralNode("def", 4) { NodeId = 3 })
+                { NodeId = 1 }
+            };
+
+            // Act
+            var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
+
+            // Assert
+            Assert.AreEqual("<span class=\"ast-node ast-node-1\"><span class=\"ast-node ast-node-2\">abc</span>|<span class=\"ast-node ast-node-3\">def</span></span>", result);
+        }
+
+        [TestMethod]
+        public void AnalysisController_RenderExpressionAsHtml_ShouldRenderGroupNodeWithDataBeforeAndAfterAndBetweenChildNodes()
+        {
+            // Arrange
+            var nodes = new Node[]
+            {
+                new GroupNode("(abc|def)", 0,
+                    new LiteralNode("abc", 1) { NodeId = 2 },
+                    new LiteralNode("def", 5) { NodeId = 3 })
+                { NodeId = 1 }
+            };
+
+            // Act
+            var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
+
+            // Assert
+            Assert.AreEqual("<span class=\"ast-node ast-node-1\">(<span class=\"ast-node ast-node-2\">abc</span>|<span class=\"ast-node ast-node-3\">def</span>)</span>", result);
+        }
+
+        [TestMethod]
+        public void AnalysisController_RenderExpressionAsHtml_ShouldRenderNestedGroupNodesWithDataBeforeAndAfterAndBetweenChildNodes()
+        {
+            // Arrange
+            // abc(def(ghi)jkl(mno)pqr)stu
+            var nodes = new Node[]
+            {
+                new LiteralNode("abc", 0),
+                new GroupNode("(def(ghi)jkl(mno)pqr)", 3,
+                    new LiteralNode("def", 4),
+                    new GroupNode("(ghi)", 7,
+                        new LiteralNode("ghi", 8)),
+                    new LiteralNode("jkl", 12),
+                    new GroupNode("(mno)", 15,
+                        new LiteralNode("mno", 16)),
+                    new LiteralNode("pqr", 20)),
+                new LiteralNode("stu", 24)
+            };
+
+            // Act
+            var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
+
+            // Assert
+            const string expected =
+                "<span class=\"ast-node ast-node-0\">abc</span>" +
+                "<span class=\"ast-node ast-node-0\">(" +
+                    "<span class=\"ast-node ast-node-0\">def</span>" +
+                    "<span class=\"ast-node ast-node-0\">(" +
+                        "<span class=\"ast-node ast-node-0\">ghi</span>" +
+                    ")</span>" +
+                    "<span class=\"ast-node ast-node-0\">jkl</span>" +
+                    "<span class=\"ast-node ast-node-0\">(" +
+                        "<span class=\"ast-node ast-node-0\">mno</span>" +
+                    ")</span>" +
+                    "<span class=\"ast-node ast-node-0\">pqr</span>" +
+                ")</span>" +
+                "<span class=\"ast-node ast-node-0\">stu</span>";
+            Assert.AreEqual(expected, result);
+        }
     }
 }

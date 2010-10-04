@@ -135,7 +135,7 @@ namespace Web.Controllers
             return new HtmlString(markupBuilder.ToString());
         }
 
-        static string BuildNodeClass(Node currentNode)
+        internal static string BuildNodeClass(Node currentNode)
         {
             var nodeClasses = new List<string> { "ast-node" };
 

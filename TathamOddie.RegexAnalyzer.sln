@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic.Test", "Logic.Test\Lo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{83C87C1D-1645-4C3B-8D70-0C4B910FB069}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Test", "Web.Test\Web.Test.csproj", "{A966BA2B-D99A-4C3C-84F4-E6CF3B0FE498}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = TathamOddie.RegexAnalyzer.vsmdi
@@ -34,6 +36,10 @@ Global
 		{83C87C1D-1645-4C3B-8D70-0C4B910FB069}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83C87C1D-1645-4C3B-8D70-0C4B910FB069}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83C87C1D-1645-4C3B-8D70-0C4B910FB069}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A966BA2B-D99A-4C3C-84F4-E6CF3B0FE498}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A966BA2B-D99A-4C3C-84F4-E6CF3B0FE498}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A966BA2B-D99A-4C3C-84F4-E6CF3B0FE498}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A966BA2B-D99A-4C3C-84F4-E6CF3B0FE498}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

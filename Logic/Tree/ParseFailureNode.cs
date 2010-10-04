@@ -23,7 +23,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
 
         public override string Description
         {
-            get { return message; }
+            get { return "error: " + message; }
         }
     }
 }

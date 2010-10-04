@@ -73,6 +73,7 @@
     <Compile Include="Tokens\TokenizerTests.cs" />
     <Compile Include="Tokens\TokenTests.cs" />
     <Compile Include="Tree\GroupNodeTests.cs" />
+    <Compile Include="Tree\ParseFailureNodeTests.cs" />
     <Compile Include="Tree\QuantifierNodeTests.cs" />
     <Compile Include="Tree\TreeBuilderCharacterTests.cs" />
     <Compile Include="Tree\TreeBuilderQuantifierTests.cs" />

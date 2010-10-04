@@ -4,6 +4,9 @@
     {
         CapturingGroup,
         NonCapturingGroup,
-        PositiveLookAhead
+        PositiveLookAhead,
+        PositiveLookBehind,
+        NegativeLookAhead,
+        NegativeLookBehind
     }
 }

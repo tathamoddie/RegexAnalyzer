@@ -223,7 +223,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
         }
 
         [TestMethod]
-        public void TreeBuilding_Build_ShouldBuildPositiveLookaheadGroupNode()
+        public void TreeBuilding_Build_ShouldBuildPositiveLookAheadGroupNode()
         {
             // Arrange
             var tokens = new[]
@@ -244,6 +244,89 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
                     new GroupNode("(?=abc)", 0,
                         new LiteralNode("abc", 3))
                     { GroupMode = GroupMode.PositiveLookAhead }
+                },
+                nodes.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void TreeBuilding_Build_ShouldBuildPositiveLookBehindGroupNode()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.GroupStart, "(", 0),
+                new Token(TokenType.GroupDirectiveStart, "?", 1),
+                new Token(TokenType.NamedIdentifierStartOrLookBehindMarker, "<", 2),
+                new Token(TokenType.PositiveLookBehindMarker, "=", 3),
+                new Token(TokenType.Literal, "abc", 4),
+                new Token(TokenType.GroupEnd, ")", 7),
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new GroupNode("(?<=abc)", 0,
+                        new LiteralNode("abc", 4))
+                    { GroupMode = GroupMode.PositiveLookBehind }
+                },
+                nodes.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void TreeBuilding_Build_ShouldBuildNegativeLookAheadGroupNode()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.GroupStart, "(", 0),
+                new Token(TokenType.GroupDirectiveStart, "?", 1),
+                new Token(TokenType.NegativeLookAheadMarker, "!", 2),
+                new Token(TokenType.Literal, "abc", 3),
+                new Token(TokenType.GroupEnd, ")", 6),
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new GroupNode("(?!abc)", 0,
+                        new LiteralNode("abc", 3))
+                    { GroupMode = GroupMode.NegativeLookAhead }
+                },
+                nodes.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void TreeBuilding_Build_ShouldBuildNegativeLookBehindGroupNode()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.GroupStart, "(", 0),
+                new Token(TokenType.GroupDirectiveStart, "?", 1),
+                new Token(TokenType.NamedIdentifierStartOrLookBehindMarker, "<", 2),
+                new Token(TokenType.NegativeLookBehindMarker, "!", 3),
+                new Token(TokenType.Literal, "abc", 4),
+                new Token(TokenType.GroupEnd, ")", 7),
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new GroupNode("(?<!abc)", 0,
+                        new LiteralNode("abc", 4))
+                    { GroupMode = GroupMode.NegativeLookBehind }
                 },
                 nodes.ToArray()
             );

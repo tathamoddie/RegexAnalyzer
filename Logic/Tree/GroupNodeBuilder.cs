@@ -104,6 +104,35 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
                     },
                     (g, t) => { g.GroupMode = GroupMode.PositiveLookAhead; }
                 },
+
+                // Negative lookahead
+                {
+                    new[]
+                    {
+                        new PatternSegment<Token>(t => t.Type == TokenType.NegativeLookAheadMarker, 1)
+                    },
+                    (g, t) => { g.GroupMode = GroupMode.NegativeLookAhead; }
+                },
+
+                // Positive lookbehind
+                {
+                    new[]
+                    {
+                        new PatternSegment<Token>(t => t.Type == TokenType.NamedIdentifierStartOrLookBehindMarker, 1),
+                        new PatternSegment<Token>(t => t.Type == TokenType.PositiveLookBehindMarker, 1)
+                    },
+                    (g, t) => { g.GroupMode = GroupMode.PositiveLookBehind; }
+                },
+
+                // Negative lookbehind
+                {
+                    new[]
+                    {
+                        new PatternSegment<Token>(t => t.Type == TokenType.NamedIdentifierStartOrLookBehindMarker, 1),
+                        new PatternSegment<Token>(t => t.Type == TokenType.NegativeLookBehindMarker, 1)
+                    },
+                    (g, t) => { g.GroupMode = GroupMode.NegativeLookBehind; }
+                },
             };
 
             foreach (var strategy in strategies)

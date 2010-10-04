@@ -33,9 +33,14 @@ namespace Web.Controllers
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
+            var tokens = Tokenizer.Tokenize(expression);
+            var nodes = new TreeBuilder().Build(tokens);
+
             stopwatch.Stop();
 
             ViewData["TimeTaken"] = stopwatch.Elapsed;
+
+            ViewData["NodesMarkup"] = RenderNodesAsHtml(nodes);
 
             return View("Basic");
         }

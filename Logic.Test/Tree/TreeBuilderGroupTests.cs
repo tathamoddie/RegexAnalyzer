@@ -223,6 +223,33 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
         }
 
         [TestMethod]
+        public void TreeBuilding_Build_ShouldBuildPositiveLookaheadGroupNode()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.GroupStart, "(", 0),
+                new Token(TokenType.GroupDirectiveStart, "?", 1),
+                new Token(TokenType.PositiveLookAheadMarker, "=", 2),
+                new Token(TokenType.Literal, "abc", 3),
+                new Token(TokenType.GroupEnd, ")", 6),
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new GroupNode("(?=abc)", 0,
+                        new LiteralNode("abc", 3))
+                    { GroupMode = GroupMode.PositiveLookAhead }
+                },
+                nodes.ToArray()
+            );
+        }
+
+        [TestMethod]
         public void TreeBuilding_Build_ShouldNotThrowStackOverflowExceptionForMassivelyNestedGroups()
         {
             // Arrange

@@ -95,6 +95,15 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
                     },
                     (g, t) => { g.GroupMode = GroupMode.NonCapturingGroup; }
                 },
+
+                // Positive lookahead
+                {
+                    new[]
+                    {
+                        new PatternSegment<Token>(t => t.Type == TokenType.PositiveLookAheadMarker, 1)
+                    },
+                    (g, t) => { g.GroupMode = GroupMode.PositiveLookAhead; }
+                },
             };
 
             foreach (var strategy in strategies)

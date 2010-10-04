@@ -3,6 +3,7 @@
     public enum GroupMode
     {
         CapturingGroup,
-        NonCapturingGroup
+        NonCapturingGroup,
+        PositiveLookAhead
     }
 }

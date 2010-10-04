@@ -56,7 +56,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
             return Equals((Node) obj);
         }
 
-        public bool Equals(Node other)
+        public virtual bool Equals(Node other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

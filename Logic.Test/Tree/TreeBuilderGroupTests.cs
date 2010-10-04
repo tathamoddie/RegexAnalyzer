@@ -31,6 +31,27 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
         }
 
         [TestMethod]
+        public void TreeBuilding_Build_ShouldBuildParseFailureNodeForUnclosedGroup()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.GroupStart, "(", 0)
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new[]
+                {
+                    new ParseFailureNode("(", 0, "group is never closed")
+                },
+                nodes.ToArray()
+            );
+        }
+
+        [TestMethod]
         public void TreeBuilding_Build_ShouldBuildGroupNodeWithLiteralContent()
         {
             // Arrange

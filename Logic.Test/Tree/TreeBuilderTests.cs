@@ -23,7 +23,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
-                    new ParseFailureNode("x", 0, "Unrecognised token.")
+                    new ParseFailureNode("x", 0, "unrecognised token")
                 },
                 nodes.ToArray()
             );
@@ -65,7 +65,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
-                    new ParseFailureNode(")", 0, "Unexpected token.")
+                    new ParseFailureNode(")", 0, "unexpected token")
                 },
                 nodes.ToArray()
             );

@@ -25,5 +25,20 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
         {
             get { return "error: " + message; }
         }
+
+        public override bool Equals(Node other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return base.Equals(other) && Equals(((ParseFailureNode)other).message, message);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (base.GetHashCode()*397) ^ (message != null ? message.GetHashCode() : 0);
+            }
+        }
     }
 }

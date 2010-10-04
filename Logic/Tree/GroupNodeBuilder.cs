@@ -39,7 +39,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
             }
 
             if (endToken == null)
-                return new ParseFailureNode(startToken, "Group is never closed.");
+                return new ParseFailureNode(startToken, "group is never closed");
 
             var combinedData = Token.GetData(startToken, contentsTokens, endToken);
 

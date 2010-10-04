@@ -84,11 +84,15 @@ table
     border-collapse: collapse;
     th { background-color: @box-background-color; white-space: nowrap; }
     th, td { padding: 3px 10px; text-align: left; }
-    tbody tr { border-top: solid 1px @box-color; }
-    tbody tr.ast-node { .ast-node-hover-candidate; }
-    tbody tr.ast-node:hover,
-    tbody tr.ast-node-hover { .ast-node-hover; }
     th:nth-child(1n+2), td:nth-child(1n+2) { border-left: solid 1px @box-inner-border; }
+    tbody
+    {
+        tr { border-top: solid 1px @box-color; }
+        tr.ast-node { .ast-node-hover-candidate; }
+        tr.ast-parse-failure-node { background-color: @error-highlight-background-color; }
+        tr.ast-node:hover,
+        tr.ast-node-hover { .ast-node-hover; }
+    }
 }
 
 ol.ast
@@ -118,19 +122,10 @@ ol.ast
             width: 100%;
             background-color: #fff;
         }
-        .ast-parse-failure-node * *
-        {
-            background-color: @error-highlight-background-color;
-        }
-        .ast-node * *
-        {
-            .ast-node-hover-candidate;
-        }
+        .ast-node * * { .ast-node-hover-candidate; }
+        .ast-parse-failure-node * * { background-color: @error-highlight-background-color; }
         .ast-node:hover * *,
-        .ast-node-hover * *
-        {
-            .ast-node-hover;
-        }
+        .ast-node-hover * * { .ast-node-hover; }
         .ast-node-data
         {
             display: block;

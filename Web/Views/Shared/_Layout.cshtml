@@ -23,6 +23,17 @@
                     }
                 });
 
+                $(".ast-node").hover(
+                    function () {
+                        var nodeIdClass = /ast-node-\d+/.exec($(this).attr('class'))[0];
+                        $("." + nodeIdClass).addClass("ast-node-hover");
+                    },
+                    function () {
+                        var nodeIdClass = /ast-node-\d+/.exec($(this).attr('class'))[0];
+                        $("." + nodeIdClass).removeClass("ast-node-hover");
+                    }
+                );
+
             </script>
         </div>
     </body>

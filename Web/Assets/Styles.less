@@ -5,6 +5,7 @@
 @box-inner-border: #ddd;
 @box-background-color: #f7f7f7;
 @highlight-background-color: #ffb;
+@error-highlight-background-color: #fcc;
 
 * { margin: 0; padding: 0; }
 
@@ -98,10 +99,14 @@ ol.ast
             overflow: hidden;
             width: 100%;
             background-color: #fff;
-        }   
+        }
         .ast-node:hover * *
         {
             background-color: @highlight-background-color;
+        }
+        .ast-parse-failure-node * *
+        {
+            background-color: @error-highlight-background-color;
         }
         .ast-node-data
         {

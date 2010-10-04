@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -110,7 +109,8 @@ namespace Web.Controllers
                 markupBuilder.Append("<li>");
 
                 markupBuilder.AppendFormat(
-                    "<span class=\"ast-node\"><span class=\"ast-node-data\"><code title=\"{0}\">{1}</code></span><span class=\"ast-node-description\"><span>{2}</span></span></span>",
+                    "<span class=\"{0}\"><span class=\"ast-node-data\"><code title=\"{1}\">{2}</code></span><span class=\"ast-node-description\"><span>{3}</span></span></span>",
+                    BuildNodeClass(currentNode),
                     HttpUtility.HtmlAttributeEncode(currentNode.Data),
                     HttpUtility.HtmlEncode(currentNode.Data),
                     HttpUtility.HtmlEncode(currentNode.Description));
@@ -133,6 +133,16 @@ namespace Web.Controllers
                 markupBuilder.Append("</ol>");
 
             return new HtmlString(markupBuilder.ToString());
+        }
+
+        static string BuildNodeClass(Node currentNode)
+        {
+            var nodeClasses = new List<string> { "ast-node" };
+
+            if (currentNode is ParseFailureNode)
+                nodeClasses.Add("ast-parse-failure-node");
+
+            return string.Join(" ", nodeClasses.Where(n => !string.IsNullOrEmpty(n)).ToArray());
         }
     }
 }

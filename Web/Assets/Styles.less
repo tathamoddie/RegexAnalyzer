@@ -63,6 +63,17 @@ code
     margin-bottom: 8px;
 }
 
+.ast-node-hover-candidate ()
+{
+    -webkit-transition-property: background-color;
+    -webkit-transition-duration: 1s;
+}
+
+.ast-node-hover ()
+{
+    background-color: @highlight-background-color;
+}
+
 table
 {
     border: solid 1px @box-color;
@@ -70,7 +81,9 @@ table
     th { background-color: @box-background-color; white-space: nowrap; }
     th, td { padding: 3px 10px; text-align: left; }
     tbody tr { border-top: solid 1px @box-color; }
-    tbody tr.ast-node-hover { background-color: @highlight-background-color; }
+    tbody tr.ast-node { .ast-node-hover-candidate; }
+    tbody tr.ast-node:hover,
+    tbody tr.ast-node-hover { .ast-node-hover; }
     th:nth-child(1n+2), td:nth-child(1n+2) { border-left: solid 1px @box-inner-border; }
 }
 
@@ -105,10 +118,14 @@ ol.ast
         {
             background-color: @error-highlight-background-color;
         }
+        .ast-node * *
+        {
+            .ast-node-hover-candidate;
+        }
         .ast-node:hover * *,
         .ast-node-hover * *
         {
-            background-color: @highlight-background-color;
+            .ast-node-hover;
         }
         .ast-node-data
         {

@@ -27,8 +27,9 @@
 <table title="Expression tokens">
     <thead>
         <tr>
-            <th>Depth</th>
+            <th>Node Id</th>
             <th>Node Type</th>
+            <th>Depth</th>
             <th>Index</th>
             <th>Data</th>
         </tr>
@@ -36,8 +37,9 @@
     <tbody>
         @foreach(var node in View.AllNodes) {
             <tr class="@node.CssClass">
-                <td>@node.Depth</td>
+                <td>@node.NodeId</td>
                 <td>@node.TypeName</td>
+                <td>@node.Depth</td>
                 <td>@node.StartIndex</td>
                 <td><code>@node.Data</code></td>
             </tr>

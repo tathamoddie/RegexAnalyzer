@@ -11,6 +11,11 @@ namespace Web.Models
             this.node = node;
         }
 
+        public int NodeId
+        {
+            get { return node.NodeId; }
+        }
+
         public string TypeName
         {
             get { return node.GetType().Name; }

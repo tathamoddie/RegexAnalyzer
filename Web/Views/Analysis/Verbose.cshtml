@@ -35,11 +35,11 @@
     </thead>
     <tbody>
         @foreach(var node in View.AllNodes) {
-            <tr>
-                <td>@node.Key</td>
-                <td>@node.Value.GetType().Name</td>
-                <td>@node.Value.StartIndex.ToString("#,##0")</td>
-                <td><code>@node.Value.Data</code></td>
+            <tr class="@node.CssClass">
+                <td>@node.Depth</td>
+                <td>@node.TypeName</td>
+                <td>@node.StartIndex</td>
+                <td><code>@node.Data</code></td>
             </tr>
         }
     </tbody>

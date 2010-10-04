@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using TathamOddie.RegexAnalyzer.Logic.Tokens;
 using TathamOddie.RegexAnalyzer.Logic.Tree;
+using Web.Models;
 
 namespace Web.Controllers
 {
@@ -59,7 +60,7 @@ namespace Web.Controllers
             return View("Verbose");
         }
 
-        static IEnumerable<KeyValuePair<int, Node>> FlattenNodes(IEnumerable<Node> nodes)
+        static IEnumerable<NodeViewModel> FlattenNodes(IEnumerable<Node> nodes)
         {
             var nodesToProcess = new Stack<Node>(nodes.Reverse());
             var depths = new Stack<int>(new [] { nodes.Count() });
@@ -72,7 +73,11 @@ namespace Web.Controllers
 
                 depths.Push(depths.Pop() - 1);
 
-                yield return new KeyValuePair<int, Node>(depths.Count() - 1, currentNode);
+                yield return new NodeViewModel(currentNode)
+                {
+                    CssClass = BuildNodeClass(currentNode),
+                    Depth = depths.Count() - 1
+                };
 
                 var children = currentNode.Children;
                 if (!children.Any()) continue;

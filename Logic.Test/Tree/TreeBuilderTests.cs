@@ -9,7 +9,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
     public class TreeBuilderTests
     {
         [TestMethod]
-        public void TreeBuilder_Build_ShouldConvertParseFailureToken()
+        public void TreeBuilder_BuildNodes_ShouldConvertParseFailureToken()
         {
             // Arrange
             var tokens = new[]
@@ -18,7 +18,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().Build(tokens);
+            var nodes = new TreeBuilder().BuildNodes(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -30,7 +30,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
         }
 
         [TestMethod]
-        public void TreeBuilder_Build_ShouldBuildLiteralTokenIntoLiteralNode()
+        public void TreeBuilder_BuildNodes_ShouldBuildLiteralTokenIntoLiteralNode()
         {
             // Arrange
             var tokens = new[]
@@ -39,7 +39,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().Build(tokens);
+            var nodes = new TreeBuilder().BuildNodes(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -51,7 +51,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
         }
 
         [TestMethod]
-        public void TreeBuilder_Build_ShouldConvertUnexpectedTokenToParseFailureNode()
+        public void TreeBuilder_BuildNodes_ShouldConvertUnexpectedTokenToParseFailureNode()
         {
             // Arrange
             var tokens = new[]
@@ -60,12 +60,37 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().Build(tokens);
+            var nodes = new TreeBuilder().BuildNodes(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
                 {
                     new ParseFailureNode(")", 0, "unexpected token")
+                },
+                nodes.ToArray()
+            );
+        }
+
+        [TestMethod]
+        public void TreeBuilder_Build_ShouldAssignIds()
+        {
+            // Arrange
+            var tokens = new[]
+            {
+                new Token(TokenType.Literal, "1", 0),    // 1
+                new Token(TokenType.Literal, "2", 1),    // 2
+                new Token(TokenType.Literal, "3", 2),    // 3
+            };
+
+            // Act
+            var nodes = new TreeBuilder().Build(tokens);
+
+            // Assert
+            CollectionAssert.AreEqual(new Node[]
+                {
+                    new LiteralNode("1", 0) { NodeId = 1 },
+                    new LiteralNode("2", 1) { NodeId = 2 },
+                    new LiteralNode("3", 2) { NodeId = 3 },
                 },
                 nodes.ToArray()
             );

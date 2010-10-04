@@ -9,7 +9,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
     public class TreeBuilderCharacterTests
     {
         [TestMethod]
-        public void TreeBuilder_Build_ShouldBuildWordCharacterClassNode()
+        public void TreeBuilder_BuildNodes_ShouldBuildWordCharacterClassNode()
         {
             // Arrange
             var tokens = new[]
@@ -19,7 +19,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().Build(tokens);
+            var nodes = new TreeBuilder().BuildNodes(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -31,7 +31,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
         }
 
         [TestMethod]
-        public void TreeBuilder_Build_ShouldBuildNonWordCharacterClassNode()
+        public void TreeBuilder_BuildNodes_ShouldBuildNonWordCharacterClassNode()
         {
             // Arrange
             var tokens = new[]
@@ -41,7 +41,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().Build(tokens);
+            var nodes = new TreeBuilder().BuildNodes(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -53,7 +53,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
         }
 
         [TestMethod]
-        public void TreeBuilder_Build_ShouldBuildWhiteSpaceCharacterClassNode()
+        public void TreeBuilder_BuildNodes_ShouldBuildWhiteSpaceCharacterClassNode()
         {
             // Arrange
             var tokens = new[]
@@ -63,7 +63,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().Build(tokens);
+            var nodes = new TreeBuilder().BuildNodes(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -75,7 +75,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
         }
 
         [TestMethod]
-        public void TreeBuilder_Build_ShouldBuildNonWhiteSpaceCharacterClassNode()
+        public void TreeBuilder_BuildNodes_ShouldBuildNonWhiteSpaceCharacterClassNode()
         {
             // Arrange
             var tokens = new[]
@@ -85,7 +85,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().Build(tokens);
+            var nodes = new TreeBuilder().BuildNodes(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -97,7 +97,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
         }
 
         [TestMethod]
-        public void TreeBuilder_Build_ShouldBuildDigitsCharacterClassNode()
+        public void TreeBuilder_BuildNodes_ShouldBuildDigitsCharacterClassNode()
         {
             // Arrange
             var tokens = new[]
@@ -107,7 +107,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().Build(tokens);
+            var nodes = new TreeBuilder().BuildNodes(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -119,7 +119,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
         }
 
         [TestMethod]
-        public void TreeBuilder_Build_ShouldBuildNonDigitsCharacterClassNode()
+        public void TreeBuilder_BuildNodes_ShouldBuildNonDigitsCharacterClassNode()
         {
             // Arrange
             var tokens = new[]
@@ -129,7 +129,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().Build(tokens);
+            var nodes = new TreeBuilder().BuildNodes(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]
@@ -141,7 +141,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
         }
 
         [TestMethod]
-        public void TreeBuilder_Build_ShouldBuildCharacterEscapeIntoEscapeCharacterNode()
+        public void TreeBuilder_BuildNodes_ShouldBuildCharacterEscapeIntoEscapeCharacterNode()
         {
             // Arrange
             var tokens = new[]
@@ -151,7 +151,7 @@ namespace TathamOddie.RegexAnalyzer.Logic.Test.Tree
             };
 
             // Act
-            var nodes = new TreeBuilder().Build(tokens);
+            var nodes = new TreeBuilder().BuildNodes(tokens);
 
             // Assert
             CollectionAssert.AreEqual(new[]

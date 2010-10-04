@@ -137,7 +137,11 @@ namespace Web.Controllers
 
         internal static string BuildNodeClass(Node currentNode)
         {
-            var nodeClasses = new List<string> { "ast-node" };
+            var nodeClasses = new List<string>
+            {
+                "ast-node",
+                "ast-node-" + currentNode.NodeId
+            };
 
             if (currentNode is ParseFailureNode)
                 nodeClasses.Add("ast-parse-failure-node");

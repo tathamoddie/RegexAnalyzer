@@ -8,16 +8,16 @@ namespace TathamOddie.RegexAnalyzer.Web.Test.Controllers
     public class AnalysisControllerTests
     {
         [TestMethod]
-        public void AnalysisController_BuildNodeClass_ShouldReturnSingleClassByDefault()
+        public void AnalysisController_BuildNodeClass_ShouldReturnDefaultClassesWithNodeId()
         {
             // Arrange
-            var node = new LiteralNode("abc", 0);
+            var node = new LiteralNode("abc", 0) { NodeId = 456 };
 
             // Act
             var nodeClass = AnalysisController.BuildNodeClass(node);
 
             // Assert
-            Assert.AreEqual("ast-node", nodeClass);
+            Assert.AreEqual("ast-node ast-node-456", nodeClass);
         }
 
         [TestMethod]
@@ -30,7 +30,7 @@ namespace TathamOddie.RegexAnalyzer.Web.Test.Controllers
             var nodeClass = AnalysisController.BuildNodeClass(node);
 
             // Assert
-            Assert.AreEqual("ast-node ast-parse-failure-node", nodeClass);
+            StringAssert.Contains(nodeClass, "ast-parse-failure-node");
         }
     }
 }

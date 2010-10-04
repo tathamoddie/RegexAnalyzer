@@ -10,6 +10,13 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
 
         public IEnumerable<Node> Build(IEnumerable<Token> tokens)
         {
+            var nodes = BuildNodes(tokens);
+            AssignIdsToNodes(nodes);
+            return nodes;
+        }
+
+        internal IEnumerable<Node> BuildNodes(IEnumerable<Token> tokens)
+        {
             var state = new TreeBuilderState();
 
             var expressionNode = new ExpressionNode(Token.GetData(tokens), 0);

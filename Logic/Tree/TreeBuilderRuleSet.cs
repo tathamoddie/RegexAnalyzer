@@ -23,6 +23,11 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
             );
 
             yield return new TreeBuilderRule(
+                TokenType.GroupDirectiveStart,
+                GroupNodeBuilder.ProcessGroupDirective
+            );
+
+            yield return new TreeBuilderRule(
                 TokenType.Quantifier,
                 QuantifierNodeBuilder.BuildBasicQuantifierNode
             );

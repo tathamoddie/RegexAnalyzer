@@ -14,7 +14,14 @@
 
         public override string Description
         {
-            get { return "group"; }
+            get
+            {
+                return !string.IsNullOrEmpty(NamedIdentifier)
+                    ? string.Format("named group '{0}'", NamedIdentifier)
+                    : "group";
+            }
         }
+
+        public string NamedIdentifier { get; set; }
     }
 }

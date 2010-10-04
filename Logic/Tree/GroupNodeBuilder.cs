@@ -55,5 +55,36 @@ namespace TathamOddie.RegexAnalyzer.Logic.Tree
 
             return groupNode;
         }
+
+        public static Node ProcessGroupDirective(Token startToken, TreeBuilderState state)
+        {
+            var group = (GroupNode)state.ProcessingState.TargetNode;
+
+            var namedIdentifierTokens = state
+                .ProcessingState
+                .Tokens
+                .DequeuePattern(new []
+                {
+                    new PatternSegment<Token>(t => t.Type == TokenType.NamedIdentifierStartOrLookBehindMarker, 1),
+                    new PatternSegment<Token>(t => t.Type == TokenType.Literal),
+                    new PatternSegment<Token>(t => t.Type == TokenType.NamedIdentifierEnd, 1),
+                });
+
+            if (namedIdentifierTokens.Any())
+            {
+                var identifierTokens = namedIdentifierTokens
+                    .Skip(1)
+                    .Take(namedIdentifierTokens.Count() - 2);
+
+                var identifier = Token.GetData(identifierTokens);
+
+                // named identifier
+                group.NamedIdentifier = identifier;
+
+                return null;
+            }
+
+            return null;
+        }
     }
 }

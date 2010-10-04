@@ -106,6 +106,7 @@
     <Content Include="Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Views\Web.config" />
+    <None Include="Views\_viewstart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />

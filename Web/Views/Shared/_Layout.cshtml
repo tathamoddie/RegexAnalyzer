@@ -23,16 +23,15 @@
                     }
                 });
 
-                $(".ast-node").hover(
-                    function () {
-                        var nodeIdClass = /ast-node-\d+/.exec($(this).attr('class'))[0];
-                        $("." + nodeIdClass).addClass("ast-node-hover");
-                    },
-                    function () {
-                        var nodeIdClass = /ast-node-\d+/.exec($(this).attr('class'))[0];
-                        $("." + nodeIdClass).removeClass("ast-node-hover");
-                    }
-                );
+                $(".ast-node").mouseover(function (e) {
+                    e.stopPropagation();
+                    var nodeIdClass = /ast-node-\d+/.exec($(this).attr('class'))[0];
+                    $("." + nodeIdClass)
+                        .addClass("ast-node-hover")
+                        .mouseout(function() {
+                            $("." + nodeIdClass).removeClass("ast-node-hover");
+                        });
+                });
 
             </script>
         </div>

@@ -119,7 +119,7 @@ namespace Web.Controllers
 
                 for (var i = 0; i < layersToClose; i++)
                 {
-                    RenderRemainingDataIfThisIsTheLastNode(markupBuilder, layerNodes.Pop(), nodeToParentDictionary);
+                    RenderTrailingDataForNode(markupBuilder, layerNodes.Pop());
                     markupBuilder.Append("</span>");
                 }
 
@@ -146,14 +146,15 @@ namespace Web.Controllers
                 {
                     markupBuilder.Append(HttpUtility.HtmlEncode(currentNode.Data));
                     markupBuilder.Append("</span>");
-                    RenderRemainingDataIfThisIsTheLastNode(markupBuilder, currentNode, nodeToParentDictionary);
                 }
             }
 
-            for (var i = 0; i < layers.Count() - 1; i++)
+            for (var i = 0; i < layers.Count(); i++)
             {
-                markupBuilder.Append("</span>");
-                RenderRemainingDataIfThisIsTheLastNode(markupBuilder, layerNodes.Pop(), nodeToParentDictionary);
+                RenderTrailingDataForNode(markupBuilder, layerNodes.Pop());
+                
+                var isLastLayer = i == layers.Count() - 1;
+                if (!isLastLayer) markupBuilder.Append("</span>");
             }
 
             return new HtmlString(markupBuilder.ToString());
@@ -186,23 +187,16 @@ namespace Web.Controllers
             }
         }
 
-        static void RenderRemainingDataIfThisIsTheLastNode(StringBuilder markupBuilder, Node currentNode, IDictionary<Node, Node> nodeToParentDictionary)
+        static void RenderTrailingDataForNode(StringBuilder markupBuilder, Node currentNode)
         {
-            var parentNode = nodeToParentDictionary[currentNode];
-            if (parentNode == null) return;
+            if (!currentNode.Children.Any()) return;
 
-            var siblings = parentNode.Children.ToList();
+            var lastChild = currentNode.Children.Last();
+            var lastChildEndIndex = lastChild.StartIndex - currentNode.StartIndex + lastChild.Data.Length;
 
-            var indexOfCurrentNodeAtThisLevel = siblings.IndexOf(currentNode);
-            if (indexOfCurrentNodeAtThisLevel < siblings.Count() - 1) return;
+            var trailingCharacters = currentNode.Data.Substring(lastChildEndIndex);
 
-            var endIndexOfCurrentNode = currentNode.StartIndex + currentNode.Data.Length;
-            var numberOfRemainingCharacters = parentNode.StartIndex + parentNode.Data.Length - endIndexOfCurrentNode;
-            if (numberOfRemainingCharacters <= 0) return;
-
-            var remainingCharacters = parentNode.Data.Substring(endIndexOfCurrentNode - parentNode.StartIndex, numberOfRemainingCharacters);
-
-            markupBuilder.Append(HttpUtility.HtmlEncode(remainingCharacters));
+            markupBuilder.Append(HttpUtility.HtmlEncode(trailingCharacters));
         }
 
         static IHtmlString RenderNodesAsHtml(IEnumerable<Node> nodes)

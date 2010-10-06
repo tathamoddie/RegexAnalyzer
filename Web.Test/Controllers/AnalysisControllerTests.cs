@@ -193,6 +193,27 @@ namespace TathamOddie.RegexAnalyzer.Web.Test.Controllers
         }
 
         [TestMethod]
+        public void AnalysisController_RenderExpressionAsHtml_ShouldRenderDoubleNestedGroupsWithTrailingContent()
+        {
+            // Arrange
+            var nodes = new ExpressionNode("((abc))def", 0, new Node[]
+            {
+                new GroupNode("((abc))", 0,
+                    new GroupNode("(abc)", 1,
+                        new LiteralNode("abc", 2) { NodeId = 4 })
+                    { NodeId = 3 })
+                { NodeId = 1 },
+                new LiteralNode("def", 7) { NodeId = 2 }
+            });
+
+            // Act
+            var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
+
+            // Assert
+            Assert.AreEqual("<span class=\"ast-node ast-node-1\">(<span class=\"ast-node ast-node-3\">(<span class=\"ast-node ast-node-4\">abc</span>)</span>)</span><span class=\"ast-node ast-node-2\">def</span>", result);
+        }
+
+        [TestMethod]
         public void AnalysisController_RenderExpressionAsHtml_ShouldRenderGroupNodeWithDataBeforeChildNode()
         {
             // Arrange

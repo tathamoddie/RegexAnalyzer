@@ -7,9 +7,9 @@ using System.Web;
 using System.Web.Mvc;
 using TathamOddie.RegexAnalyzer.Logic.Tokens;
 using TathamOddie.RegexAnalyzer.Logic.Tree;
-using Web.Models;
+using TathamOddie.RegexAnalyzer.Web.Models;
 
-namespace Web.Controllers
+namespace TathamOddie.RegexAnalyzer.Web.Controllers
 {
     public class AnalysisController : Controller
     {

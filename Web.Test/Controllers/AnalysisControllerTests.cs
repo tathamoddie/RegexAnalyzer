@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TathamOddie.RegexAnalyzer.Logic.Tree;
-using Web.Controllers;
+using TathamOddie.RegexAnalyzer.Web.Controllers;
 
 namespace TathamOddie.RegexAnalyzer.Web.Test.Controllers
 {

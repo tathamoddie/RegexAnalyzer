@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace Web.Controllers
+namespace TathamOddie.RegexAnalyzer.Web.Controllers
 {
     public class HomeController : Controller
     {

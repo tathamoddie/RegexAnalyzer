@@ -1,6 +1,6 @@
 ﻿using TathamOddie.RegexAnalyzer.Logic.Tree;
 
-namespace Web.Models
+namespace TathamOddie.RegexAnalyzer.Web.Models
 {
     public class NodeViewModel
     {

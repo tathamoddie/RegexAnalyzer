@@ -154,7 +154,25 @@ namespace TathamOddie.RegexAnalyzer.Web.Test.Controllers
         }
 
         [TestMethod]
-        public void AnalysisController_RenderExpressionAsHtml_ShouldRenderSimpleNestedGroup()
+        public void AnalysisController_RenderExpressionAsHtml_ShouldRenderNestedEmptyGroups()
+        {
+            // Arrange
+            var nodes = new ExpressionNode("(())", 0, new Node[]
+            {
+                new GroupNode("(())", 0,
+                    new GroupNode("()", 1) { NodeId = 2 })
+                { NodeId = 1 },
+            });
+
+            // Act
+            var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
+
+            // Assert
+            Assert.AreEqual("<span class=\"ast-node ast-node-1\">(<span class=\"ast-node ast-node-2\">()</span>)</span>", result);
+        }
+
+        [TestMethod]
+        public void AnalysisController_RenderExpressionAsHtml_ShouldRenderNestedGroupsWhereNode3HasChildren()
         {
             // Arrange
             var nodes = new ExpressionNode("(foo(bar))", 0, new Node[]

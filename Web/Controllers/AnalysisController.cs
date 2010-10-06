@@ -103,6 +103,7 @@ namespace Web.Controllers
 
             var nodesToProcess = new Stack<Node>(nodes.Reverse());
             var layers = new Stack<int>(new[] { nodes.Count() });
+            var layerNodes = new Stack<Node>(new[] { rootNode });
             var nodeToParentDictionary = nodes.ToDictionary(n => n, p => rootNode);
 
             while (nodesToProcess.Any())
@@ -117,7 +118,10 @@ namespace Web.Controllers
                 layers.Push(layers.Pop() - 1);
 
                 for (var i = 0; i < layersToClose; i++)
+                {
+                    RenderRemainingDataIfThisIsTheLastNode(markupBuilder, layerNodes.Pop(), nodeToParentDictionary);
                     markupBuilder.Append("</span>");
+                }
 
                 var currentNode = nodesToProcess.Pop();
 
@@ -130,6 +134,7 @@ namespace Web.Controllers
                 if (currentNode.Children.Any())
                 {
                     layers.Push(currentNode.Children.Count());
+                    layerNodes.Push(currentNode);
 
                     foreach (var childNode in currentNode.Children.Reverse())
                     {
@@ -141,13 +146,15 @@ namespace Web.Controllers
                 {
                     markupBuilder.Append(HttpUtility.HtmlEncode(currentNode.Data));
                     markupBuilder.Append("</span>");
+                    RenderRemainingDataIfThisIsTheLastNode(markupBuilder, currentNode, nodeToParentDictionary);
                 }
-
-                RenderRemainingDataIfThisIsTheLastNode(markupBuilder, currentNode, nodeToParentDictionary);
             }
 
             for (var i = 0; i < layers.Count() - 1; i++)
+            {
                 markupBuilder.Append("</span>");
+                RenderRemainingDataIfThisIsTheLastNode(markupBuilder, layerNodes.Pop(), nodeToParentDictionary);
+            }
 
             return new HtmlString(markupBuilder.ToString());
         }

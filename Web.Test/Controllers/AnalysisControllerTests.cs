@@ -132,6 +132,49 @@ namespace TathamOddie.RegexAnalyzer.Web.Test.Controllers
         }
 
         [TestMethod]
+        public void AnalysisController_RenderExpressionAsHtml_ShouldRenderSiblingGroups()
+        {
+            // Arrange
+            var nodes = new ExpressionNode("(abc)(def)", 0, new Node[]
+            {
+                new GroupNode("(abc)", 0,
+                    new LiteralNode("abc", 1) { NodeId = 3 })
+                { NodeId = 1 },
+                
+                new GroupNode("(def)", 5,
+                    new LiteralNode("def", 6) { NodeId = 4 })
+                { NodeId = 2 }
+            });
+
+            // Act
+            var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
+
+            // Assert
+            Assert.AreEqual("<span class=\"ast-node ast-node-1\">(<span class=\"ast-node ast-node-3\">abc</span>)</span><span class=\"ast-node ast-node-2\">(<span class=\"ast-node ast-node-4\">def</span>)</span>", result);
+        }
+
+        [TestMethod]
+        public void AnalysisController_RenderExpressionAsHtml_ShouldRenderSimpleNestedGroup()
+        {
+            // Arrange
+            var nodes = new ExpressionNode("(foo(bar))", 0, new Node[]
+            {
+                new GroupNode("(foo(bar))", 0,
+                    new LiteralNode("foo", 1) { NodeId = 2 },
+                    new GroupNode("(bar)", 4,
+                        new LiteralNode("bar", 5) { NodeId = 4 })
+                    { NodeId = 3 })
+                { NodeId = 1 },
+            });
+
+            // Act
+            var result = AnalysisController.RenderExpressionAsHtml(nodes).ToHtmlString();
+
+            // Assert
+            Assert.AreEqual("<span class=\"ast-node ast-node-1\">(<span class=\"ast-node ast-node-2\">foo</span><span class=\"ast-node ast-node-3\">(<span class=\"ast-node ast-node-4\">bar</span>)</span>)</span>", result);
+        }
+
+        [TestMethod]
         public void AnalysisController_RenderExpressionAsHtml_ShouldRenderGroupNodeWithDataBeforeChildNode()
         {
             // Arrange

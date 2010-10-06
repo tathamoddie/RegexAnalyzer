@@ -128,8 +128,9 @@ namespace Web.Controllers
                 RenderDataBetweenThisAndPreviousNode(markupBuilder, currentNode, nodeToParentDictionary);
 
                 markupBuilder.AppendFormat(
-                    "<span class=\"{0}\">",
-                    BuildNodeClass(currentNode));
+                    "<span class=\"{0}\" title=\"{1}\">",
+                    BuildNodeClass(currentNode),
+                    HttpUtility.HtmlAttributeEncode(currentNode.Description));
                 
                 if (currentNode.Children.Any())
                 {

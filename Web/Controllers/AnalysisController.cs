@@ -11,15 +11,15 @@ using TathamOddie.RegexAnalyzer.Web.Models;
 
 namespace TathamOddie.RegexAnalyzer.Web.Controllers
 {
-    public class AnalysisController : Controller
+    public partial class AnalysisController : Controller
     {
         [ValidateInput(false)]
-        public ActionResult Analyze(
+        public virtual ActionResult Analyze(
             [DefaultValue(false)]bool verbose,
             string q)
         {
             if (string.IsNullOrEmpty(q))
-                return View("NoExpression");
+                return View(Views.NoExpression);
 
             ViewData["Expression"] = q;
 
@@ -43,7 +43,7 @@ namespace TathamOddie.RegexAnalyzer.Web.Controllers
             ViewData["ExpressionMarkup"] = RenderExpressionAsHtml(rootNode);
             ViewData["NodesMarkup"] = RenderNodesAsHtml(rootNode.Children);
 
-            return View("Basic");
+            return View(Views.Basic);
         }
 
         ActionResult AnalyzeVerbose(string expression)
@@ -64,7 +64,7 @@ namespace TathamOddie.RegexAnalyzer.Web.Controllers
             ViewData["AllNodes"] = FlattenNodes(rootNode.Children);
             ViewData["NodesMarkup"] = RenderNodesAsHtml(rootNode.Children);
 
-            return View("Verbose");
+            return View(Views.Verbose);
         }
 
         static IEnumerable<NodeViewModel> FlattenNodes(IEnumerable<Node> nodes)
